@@ -6,10 +6,10 @@ import lombok.Setter;
 
 import javax.persistence.*;
 
+@Entity
+@NoArgsConstructor
 @Setter
 @Getter
-@NoArgsConstructor
-@Entity
 public class User extends Timestamped {
 
     public User(String username, String password, String email, UserRole role) {
@@ -28,12 +28,10 @@ public class User extends Timestamped {
         this.kakaoId = kakaoId;
     }
 
-    // ID가 자동으로 생성 및 증가합니다.
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Id
     private Long id;
 
-    // 반드시 값을 가지도록 합니다.
     @Column(nullable = false)
     private String username;
 
@@ -49,4 +47,16 @@ public class User extends Timestamped {
 
     @Column(nullable = true)
     private Long kakaoId;
+
+    @Override
+    public String toString() {
+        return "User{" +
+                "id=" + id +
+                ", username='" + username + '\'' +
+                ", password='" + password + '\'' +
+                ", email='" + email + '\'' +
+                ", role=" + role +
+                ", kakaoId=" + kakaoId +
+                '}';
+    }
 }
