@@ -26,6 +26,16 @@ dependencies {
     runtimeOnly 'mysql:mysql-connector-java'
     annotationProcessor 'org.projectlombok:lombok'
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
+
+    // json in java
+    implementation 'org.json:json:20210307'
+    // spring security
+    implementation 'org.springframework.boot:spring-boot-starter-security'
+    // jwt
+    implementation 'io.jsonwebtoken:jjwt:0.9.1'
+    // spring-cloud-starter
+    implementation 'org.springframework.cloud:spring-cloud-starter-aws:2.2.1.RELEASE'
+
 }
 
 test {
