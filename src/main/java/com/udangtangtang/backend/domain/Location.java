@@ -1,7 +1,6 @@
 package com.udangtangtang.backend.domain;
 
 
-import com.udangtangtang.backend.dto.LocationRequestDto;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -35,12 +34,19 @@ public class Location extends Timestamped {
     @Column(nullable = false)
     private Long userId;
 
-    public Location(LocationRequestDto requestDto, Long userId) {
-        this.placeName = requestDto.getPlaceName();
-        this.roadAddressName = requestDto.getRoadAddressName();
-        this.xCoordinate = requestDto.getXCoordinate();
-        this.yCoordinate = requestDto.getYCoordinate();
-        this.categoryName = requestDto.getCategoryName();
+    public Location(String placeName,
+                    String roadAddressName,
+                    String xCoordinate,
+                    String yCoordinate,
+                    String categoryName,
+                    Long userId
+    ) {
+        this.placeName = placeName;
+        this.roadAddressName = roadAddressName;
+        this.xCoordinate = xCoordinate;
+        this.yCoordinate = yCoordinate;
+        this.categoryName = categoryName;
         this.userId = userId;
     }
+
 }
