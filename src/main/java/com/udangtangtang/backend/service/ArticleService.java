@@ -1,9 +1,6 @@
 package com.udangtangtang.backend.service;
 
-import com.udangtangtang.backend.domain.Article;
-import com.udangtangtang.backend.domain.Hashtag;
-import com.udangtangtang.backend.domain.Image;
-import com.udangtangtang.backend.domain.User;
+import com.udangtangtang.backend.domain.*;
 import com.udangtangtang.backend.repository.ArticleRepository;
 import com.udangtangtang.backend.repository.HashtagRepository;
 import com.udangtangtang.backend.repository.ImageRepository;
@@ -21,7 +18,8 @@ public class ArticleService {
     private final ArticleRepository articleRepository;
     private final HashtagRepository hashtagRepository;
     private final ImageRepository imageRepository;
-    private final FileService fileService;
+
+    private final FileProcessService fileProcessService;
 
     public List<Article> getArticles() {
         return articleRepository.findAll();
@@ -42,7 +40,7 @@ public class ArticleService {
         }
 
         for(MultipartFile multipartFile : imageFileList) {
-            String url = fileService.uploadImage(multipartFile);
+            String url = fileProcessService.uploadImage(multipartFile, FileFolder.ARTICLE_IMAGES);
             Image image = new Image(url, article);
             imageRepository.save(image);
         }
