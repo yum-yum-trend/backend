@@ -37,6 +37,8 @@ public class AmazonS3Service implements FileService {
         String folder = "";
         if (fileFolder == FileFolder.ARTICLE_IMAGES) {
             folder = amazonS3Component.getArticleImagesFolder();
+        } else if (fileFolder == FileFolder.PROFILE_IMAGES) {
+            folder = amazonS3Component.getProfileImagesFolder();
         }
         return folder;
     }

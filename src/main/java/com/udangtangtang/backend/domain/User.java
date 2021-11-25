@@ -48,6 +48,12 @@ public class User extends Timestamped {
     @Column(nullable = true)
     private Long kakaoId;
 
+    @Column(nullable = true)
+    private String userProfileIntro;
+
+    @Column(nullable = true)
+    private String userProfileImageUrl;
+
     @Override
     public String toString() {
         return "User{" +
