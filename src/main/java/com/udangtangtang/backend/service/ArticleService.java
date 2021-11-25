@@ -22,7 +22,8 @@ public class ArticleService {
     private final LocationRepository locationRepository;
     private final HashtagRepository hashtagRepository;
     private final ImageRepository imageRepository;
-    private final FileService fileService;
+
+    private final FileProcessService fileProcessService;
     private final LocationDataPreprocess locationDataPreprocess;
 
     public List<Article> getArticles() {
@@ -42,13 +43,12 @@ public class ArticleService {
         Article article = articleRepository.save(new Article(text, location, user));
 
         for(String tag : hashtagNameList) {
-            hashtagRepository.save(new Hashtag(tag, article, user));
+            hashtagRepository.save(new Hashtag(tag, article, user.getId()));
         }
 
         for(MultipartFile multipartFile : imageFileList) {
-            String url = fileService.uploadImage(multipartFile);
-            Image image = new Image(url, article);
-            imageRepository.save(image);
+            String url = fileProcessService.uploadImage(multipartFile, FileFolder.ARTICLE_IMAGES);
+            imageRepository.save(new Image(url, article));
         }
     }
 }
