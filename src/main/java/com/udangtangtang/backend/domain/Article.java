@@ -19,8 +19,9 @@ public class Article extends Timestamped {
     @Column(nullable = false)
     private String text;
 
-    @Column(nullable = true)
-    private String location;
+    @OneToOne
+    @JoinColumn(name = "location_id", nullable = false)
+    private Location location;
 
     @OneToOne
     @JoinColumn(name = "user_id", nullable = false)
@@ -32,7 +33,8 @@ public class Article extends Timestamped {
     @OneToMany(mappedBy = "article")
     private List<Image> imageList;
 
-    public Article(String text, String location, User user) {
+
+    public Article(String text, Location location, User user) {
         this.text = text;
         this.location = location;
         this.user = user;

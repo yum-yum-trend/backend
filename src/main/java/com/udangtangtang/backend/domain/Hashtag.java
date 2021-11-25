@@ -22,13 +22,12 @@ public class Hashtag extends Timestamped {
     @JoinColumn(name = "article_id")
     private Article article;
 
-    @OneToOne
-    @JoinColumn(name = "user_id")
-    private User user;
+    @Column(nullable = false)
+    private Long userId;
 
-    public Hashtag(String tag, Article article, User user) {
+    public Hashtag(String tag, Article article, Long userId) {
         this.tag = tag;
         this.article = article;
-        this.user = user;
+        this.userId = userId;
     }
 }

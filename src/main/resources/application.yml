@@ -1,0 +1,32 @@
+spring:
+  profiles:
+    include:
+      - aws
+      - credentials
+  h2:
+    console:
+      enabled: true
+  datasource:
+    driverClassName: org.h2.Driver
+    url: jdbc:h2:./yum-yum-trend-db;AUTO_SERVER=TRUE
+    username: sa
+    password:
+  jpa:
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+    hibernate:
+      ddl-auto: update
+    generate-ddl: false
+
+logging:
+  level:
+    org:
+      hibernate:
+        SQL: debug
+        type:
+          descriptor:
+            sql: trace
+jwt:
+  secret: javainuse

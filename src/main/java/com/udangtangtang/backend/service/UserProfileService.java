@@ -1,6 +1,7 @@
 package com.udangtangtang.backend.service;
 
 import com.udangtangtang.backend.domain.Article;
+import com.udangtangtang.backend.domain.FileFolder;
 import com.udangtangtang.backend.domain.User;
 import com.udangtangtang.backend.repository.ArticleRepository;
 import com.udangtangtang.backend.repository.UserRepository;
@@ -17,7 +18,7 @@ import java.util.Optional;
 public class UserProfileService {
 
     private final UserRepository userRepository;
-    private final FileService fileService;
+    private final FileProcessService fileProcessService;
     private final ArticleRepository articleRepository;
     // private final CommentRepository commentRepository;
 
@@ -32,15 +33,8 @@ public class UserProfileService {
     @Transactional
     public String updateProfileImage(Long userId, MultipartFile newProfileImage) {
         Optional<User> user = userRepository.findById(userId);
-        String url = fileService.uploadImage(newProfileImage);
-        user.get().updateUserProfileImageUrl(url);
+        String url = fileProcessService.uploadImage(newProfileImage, FileFolder.PROFILE_IMAGES);
+        user.get().setUserProfileImageUrl(url);
         return user.get().getUserProfileImageUrl();
     }
-
-
-
-//    public List<Comment> getUserComments(Long id) {
-//        return commentRepository.findAllById(id);
-//    }
-
 }

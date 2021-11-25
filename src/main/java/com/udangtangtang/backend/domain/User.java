@@ -65,8 +65,4 @@ public class User extends Timestamped {
                 ", kakaoId=" + kakaoId +
                 '}';
     }
-
-    public void updateUserProfileImageUrl(String newUrl) {
-        this.userProfileImageUrl = newUrl;
-    }
 }
