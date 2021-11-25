@@ -1,18 +1,15 @@
 package com.udangtangtang.backend.security;
 
 import com.udangtangtang.backend.domain.User;
-import com.udangtangtang.backend.domain.UserRole;
 import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 
 public class UserDetailsImpl implements UserDetails {
 
     private final User user;
-
 
     public UserDetailsImpl(User user) {
         this.user = user;
@@ -21,6 +18,8 @@ public class UserDetailsImpl implements UserDetails {
     public User getUser() {
         return user;
     }
+
+    public Long getId() {return user.getId();}
 
     @Override
     public String getPassword() {
@@ -52,16 +51,8 @@ public class UserDetailsImpl implements UserDetails {
         return true;
     }
 
-    private static final String ROLE_PREFIX = "ROLE_";
-
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        UserRole userRole = user.getRole();
-        System.out.println(userRole.toString());
-        SimpleGrantedAuthority authority = new SimpleGrantedAuthority(ROLE_PREFIX + userRole.toString());
-        Collection<GrantedAuthority> authorities = new ArrayList<>();
-        authorities.add(authority);
-
-        return authorities;
+        return Collections.emptyList();
     }
 }

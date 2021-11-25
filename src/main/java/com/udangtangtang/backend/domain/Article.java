@@ -1,46 +1,40 @@
 package com.udangtangtang.backend.domain;
 
-import com.udangtangtang.backend.dto.ArticleRequestDto;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.util.List;
 
-@Setter
-@Getter
-@NoArgsConstructor
 @Entity
-public class Article {
-    @GeneratedValue(strategy = GenerationType.AUTO)
+@NoArgsConstructor
+@Getter
+@Setter
+public class Article extends Timestamped {
     @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
     @Column(nullable = false)
-    private String title;
+    private String text;
 
-    @Column(nullable = false)
-    private String pictureUrl;
-
-    @Column(nullable = false)
-    private String content;
-
-    @Column(nullable = false)
+    @Column(nullable = true)
     private String location;
 
-    @Column(nullable = false)
-    private String hashTag;
+    @OneToOne
+    @JoinColumn(name = "user_id", nullable = false)
+    private User user;
 
-    @Column(nullable = false)
-    private Long userId;
+    @OneToMany(mappedBy = "article")
+    private List<Hashtag> hashtagList;
 
-    public Article(ArticleRequestDto requestDto, Long userId) {
+    @OneToMany(mappedBy = "article")
+    private List<Image> imageList;
 
-        this.title = requestDto.getTitle();
-        this.pictureUrl = requestDto.getPictureUrl();
-        this.content = requestDto.getContent();
-        this.location = requestDto.getLocation();
-        this.hashTag = requestDto.getHashTag();
-        this.userId = userId;
+    public Article(String text, String location, User user) {
+        this.text = text;
+        this.location = location;
+        this.user = user;
     }
 }

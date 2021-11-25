@@ -1,28 +1,38 @@
 package com.udangtangtang.backend.controller;
 
 import com.udangtangtang.backend.domain.Article;
-import com.udangtangtang.backend.dto.ArticleRequestDto;
+import com.udangtangtang.backend.security.UserDetailsImpl;
 import com.udangtangtang.backend.service.ArticleService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequiredArgsConstructor
 public class ArticleController {
+
     private final ArticleService articleService;
 
     @GetMapping("/articles")
-    public List<Article> getAllArticles () {
+    public List<Article> getArticles() {
         return articleService.getArticles();
     }
 
-    @PostMapping("/article/save")
-    public Article createArticle(@RequestBody ArticleRequestDto requestDto) {
-        return articleService.createArticle(requestDto, 0L);
+    @GetMapping("/articles/{id}")
+    public Article getArticle(@PathVariable Long id) {
+        return articleService.getArticle(id);
+    }
+
+    @PostMapping("/articles")
+    public void createArticle(@AuthenticationPrincipal UserDetailsImpl userDetails,
+                                @RequestParam("text") String text,
+                                @RequestParam("location") String location,
+                                @RequestParam("hashtagNameList") List<String> hashtagNameList,
+                                @RequestParam("imageFileList") List<MultipartFile> imageFileList) {
+        articleService.createArticle(userDetails.getUser(), text, location, hashtagNameList, imageFileList);
     }
 }

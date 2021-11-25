@@ -4,12 +4,15 @@
     <!-- Required meta tags -->
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <link rel="shortcut icon" href="/images/favicon.png">
+    <link rel="shortcut icon" href="/static/images/favicon.png">
 
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
           integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm"
           crossorigin="anonymous">
+    <!-- Font Awesome -->
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.css"/>
 
     <!-- JS -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
@@ -27,17 +30,27 @@
 
     <!-- Custom JS / CSS -->
     <link href="/css/basic.css" rel="stylesheet" type="text/css">
+    <script src="/secret/secrets.js"></script>
+    <script src="/js/basic.js"></script>
+    <script src="/js/index.js"></script>
 
     <title>Yum Yum Trend</title>
 </head>
 <script>
-    $(document).ready(function() {
-       $('#header').load("header.html");
-       $('#list').load("list.html");
+    $(document).ready(function () {
+        $('#header').load("header.html");
+        $('#list').load("list.html");
+        $('#modal').load("article-modal.html");
+
+        showArticles();
     });
 </script>
 <body>
     <header id="header"></header>
     <section id="list"></section>
+    <section id="modal"></section>
 </body>
+<script>
+
+</script>
 </html>
