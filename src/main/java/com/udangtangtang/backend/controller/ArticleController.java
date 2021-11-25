@@ -31,13 +31,11 @@ public class ArticleController {
     @PostMapping("/articles")
     public void createArticle(@AuthenticationPrincipal UserDetailsImpl userDetails,
                                 @RequestParam("text") String text,
-                                @RequestParam("location") String location,
+                                @RequestParam("location") String locationJsonString,
                                 @RequestParam("hashtagNameList") List<String> hashtagNameList,
                                 @RequestParam("imageFileList") List<MultipartFile> imageFileList) {
-        System.out.println(111111);
-        JSONObject rjson = new JSONObject(location);
-        System.out.println(rjson);
-        System.out.println(rjson.getJSONObject("xCoordinate"));
-        articleService.createArticle(userDetails.getUser(), text, "ddd", hashtagNameList, imageFileList);
+
+
+        articleService.createArticle(userDetails.getUser(), text, new LocationRequestDto(locationJsonString), hashtagNameList, imageFileList);
     }
 }
