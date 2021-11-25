@@ -20,16 +20,16 @@ public class Location extends Timestamped {
     @Column(nullable = false)
     private String placeName;
 
-    @Column(nullable = false)
+    @Column(nullable = true)
     private String roadAddressName;
 
-    @Column(nullable = false)
+    @Column(nullable = true)
     private String xCoordinate;
 
-    @Column(nullable = false)
+    @Column(nullable = true)
     private String yCoordinate;
 
-    @Column(nullable = false)
+    @Column(nullable = true)
     private String categoryName;
 
     @Column(nullable = false)

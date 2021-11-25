@@ -6,7 +6,7 @@ import com.udangtangtang.backend.repository.ArticleRepository;
 import com.udangtangtang.backend.repository.HashtagRepository;
 import com.udangtangtang.backend.repository.ImageRepository;
 import com.udangtangtang.backend.repository.LocationRepository;
-import com.udangtangtang.backend.util.DataPreprocessing;
+import com.udangtangtang.backend.util.LocationDataPreprocess;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -23,7 +23,7 @@ public class ArticleService {
     private final HashtagRepository hashtagRepository;
     private final ImageRepository imageRepository;
     private final FileService fileService;
-    private final DataPreprocessing dataPreprocessing;
+    private final LocationDataPreprocess locationDataPreprocess;
 
     public List<Article> getArticles() {
         return articleRepository.findAll();
@@ -36,8 +36,8 @@ public class ArticleService {
 
     @Transactional
     public void createArticle(User user, String text, LocationRequestDto locationRequestDto, List<String> hashtagNameList, List<MultipartFile> imageFileList) {
-        LocationRequestDto locationInfo = dataPreprocessing.categoryDataPreprocessing(locationRequestDto);
-        Location location = locationRepository.save(new Location(locationInfo, user.getId()));
+        locationDataPreprocess.categoryNamePreprocess(locationRequestDto);
+        Location location = locationRepository.save(new Location(locationRequestDto, user.getId()));
 
         Article article = articleRepository.save(new Article(text, location, user));
 
