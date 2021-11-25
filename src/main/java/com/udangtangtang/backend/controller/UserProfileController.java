@@ -20,6 +20,11 @@ public class UserProfileController {
 
     private final UserProfileService userProfileService;
 
+    @GetMapping(value = "/profile/navbarimage/{userId}")
+    public String getUserProfileImageUrl(@PathVariable("userId") Long userId) {
+        return userProfileService.getUserProfileImageUrl(userId);
+    }
+
     @GetMapping(value = "/profile/{userId}")
     public Optional<User> getUserProfileInfo(@PathVariable("userId") Long userId) {
         return userProfileService.getUserProfileInfo(userId);
@@ -33,14 +38,7 @@ public class UserProfileController {
     @PostMapping(value = "/profile/imagechange/{userId}")
     public String getProfileImage(@PathVariable("userId") Long userId,
                                 @RequestParam("newProfileImage") MultipartFile newProfileImage) {
-        System.out.println("여기?");
         String url = userProfileService.updateProfileImage(userId, newProfileImage);
         return url;
     }
-
-
-//    @GetMapping(value = "/profile/comments/${userId}")
-//    public List<Comment> getUserComments(@PathVariable("userId") Long userId) {
-//        return userProfileService.getUserComments(username);
-//    }
 }

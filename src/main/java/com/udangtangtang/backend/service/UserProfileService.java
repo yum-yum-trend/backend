@@ -37,4 +37,8 @@ public class UserProfileService {
         user.get().setUserProfileImageUrl(url);
         return user.get().getUserProfileImageUrl();
     }
+
+    public String getUserProfileImageUrl(Long userId) {
+        return userRepository.findById(userId).get().getUserProfileImageUrl();
+    }
 }
