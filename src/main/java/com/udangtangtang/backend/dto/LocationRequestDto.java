@@ -22,12 +22,19 @@ public class LocationRequestDto {
     public LocationRequestDto(String locationJsonString) {
         JSONObject jsonObject = new JSONObject(locationJsonString);
 
-        this.placeName = jsonObject.getString("placeName");
-        this.roadAddressName = jsonObject.getString("roadAddressName");
-        this.xCoordinate = jsonObject.getString("xCoordinate");
-        this.yCoordinate = jsonObject.getString(("yCoordinate"));
-        this.categoryName = jsonObject.getString("categoryName");
-
+        if(jsonObject.length() == 0) {
+            this.placeName = "집";
+            this.roadAddressName = "";
+            this.xCoordinate = "";
+            this.yCoordinate = "";
+            this.categoryName = "";
+        } else {
+            this.placeName = jsonObject.getString("placeName");
+            this.roadAddressName = jsonObject.getString("roadAddressName");
+            this.xCoordinate = jsonObject.getString("xCoordinate");
+            this.yCoordinate = jsonObject.getString(("yCoordinate"));
+            this.categoryName = jsonObject.getString("categoryName");
+        }
         System.out.println("res");
         System.out.println(this);
     }

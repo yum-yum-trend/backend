@@ -35,7 +35,6 @@ public class ArticleController {
                                 @RequestParam("hashtagNameList") List<String> hashtagNameList,
                                 @RequestParam("imageFileList") List<MultipartFile> imageFileList) {
 
-
         articleService.createArticle(userDetails.getUser(), text, new LocationRequestDto(locationJsonString), hashtagNameList, imageFileList);
     }
 }
