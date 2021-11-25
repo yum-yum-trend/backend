@@ -36,13 +36,12 @@ public class ArticleService {
         Article article = articleRepository.save(new Article(text, location, user));
 
         for(String tag : hashtagNameList) {
-            hashtagRepository.save(new Hashtag(tag, article, user));
+            hashtagRepository.save(new Hashtag(tag, article, user.getId()));
         }
 
         for(MultipartFile multipartFile : imageFileList) {
             String url = fileProcessService.uploadImage(multipartFile, FileFolder.ARTICLE_IMAGES);
-            Image image = new Image(url, article);
-            imageRepository.save(image);
+            imageRepository.save(new Image(url, article));
         }
     }
 }
