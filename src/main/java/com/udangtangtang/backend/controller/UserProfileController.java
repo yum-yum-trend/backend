@@ -2,6 +2,7 @@ package com.udangtangtang.backend.controller;
 
 import com.udangtangtang.backend.domain.Article;
 import com.udangtangtang.backend.domain.User;
+import com.udangtangtang.backend.dto.ProfileChangesDto;
 import com.udangtangtang.backend.security.UserDetailsImpl;
 import com.udangtangtang.backend.service.ArticleService;
 import com.udangtangtang.backend.service.UserProfileService;
@@ -20,7 +21,7 @@ public class UserProfileController {
 
     private final UserProfileService userProfileService;
 
-    @GetMapping(value = "/profile/navbarimage/{userId}")
+    @GetMapping(value = "/profile/navbar-image/{userId}")
     public String getUserProfileImageUrl(@PathVariable("userId") Long userId) {
         return userProfileService.getUserProfileImageUrl(userId);
     }
@@ -35,10 +36,28 @@ public class UserProfileController {
         return userProfileService.getUserArticles(userId);
     }
 
-    @PostMapping(value = "/profile/imagechange/{userId}")
+//    @GetMapping(value = "/profile/bookmarks/{userId}")
+//    public List<Article> getUserArticles(@PathVariable("userId") Long userId) {
+//        return userProfileService.getUserBookmarks(userId);
+//    }
+
+    @PostMapping(value = "/profile/image-change/{userId}")
     public String getProfileImage(@PathVariable("userId") Long userId,
                                 @RequestParam("newProfileImage") MultipartFile newProfileImage) {
         String url = userProfileService.updateProfileImage(userId, newProfileImage);
         return url;
+    }
+
+    @PostMapping(value = "/profile/update/{userId}")
+    public String updateUserProfileInfo(@PathVariable("userId") Long userId,
+                                          @RequestBody ProfileChangesDto profileChangesDto) {
+        return userProfileService.updateUserProfileInfo(userId, profileChangesDto);
+
+    }
+
+    @GetMapping(value = "/profile/image-reset/{userId}")
+    public String resetUserProfileImage(@PathVariable("userId") Long userId) {
+        userProfileService.resetUserProfileImage(userId);
+        return "success";
     }
 }
