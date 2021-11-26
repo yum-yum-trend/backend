@@ -1,5 +1,6 @@
 package com.udangtangtang.backend.service;
 
+
 import com.udangtangtang.backend.domain.*;
 import com.udangtangtang.backend.dto.LocationRequestDto;
 import com.udangtangtang.backend.repository.ArticleRepository;
@@ -22,7 +23,6 @@ public class ArticleService {
     private final LocationRepository locationRepository;
     private final HashtagRepository hashtagRepository;
     private final ImageRepository imageRepository;
-
     private final FileProcessService fileProcessService;
     private final LocationDataPreprocess locationDataPreprocess;
 
