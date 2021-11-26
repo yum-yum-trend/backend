@@ -49,10 +49,9 @@ public class UserProfileController {
     }
 
     @PostMapping(value = "/profile/update/{userId}")
-    public String updateUserProfileInfo(@PathVariable("userId") Long userId,
-                                          @RequestBody ProfileChangesDto profileChangesDto) {
-        return userProfileService.updateUserProfileInfo(userId, profileChangesDto);
-
+    public void updateUserProfileInfo(@PathVariable("userId") Long userId,
+                                          @RequestBody ProfileChangesDto profileChangesDto) throws Exception {
+        userProfileService.updateUserProfileInfo(userId, profileChangesDto);
     }
 
     @GetMapping(value = "/profile/image-reset/{userId}")
