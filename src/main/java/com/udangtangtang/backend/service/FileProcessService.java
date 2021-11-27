@@ -47,6 +47,6 @@ public class FileProcessService {
 
     private String getFileName(String url) {
         String[] paths = url.split("/");
-        return paths[paths.length-2] + "/" + paths[paths.length-1];
+        return paths[paths.length-2] + "/" + paths[paths.length-1]; // folder + / + file name
     }
 }

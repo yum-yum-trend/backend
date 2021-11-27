@@ -5,6 +5,7 @@ import com.udangtangtang.backend.dto.LocationRequestDto;
 import com.udangtangtang.backend.security.UserDetailsImpl;
 import com.udangtangtang.backend.service.ArticleService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.lang.Nullable;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -44,12 +45,12 @@ public class ArticleController {
                               @RequestParam("text") String text,
                               @RequestParam("location") String locationJsonString,
                               @RequestParam("tagNames") List<String> tagNames,
-                              @RequestParam("imageFiles") List<MultipartFile> imageFiles) {
+                              @Nullable @RequestParam("imageFiles") List<MultipartFile> imageFiles) {
         articleService.updateArticle(userDetails.getUser(), id, text, new LocationRequestDto(locationJsonString), tagNames, imageFiles);
     }
 
     @DeleteMapping("/articles/image/{id}")
     public void deleteArticleImage(@PathVariable Long id) {
-
+        articleService.deleteArticleImage(id);
     }
 }

@@ -15,6 +15,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -70,9 +71,11 @@ public class ArticleService {
         }
 
         List<Image> images = new ArrayList<>();
-        for(MultipartFile multipartFile : imageFiles) {
-            String url = fileProcessService.uploadImage(multipartFile, FileFolder.ARTICLE_IMAGES);
-            images.add(new Image(url, article));
+        if (imageFiles != null) {
+            for(MultipartFile multipartFile : imageFiles) {
+                String url = fileProcessService.uploadImage(multipartFile, FileFolder.ARTICLE_IMAGES);
+                images.add(new Image(url, article));
+            }
         }
 
         article.update(text, location, tags, images);
@@ -81,6 +84,10 @@ public class ArticleService {
 
     @Transactional
     public void deleteArticleImage(Long id) {
+        Image image = imageRepository.findById(id).orElseThrow(
+                () -> new NullPointerException(String.format("아이디(%d)에 해당되는 이미지가 없습니다.", id))
+        );
+        fileProcessService.deleteImage(image.getUrl());
         imageRepository.deleteById(id);
     }
 }
