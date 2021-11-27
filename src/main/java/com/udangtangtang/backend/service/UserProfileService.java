@@ -3,7 +3,7 @@ package com.udangtangtang.backend.service;
 import com.udangtangtang.backend.domain.Article;
 import com.udangtangtang.backend.domain.FileFolder;
 import com.udangtangtang.backend.domain.User;
-import com.udangtangtang.backend.dto.ProfileChangesDto;
+import com.udangtangtang.backend.dto.ProfileRequestDto;
 import com.udangtangtang.backend.repository.ArticleRepository;
 import com.udangtangtang.backend.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -49,13 +49,13 @@ public class UserProfileService {
     }
 
     @Transactional
-    public void updateUserProfileInfo(Long userId, ProfileChangesDto profileChangesDto) throws Exception  {
+    public void updateUserProfileInfo(Long userId, ProfileRequestDto profileRequestDto) throws Exception  {
         Optional<User> user = userRepository.findById(userId);
-        String nowPassword = profileChangesDto.getNowPassword();
-        String newPassword = profileChangesDto.getNewPassword();
-        String userProfileIntro = profileChangesDto.getUserProfileIntro();
+        String nowPassword = profileRequestDto.getNowPassword();
+        String newPassword = profileRequestDto.getNewPassword();
+        String userProfileIntro = profileRequestDto.getUserProfileIntro();
 
-        if (!nowPassword.equals("")) {
+        if (!nowPassword.isEmpty()) {
             authenticate(user.get().getUsername(), nowPassword);
             String encodedNewPassword = passwordEncoder.encode(newPassword);
             user.get().setPassword(encodedNewPassword);

@@ -2,13 +2,9 @@ package com.udangtangtang.backend.controller;
 
 import com.udangtangtang.backend.domain.Article;
 import com.udangtangtang.backend.domain.User;
-import com.udangtangtang.backend.dto.ProfileChangesDto;
-import com.udangtangtang.backend.security.UserDetailsImpl;
-import com.udangtangtang.backend.service.ArticleService;
+import com.udangtangtang.backend.dto.ProfileRequestDto;
 import com.udangtangtang.backend.service.UserProfileService;
-import com.udangtangtang.backend.service.UserService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -48,13 +44,13 @@ public class UserProfileController {
         return url;
     }
 
-    @PostMapping(value = "/profile/update/{userId}")
+    @PutMapping(value = "/profile/{userId}")
     public void updateUserProfileInfo(@PathVariable("userId") Long userId,
-                                          @RequestBody ProfileChangesDto profileChangesDto) throws Exception {
-        userProfileService.updateUserProfileInfo(userId, profileChangesDto);
+                                          @RequestBody ProfileRequestDto profileRequestDto) throws Exception {
+        userProfileService.updateUserProfileInfo(userId, profileRequestDto);
     }
 
-    @GetMapping(value = "/profile/image-reset/{userId}")
+    @DeleteMapping(value = "/profile/{userId}")
     public String resetUserProfileImage(@PathVariable("userId") Long userId) {
         userProfileService.resetUserProfileImage(userId);
         return "success";
