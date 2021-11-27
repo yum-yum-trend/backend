@@ -26,8 +26,8 @@ public class ArticleController {
     }
 
     @GetMapping("/articles/{id}")
-    public Article getArticle(@PathVariable Long id) {
-        return articleService.getArticle(id);
+    public ArticleResponseDto getArticle(@PathVariable Long id, @AuthenticationPrincipal UserDetailsImpl userDetails) {
+        return articleService.getArticle(id, userDetails.getUser().getId());
     }
 
     @PostMapping("/articles")

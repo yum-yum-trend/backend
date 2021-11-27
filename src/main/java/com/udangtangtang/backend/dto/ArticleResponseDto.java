@@ -13,5 +13,4 @@ public class ArticleResponseDto {
     private Article article;
     private Long likeCount;
     private boolean likes;
-
 }

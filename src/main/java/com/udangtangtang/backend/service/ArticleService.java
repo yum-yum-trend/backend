@@ -44,9 +44,19 @@ public class ArticleService {
         return articleResponseDtoList;
     }
 
-    public Article getArticle(Long id) { return articleRepository.findById(id).orElseThrow(
-            () -> new NullPointerException("해당되는 아이디의 게시물이 없습니다.")
+    public ArticleResponseDto getArticle(Long id, Long userId) {
+        Article article = articleRepository.findById(id).orElseThrow(
+                () -> new NullPointerException("해당되는 아이디의 게시물이 없습니다.")
         );
+        Long likeCount = likesRepository.countByArticleId(id);
+
+        if (likesRepository.findByUserIdAndArticleId(userId, id).isPresent()) {
+            ArticleResponseDto articleResponseDto = new ArticleResponseDto(article, likeCount, true);
+            return articleResponseDto;
+        } else {
+            ArticleResponseDto articleResponseDto = new ArticleResponseDto(article, likeCount, false);
+            return articleResponseDto;
+        }
     }
 
     @Transactional
