@@ -24,7 +24,7 @@ logging:
   level:
     org:
       hibernate:
-        SQL: debug
+        SQL: error # debug
         type:
           descriptor:
             sql: trace
