@@ -46,7 +46,7 @@ public class ArticleController {
         articleService.increaseLikeCount(userDetails.getId(), articleId);
     }
 
-    @PutMapping("articles/unlike")
+    @PutMapping("/articles/unlike")
     public void decreaseLikeCount(@AuthenticationPrincipal UserDetailsImpl userDetails,
                                   @RequestParam("articleId") Long articleId) {
         articleService.decreaseLikeCount(userDetails.getId(), articleId);
