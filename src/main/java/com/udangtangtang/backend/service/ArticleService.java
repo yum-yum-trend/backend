@@ -15,7 +15,6 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -80,6 +79,20 @@ public class ArticleService {
 
         article.update(text, location, tags, images);
         articleRepository.save(article);
+    }
+
+    @Transactional
+    public void deleteArticle(Long id) throws IllegalArgumentException {
+        Article article = articleRepository.findById(id).orElseThrow(
+                () -> new NullPointerException(String.format("아이디(%d)에 해당되는 게시물이 없습니다.", id))
+        );
+
+        // S3에 업로드된 이미지 삭제
+        for(Image image : article.getImages()) {
+            fileProcessService.deleteImage(image.getUrl());
+        }
+
+        articleRepository.delete(article);
     }
 
     @Transactional

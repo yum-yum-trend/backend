@@ -49,6 +49,11 @@ public class ArticleController {
         articleService.updateArticle(userDetails.getUser(), id, text, new LocationRequestDto(locationJsonString), tagNames, imageFiles);
     }
 
+    @DeleteMapping("/articles/{id}")
+    public void deleteArticle(@AuthenticationPrincipal UserDetailsImpl userDetails, @PathVariable("id") Long id) {
+        articleService.deleteArticle(id);
+    }
+
     @DeleteMapping("/articles/image/{id}")
     public void deleteArticleImage(@PathVariable Long id) {
         articleService.deleteArticleImage(id);
