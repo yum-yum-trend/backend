@@ -19,7 +19,7 @@ public class Article extends Timestamped {
     @Column(nullable = false)
     private String text;
 
-    @OneToOne(cascade = CascadeType.ALL)
+    @OneToOne(orphanRemoval=true)
     @JoinColumn(name = "location_id", nullable = false)
     private Location location;
 
