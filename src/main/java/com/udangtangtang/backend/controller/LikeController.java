@@ -20,7 +20,7 @@ public class LikeController {
     }
 
     @GetMapping("/likes/{id}")
-    public LikeResponseDto getArticle(@PathVariable Long id, 
+    public LikeResponseDto getArticle(@PathVariable Long id,
                                       @AuthenticationPrincipal UserDetailsImpl userDetails) {
         return likeService.getLike(id, userDetails.getUser().getId());
     }
