@@ -52,23 +52,30 @@ public class UserProfileService {
     }
 
     @Transactional
-    public void updateUserProfileInfo(Long userId, ProfileRequestDto profileRequestDto) throws Exception  {
+    public void updateUserPassword(Long userId, ProfileRequestDto profileRequestDto) throws Exception {
         User user = userRepository.findById(userId).orElseThrow(
                 () -> new NullPointerException("해당 유저가 존재하지 않습니다!"));
         String nowPassword = profileRequestDto.getNowPassword();
         String newPassword = profileRequestDto.getNewPassword();
-        String userProfileIntro = profileRequestDto.getUserProfileIntro();
 
         if (!nowPassword.isEmpty()) {
             authenticate(user.getUsername(), nowPassword);
             String encodedNewPassword = passwordEncoder.encode(newPassword);
             user.setPassword(encodedNewPassword);
         }
+    }
 
+    @Transactional
+    public String updateUserProfileIntroText(Long userId, ProfileRequestDto profileRequestDto) {
+        User user = userRepository.findById(userId).orElseThrow(
+                () -> new NullPointerException("해당 유저가 존재하지 않습니다!"));
+        String userProfileIntro = profileRequestDto.getUserProfileIntro();
         if (!userProfileIntro.equals(user.getUserProfileIntro())) {
             user.setUserProfileIntro(userProfileIntro);
         }
+        return user.getUserProfileIntro();
     }
+
 
     private void authenticate(String username, String password) throws Exception {
         try {
@@ -86,4 +93,5 @@ public class UserProfileService {
                 () -> new NullPointerException("해당 유저가 존재하지 않습니다!"));
         user.setUserProfileImageUrl("");
     }
+
 }
