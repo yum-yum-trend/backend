@@ -3,10 +3,7 @@ package com.udangtangtang.backend.service;
 
 import com.udangtangtang.backend.domain.*;
 import com.udangtangtang.backend.dto.LocationRequestDto;
-import com.udangtangtang.backend.repository.ArticleRepository;
-import com.udangtangtang.backend.repository.TagRepository;
-import com.udangtangtang.backend.repository.ImageRepository;
-import com.udangtangtang.backend.repository.LocationRepository;
+import com.udangtangtang.backend.repository.*;
 import com.udangtangtang.backend.util.LocationDataPreprocess;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -28,12 +25,16 @@ public class ArticleService {
     private final LocationDataPreprocess locationDataPreprocess;
 
     public List<Article> getArticles() {
-        return articleRepository.findAll();
+        List<Article> articleList = articleRepository.findAll();
+
+        return articleList;
     }
 
-    public Article getArticle(Long id) { return articleRepository.findById(id).orElseThrow(
-            () -> new NullPointerException("해당되는 아이디의 게시물이 없습니다.")
+    public Article getArticle(Long id) {
+        Article article = articleRepository.findById(id).orElseThrow(
+                () -> new NullPointerException("해당되는 아이디의 게시물이 없습니다.")
         );
+        return article;
     }
 
     @Transactional

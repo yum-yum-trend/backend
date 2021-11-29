@@ -33,7 +33,6 @@ public class Article extends Timestamped {
     @OneToMany(mappedBy = "article", cascade = CascadeType.ALL, orphanRemoval=true)
     private List<Image> images;
 
-
     public Article(String text, Location location, User user) {
         this.text = text;
         this.location = location;

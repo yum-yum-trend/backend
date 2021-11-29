@@ -5,6 +5,7 @@ import com.udangtangtang.backend.controller.JwtAuthenticationFilter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -37,6 +38,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/login/kakao").permitAll()
                 .antMatchers("/signup").permitAll()
                 .antMatchers("/").permitAll()
+                .mvcMatchers(HttpMethod.GET, "/articles/**").permitAll()
+                .mvcMatchers(HttpMethod.GET, "/likes/guest/**").permitAll()
                 .anyRequest().authenticated().and()
                 .cors().and()
                 .exceptionHandling().authenticationEntryPoint(jwtAuthenticationEntryPoint).and().sessionManagement()
@@ -47,9 +50,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .defaultSuccessUrl("/")
                 .permitAll()
                 .and()
-                .logout()
-                .logoutUrl("/user/logout")
-                .permitAll();
+                .logout();
+
 
         http.addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class);
     }
