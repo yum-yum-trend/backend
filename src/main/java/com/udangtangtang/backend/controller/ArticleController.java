@@ -46,17 +46,13 @@ public class ArticleController {
                               @RequestParam("text") String text,
                               @RequestParam("location") String locationJsonString,
                               @RequestParam("tagNames") List<String> tagNames,
-                              @Nullable @RequestParam("imageFiles") List<MultipartFile> imageFiles) {
-        articleService.updateArticle(userDetails.getUser(), id, text, new LocationRequestDto(locationJsonString), tagNames, imageFiles);
+                              @Nullable @RequestParam("imageFiles") List<MultipartFile> imageFiles,
+                              @Nullable @RequestParam("rmImageIdList") List<Long> rmImageIdList) {
+        articleService.updateArticle(userDetails.getUser(), id, text, new LocationRequestDto(locationJsonString), tagNames, imageFiles, rmImageIdList);
     }
 
     @DeleteMapping("/articles/{id}")
     public void deleteArticle(@AuthenticationPrincipal UserDetailsImpl userDetails, @PathVariable("id") Long id) {
         articleService.deleteArticle(id);
-    }
-
-    @DeleteMapping("/articles/image/{id}")
-    public void deleteArticleImage(@PathVariable Long id) {
-        articleService.deleteArticleImage(id);
     }
 }

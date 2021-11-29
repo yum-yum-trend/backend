@@ -30,7 +30,7 @@ public class ArticleService {
 
     public Article getArticle(Long id) {
         return articleRepository.findById(id).orElseThrow(
-                () -> new NullPointerException("해당되는 아이디의 게시물이 없습니다.")
+                () -> new NullPointerException(String.format("해당되는 아이디(%d)의 게시물이 없습니다.", id))
         );
     }
 
@@ -54,10 +54,19 @@ public class ArticleService {
     }
 
     @Transactional
-    public void updateArticle(User user, Long id, String text, LocationRequestDto locationRequestDto, List<String> tagNames, List<MultipartFile> imageFiles) {
+    public void updateArticle(User user, Long id, String text, LocationRequestDto locationRequestDto, List<String> tagNames, List<MultipartFile> imageFiles, List<Long> rmImageIdList) {
         Article article = articleRepository.findById(id).orElseThrow(
-                () -> new NullPointerException("일치하는 게시물이 없습니다.")
+                () -> new NullPointerException(String.format("해당되는 아이디(%d)의 게시물이 없습니다.", id))
         );
+
+        // 기존에 저장된 이미지 삭제
+        for(Long imageId : rmImageIdList) {
+            Image image = imageRepository.findById(imageId).orElseThrow(
+                    () -> new NullPointerException(String.format("해당되는 아이디(%d)의 이미지가 없습니다.", imageId))
+            );
+            fileProcessService.deleteImage(image.getUrl());
+        }
+        imageRepository.deleteAllById(rmImageIdList);
 
         locationDataPreprocess.categoryNamePreprocess(locationRequestDto);
         Location location = locationRepository.save(new Location(locationRequestDto, user.getId()));
@@ -91,14 +100,5 @@ public class ArticleService {
         }
 
         articleRepository.delete(article);
-    }
-
-    @Transactional
-    public void deleteArticleImage(Long id) {
-        Image image = imageRepository.findById(id).orElseThrow(
-                () -> new NullPointerException(String.format("아이디(%d)에 해당되는 이미지가 없습니다.", id))
-        );
-        fileProcessService.deleteImage(image.getUrl());
-        imageRepository.deleteById(id);
     }
 }
