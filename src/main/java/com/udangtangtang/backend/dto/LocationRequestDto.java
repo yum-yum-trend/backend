@@ -6,8 +6,6 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.json.JSONObject;
 
-import javax.persistence.Column;
-
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
@@ -22,7 +20,7 @@ public class LocationRequestDto {
     public LocationRequestDto(String locationJsonString) {
         JSONObject jsonObject = new JSONObject(locationJsonString);
 
-        if(jsonObject.length() == 0) {
+        if(jsonObject.isEmpty()) {
             this.placeName = "집";
             this.roadAddressName = "";
             this.xCoordinate = "";
@@ -35,8 +33,6 @@ public class LocationRequestDto {
             this.yCoordinate = jsonObject.getString(("yCoordinate"));
             this.categoryName = jsonObject.getString("categoryName");
         }
-        System.out.println("res");
-        System.out.println(this);
     }
 
     @Override

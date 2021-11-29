@@ -5,6 +5,7 @@ import com.udangtangtang.backend.dto.LocationRequestDto;
 import com.udangtangtang.backend.security.UserDetailsImpl;
 import com.udangtangtang.backend.service.ArticleService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.lang.Nullable;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -32,9 +33,29 @@ public class ArticleController {
     public void createArticle(@AuthenticationPrincipal UserDetailsImpl userDetails,
                                 @RequestParam("text") String text,
                                 @RequestParam("location") String locationJsonString,
-                                @RequestParam("hashtagNameList") List<String> hashtagNameList,
-                                @RequestParam("imageFileList") List<MultipartFile> imageFileList) {
+                                @RequestParam("tagNames") List<String> tagNames,
+                                @RequestParam("imageFiles") List<MultipartFile> imageFiles) {
 
-        articleService.createArticle(userDetails.getUser(), text, new LocationRequestDto(locationJsonString), hashtagNameList, imageFileList);
+        articleService.createArticle(userDetails.getUser(), text, new LocationRequestDto(locationJsonString), tagNames, imageFiles);
+    }
+
+    @PostMapping("/articles/{id}")
+    public void updateArticle(@AuthenticationPrincipal UserDetailsImpl userDetails,
+                              @PathVariable("id") Long id,
+                              @RequestParam("text") String text,
+                              @RequestParam("location") String locationJsonString,
+                              @RequestParam("tagNames") List<String> tagNames,
+                              @Nullable @RequestParam("imageFiles") List<MultipartFile> imageFiles) {
+        articleService.updateArticle(userDetails.getUser(), id, text, new LocationRequestDto(locationJsonString), tagNames, imageFiles);
+    }
+
+    @DeleteMapping("/articles/{id}")
+    public void deleteArticle(@AuthenticationPrincipal UserDetailsImpl userDetails, @PathVariable("id") Long id) {
+        articleService.deleteArticle(id);
+    }
+
+    @DeleteMapping("/articles/image/{id}")
+    public void deleteArticleImage(@PathVariable Long id) {
+        articleService.deleteArticleImage(id);
     }
 }
