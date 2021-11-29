@@ -40,6 +40,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/").permitAll()
                 .mvcMatchers(HttpMethod.GET, "/articles/**").permitAll()
                 .mvcMatchers(HttpMethod.GET, "/likes/guest/**").permitAll()
+                .mvcMatchers(HttpMethod.GET, "/comment/**").permitAll()
                 .anyRequest().authenticated().and()
                 .cors().and()
                 .exceptionHandling().authenticationEntryPoint(jwtAuthenticationEntryPoint).and().sessionManagement()

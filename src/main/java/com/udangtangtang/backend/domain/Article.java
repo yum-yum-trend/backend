@@ -34,7 +34,7 @@ public class Article extends Timestamped {
     @OneToMany(mappedBy = "article", cascade = CascadeType.ALL, orphanRemoval=true)
     private List<Image> images;
 
-    @OneToMany(mappedBy = "article")
+    @OneToMany(mappedBy = "article", cascade = CascadeType.ALL)
     private List<Comment> comments = new ArrayList<>();
 
     public Article(String text, Location location, User user) {
