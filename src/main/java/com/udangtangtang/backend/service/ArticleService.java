@@ -2,17 +2,14 @@ package com.udangtangtang.backend.service;
 
 
 import com.udangtangtang.backend.domain.*;
-import com.udangtangtang.backend.dto.ArticleResponseDto;
 import com.udangtangtang.backend.dto.LocationRequestDto;
 import com.udangtangtang.backend.repository.*;
 import com.udangtangtang.backend.util.LocationDataPreprocess;
 import lombok.RequiredArgsConstructor;
-import net.bytebuddy.implementation.bytecode.Throw;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -25,38 +22,18 @@ public class ArticleService {
     private final ImageRepository imageRepository;
     private final FileProcessService fileProcessService;
     private final LocationDataPreprocess locationDataPreprocess;
-    private final UserRepository userRepository;
-    private final LikesRepository likesRepository;
 
-    public List<ArticleResponseDto> getArticles(Long userId) {
+    public List<Article> getArticles() {
         List<Article> articleList = articleRepository.findAll();
 
-        List<ArticleResponseDto> articleResponseDtoList = new ArrayList<>();
-        for (Article article : articleList) {
-            Long likeCount = likesRepository.countByArticleId(article.getId());
-
-            if (likesRepository.findByUserIdAndArticleId(userId, article.getId()).isPresent()) {
-                articleResponseDtoList.add(new ArticleResponseDto(article, likeCount, true));
-            } else {
-                articleResponseDtoList.add(new ArticleResponseDto(article, likeCount, false));
-            }
-        }
-        return articleResponseDtoList;
+        return articleList;
     }
 
-    public ArticleResponseDto getArticle(Long id, Long userId) {
+    public Article getArticle(Long id) {
         Article article = articleRepository.findById(id).orElseThrow(
                 () -> new NullPointerException("해당되는 아이디의 게시물이 없습니다.")
         );
-        Long likeCount = likesRepository.countByArticleId(id);
-
-        if (likesRepository.findByUserIdAndArticleId(userId, id).isPresent()) {
-            ArticleResponseDto articleResponseDto = new ArticleResponseDto(article, likeCount, true);
-            return articleResponseDto;
-        } else {
-            ArticleResponseDto articleResponseDto = new ArticleResponseDto(article, likeCount, false);
-            return articleResponseDto;
-        }
+        return article;
     }
 
     @Transactional
@@ -74,33 +51,5 @@ public class ArticleService {
             String url = fileProcessService.uploadImage(multipartFile, FileFolder.ARTICLE_IMAGES);
             imageRepository.save(new Image(url, article));
         }
-    }
-
-    @Transactional
-    public void increaseLikeCount(Long userId, Long articleId) {
-        if(likesRepository.findByUserIdAndArticleId(userId, articleId).isPresent()) {
-            throw new IllegalArgumentException("이미 좋아요를 누른 게시글입니다.");
-        }
-        userRepository.findById(userId).orElseThrow(
-                () -> new NullPointerException("해당 유저가 존재하지 않습니다!")
-        );
-        articleRepository.findById(articleId).orElseThrow(
-                () -> new NullPointerException("해당 글이 존재하지 않습니다!")
-        );
-        likesRepository.save(new Likes(userId, articleId));
-    }
-
-    @Transactional
-    public void decreaseLikeCount(Long user, Long articleId) {
-        Likes deleteLike = likesRepository.findByUserIdAndArticleId(user, articleId).orElseThrow(
-                () -> new NullPointerException("해당 좋아요 항목이 존재하지 않습니다!")
-        );
-        userRepository.findById(user).orElseThrow(
-                () -> new NullPointerException("해당 유저가 존재하지 않습니다!")
-        );
-        articleRepository.findById(articleId).orElseThrow(
-                () -> new NullPointerException("해당 글이 존재하지 않습니다!")
-        );
-        likesRepository.delete(deleteLike);
     }
 }
