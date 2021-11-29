@@ -1,8 +1,6 @@
 package com.udangtangtang.backend.controller;
 
 import com.udangtangtang.backend.domain.Article;
-import com.udangtangtang.backend.domain.Likes;
-import com.udangtangtang.backend.dto.ArticleResponseDto;
 import com.udangtangtang.backend.dto.LocationRequestDto;
 import com.udangtangtang.backend.security.UserDetailsImpl;
 import com.udangtangtang.backend.service.ArticleService;
@@ -21,13 +19,13 @@ public class ArticleController {
     private final ArticleService articleService;
 
     @GetMapping("/articles")
-    public List<ArticleResponseDto> getArticles(@AuthenticationPrincipal UserDetailsImpl userDetails) {
-        return articleService.getArticles(userDetails.getUser().getId());
+    public List<Article> getArticles() {
+        return articleService.getArticles();
     }
 
     @GetMapping("/articles/{id}")
-    public ArticleResponseDto getArticle(@PathVariable Long id, @AuthenticationPrincipal UserDetailsImpl userDetails) {
-        return articleService.getArticle(id, userDetails.getUser().getId());
+    public Article getArticle(@PathVariable Long id) {
+        return articleService.getArticle(id);
     }
 
     @PostMapping("/articles")
@@ -38,17 +36,5 @@ public class ArticleController {
                                 @RequestParam("imageFileList") List<MultipartFile> imageFileList) {
 
         articleService.createArticle(userDetails.getUser(), text, new LocationRequestDto(locationJsonString), hashtagNameList, imageFileList);
-    }
-
-    @PutMapping("/articles/like")
-    public void increaseLikeCount(@AuthenticationPrincipal UserDetailsImpl userDetails,
-                                  @RequestParam("articleId") Long articleId) {
-        articleService.increaseLikeCount(userDetails.getId(), articleId);
-    }
-
-    @PutMapping("articles/unlike")
-    public void decreaseLikeCount(@AuthenticationPrincipal UserDetailsImpl userDetails,
-                                  @RequestParam("articleId") Long articleId) {
-        articleService.decreaseLikeCount(userDetails.getId(), articleId);
     }
 }
