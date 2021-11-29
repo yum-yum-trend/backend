@@ -1,6 +1,5 @@
 package com.udangtangtang.backend.service;
 
-
 import com.udangtangtang.backend.domain.*;
 import com.udangtangtang.backend.dto.LocationRequestDto;
 import com.udangtangtang.backend.repository.*;
@@ -25,16 +24,14 @@ public class ArticleService {
     private final LocationDataPreprocess locationDataPreprocess;
 
     public List<Article> getArticles() {
-        List<Article> articleList = articleRepository.findAll();
 
-        return articleList;
+        return articleRepository.findAll();
     }
 
     public Article getArticle(Long id) {
-        Article article = articleRepository.findById(id).orElseThrow(
+        return articleRepository.findById(id).orElseThrow(
                 () -> new NullPointerException("해당되는 아이디의 게시물이 없습니다.")
         );
-        return article;
     }
 
     @Transactional

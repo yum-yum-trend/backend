@@ -5,6 +5,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -32,6 +33,9 @@ public class Article extends Timestamped {
 
     @OneToMany(mappedBy = "article", cascade = CascadeType.ALL, orphanRemoval=true)
     private List<Image> images;
+
+    @OneToMany(mappedBy = "article", cascade = CascadeType.ALL)
+    private List<Comment> comments = new ArrayList<>();
 
     public Article(String text, Location location, User user) {
         this.text = text;
