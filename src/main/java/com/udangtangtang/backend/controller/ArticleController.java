@@ -1,7 +1,5 @@
 package com.udangtangtang.backend.controller;
 
-import com.udangtangtang.backend.domain.Article;
-import com.udangtangtang.backend.domain.Likes;
 import com.udangtangtang.backend.dto.ArticleResponseDto;
 import com.udangtangtang.backend.dto.LocationRequestDto;
 import com.udangtangtang.backend.security.UserDetailsImpl;

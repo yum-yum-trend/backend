@@ -1,6 +1,5 @@
 package com.udangtangtang.backend.service;
 
-
 import com.amazonaws.services.s3.model.ObjectMetadata;
 import com.udangtangtang.backend.domain.FileFolder;
 import lombok.RequiredArgsConstructor;

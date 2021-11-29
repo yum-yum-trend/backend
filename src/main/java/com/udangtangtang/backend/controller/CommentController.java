@@ -1,6 +1,5 @@
 package com.udangtangtang.backend.controller;
 
-import com.udangtangtang.backend.domain.Comment;
 import com.udangtangtang.backend.dto.CommentRequestDto;
 import com.udangtangtang.backend.dto.CommentResponseDto;
 import com.udangtangtang.backend.security.UserDetailsImpl;

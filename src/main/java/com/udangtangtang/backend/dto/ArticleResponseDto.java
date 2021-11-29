@@ -1,7 +1,6 @@
 package com.udangtangtang.backend.dto;
 
 import com.udangtangtang.backend.domain.Article;
-import com.udangtangtang.backend.domain.Likes;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

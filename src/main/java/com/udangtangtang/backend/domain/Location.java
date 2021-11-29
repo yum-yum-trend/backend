@@ -1,6 +1,5 @@
 package com.udangtangtang.backend.domain;
 
-
 import com.udangtangtang.backend.dto.LocationRequestDto;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

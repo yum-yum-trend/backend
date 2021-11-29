@@ -1,13 +1,11 @@
 package com.udangtangtang.backend.service;
 
-
 import com.udangtangtang.backend.domain.*;
 import com.udangtangtang.backend.dto.ArticleResponseDto;
 import com.udangtangtang.backend.dto.LocationRequestDto;
 import com.udangtangtang.backend.repository.*;
 import com.udangtangtang.backend.util.LocationDataPreprocess;
 import lombok.RequiredArgsConstructor;
-import net.bytebuddy.implementation.bytecode.Throw;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
