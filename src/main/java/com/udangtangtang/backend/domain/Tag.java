@@ -9,13 +9,13 @@ import javax.persistence.*;
 @Entity
 @NoArgsConstructor
 @Getter
-public class Hashtag extends Timestamped {
+public class Tag extends Timestamped {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
     @Column(nullable = false)
-    private String tag;
+    private String name;
 
     @JsonIgnore
     @ManyToOne
@@ -25,8 +25,8 @@ public class Hashtag extends Timestamped {
     @Column(nullable = false)
     private Long userId;
 
-    public Hashtag(String tag, Article article, Long userId) {
-        this.tag = tag;
+    public Tag(String name, Article article, Long userId) {
+        this.name = name;
         this.article = article;
         this.userId = userId;
     }
