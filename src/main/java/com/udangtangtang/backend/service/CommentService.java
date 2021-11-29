@@ -42,10 +42,10 @@ public class CommentService {
 
     public void saveComment(Long userId, Long articleId, CommentRequestDto commentRequestDto) {
         Article article = articleRepository.findById(articleId).orElseThrow(
-                () -> new NullPointerException("해당 유저가 존재하지 않습니다."));
+                () -> new NullPointerException("해당 게시글이 존재하지 않습니다."));
         User user = userRepository.findById(userId).orElseThrow(
                 () -> new NullPointerException("해당 유저가 존재하지 않습니다."));
-        Comment comment = new Comment(user, article, commentRequestDto);
+        Comment comment = new Comment(user, article, commentRequestDto.getCommentText());
         commentRepository.save(comment);
     }
 

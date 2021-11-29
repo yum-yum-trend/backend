@@ -30,9 +30,9 @@ public class Comment {
     @Column(nullable = false)
     private String commentText;
 
-    public Comment(User user, Article article, CommentRequestDto commentRequestDto) {
+    public Comment(User user, Article article, String commentText) {
         this.user = user;
         this.article = article;
-        this.commentText = commentRequestDto.getCommentText();
+        this.commentText = commentText;
     }
 }
