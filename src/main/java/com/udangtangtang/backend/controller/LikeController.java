@@ -19,11 +19,32 @@ public class LikeController {
         return likeService.getLikes(userDetails.getUser().getId());
     }
 
+    @GetMapping("/likes/guest")
+    public List<LikeResponseDto> getLikesGuest() {
+        return likeService.getLikesGuest();
+    }
+
     @GetMapping("/likes/{id}")
-    public LikeResponseDto getArticle(@PathVariable Long id,
+    public LikeResponseDto getLike(@PathVariable Long id,
                                       @AuthenticationPrincipal UserDetailsImpl userDetails) {
         return likeService.getLike(id, userDetails.getUser().getId());
     }
+
+    @GetMapping("/likes/guest/{id}")
+    public LikeResponseDto getLikeGuest(@PathVariable Long id) {
+        return likeService.getLikeGuest(id);
+    }
+
+    @GetMapping("/profile/likes/{id}")
+    public List<LikeResponseDto> getLikesUser(@PathVariable Long id) {
+        return likeService.getLikesUser(id);
+    }
+
+    @GetMapping("/profile/likes")
+    public List<LikeResponseDto> getLikes(@PathVariable Long id) {
+        return likeService.getLikesUser(id);
+    }
+
 
     @PutMapping("/articles/like")
     public void increaseLikeCount(@AuthenticationPrincipal UserDetailsImpl userDetails,

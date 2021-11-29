@@ -37,6 +37,35 @@ public class LikeService {
         return likeResponseDtoList;
     }
 
+    public List<LikeResponseDto> getLikesUser(Long userId) {
+        List<Article> articleList = articleRepository.findAllByUserId(userId);
+
+        List<LikeResponseDto> likeResponseDtoList = new ArrayList<>();
+        for (Article article : articleList) {
+            Long likeCount = likesRepository.countByArticleId(article.getId());
+
+            if (likesRepository.findByUserIdAndArticleId(userId, article.getId()).isPresent()) {
+                likeResponseDtoList.add(new LikeResponseDto(article, likeCount, true));
+            } else {
+                likeResponseDtoList.add(new LikeResponseDto(article, likeCount, false));
+            }
+        }
+        return likeResponseDtoList;
+    }
+
+
+    public List<LikeResponseDto> getLikesGuest() {
+        List<Article> articleList = articleRepository.findAll();
+
+        List<LikeResponseDto> likeResponseDtoList = new ArrayList<>();
+        for (Article article : articleList) {
+            Long likeCount = likesRepository.countByArticleId(article.getId());
+            likeResponseDtoList.add(new LikeResponseDto(article, likeCount, false));
+        }
+        return likeResponseDtoList;
+    }
+
+
     public LikeResponseDto getLike(Long id, Long userId) {
         Article article = articleRepository.findById(id).orElseThrow(
                 () -> new NullPointerException("해당되는 아이디의 게시물이 없습니다.")
@@ -50,6 +79,16 @@ public class LikeService {
             LikeResponseDto likeResponseDto = new LikeResponseDto(article, likeCount, false);
             return likeResponseDto;
         }
+    }
+
+    public LikeResponseDto getLikeGuest(Long id) {
+        Article article = articleRepository.findById(id).orElseThrow(
+                () -> new NullPointerException("해당되는 아이디의 게시물이 없습니다.")
+        );
+        Long likeCount = likesRepository.countByArticleId(id);
+        LikeResponseDto likeResponseDto = new LikeResponseDto(article, likeCount, false);
+
+        return likeResponseDto;
     }
 
     @Transactional
