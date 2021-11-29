@@ -38,31 +38,35 @@ public class UserProfileService {
 
     @Transactional
     public String updateProfileImage(Long userId, MultipartFile newProfileImage) {
-        Optional<User> user = userRepository.findById(userId);
+        User user = userRepository.findById(userId).orElseThrow(
+                () -> new NullPointerException("해당 유저가 존재하지 않습니다!"));
         String url = fileProcessService.uploadImage(newProfileImage, FileFolder.PROFILE_IMAGES);
-        user.get().setUserProfileImageUrl(url);
-        return user.get().getUserProfileImageUrl();
+        user.setUserProfileImageUrl(url);
+        return user.getUserProfileImageUrl();
     }
 
     public String getUserProfileImageUrl(Long userId) {
-        return userRepository.findById(userId).get().getUserProfileImageUrl();
+        User user = userRepository.findById(userId).orElseThrow(
+                () -> new NullPointerException("해당 유저가 존재하지 않습니다!"));
+        return user.getUserProfileImageUrl();
     }
 
     @Transactional
     public void updateUserProfileInfo(Long userId, ProfileRequestDto profileRequestDto) throws Exception  {
-        Optional<User> user = userRepository.findById(userId);
+        User user = userRepository.findById(userId).orElseThrow(
+                () -> new NullPointerException("해당 유저가 존재하지 않습니다!"));
         String nowPassword = profileRequestDto.getNowPassword();
         String newPassword = profileRequestDto.getNewPassword();
         String userProfileIntro = profileRequestDto.getUserProfileIntro();
 
         if (!nowPassword.isEmpty()) {
-            authenticate(user.get().getUsername(), nowPassword);
+            authenticate(user.getUsername(), nowPassword);
             String encodedNewPassword = passwordEncoder.encode(newPassword);
-            user.get().setPassword(encodedNewPassword);
+            user.setPassword(encodedNewPassword);
         }
 
-        if (!userProfileIntro.equals(user.get().getUserProfileIntro())) {
-            user.get().setUserProfileIntro(userProfileIntro);
+        if (!userProfileIntro.equals(user.getUserProfileIntro())) {
+            user.setUserProfileIntro(userProfileIntro);
         }
     }
 
@@ -78,7 +82,8 @@ public class UserProfileService {
 
     @Transactional
     public void resetUserProfileImage(Long userId) {
-        Optional<User> user = userRepository.findById(userId);
-        user.get().setUserProfileImageUrl("");
+        User user = userRepository.findById(userId).orElseThrow(
+                () -> new NullPointerException("해당 유저가 존재하지 않습니다!"));
+        user.setUserProfileImageUrl("");
     }
 }
