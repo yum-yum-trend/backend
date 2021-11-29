@@ -10,6 +10,7 @@ import com.udangtangtang.backend.domain.FileFolder;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
+import java.io.File;
 import java.io.InputStream;
 
 
@@ -33,6 +34,7 @@ public class AmazonS3Service implements FileService {
         return amazonS3.getUrl(amazonS3Component.getBucket(), fileName).toString();
     }
 
+    // FIXME: Key - Value
     public String getFileFolder(FileFolder fileFolder) {
         String folder = "";
         if (fileFolder == FileFolder.ARTICLE_IMAGES) {
