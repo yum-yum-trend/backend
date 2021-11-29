@@ -20,7 +20,7 @@ public class Article extends Timestamped {
     @Column(nullable = false)
     private String text;
 
-    @OneToOne
+    @OneToOne(orphanRemoval=true)
     @JoinColumn(name = "location_id", nullable = false)
     private Location location;
 
@@ -28,11 +28,11 @@ public class Article extends Timestamped {
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
-    @OneToMany(mappedBy = "article")
-    private List<Hashtag> hashtagList;
+    @OneToMany(mappedBy = "article", cascade = CascadeType.ALL, orphanRemoval=true)
+    private List<Tag> tags;
 
-    @OneToMany(mappedBy = "article")
-    private List<Image> imageList;
+    @OneToMany(mappedBy = "article", cascade = CascadeType.ALL, orphanRemoval=true)
+    private List<Image> images;
 
     @OneToMany(mappedBy = "article")
     private List<Comment> comments = new ArrayList<>();
@@ -41,5 +41,13 @@ public class Article extends Timestamped {
         this.text = text;
         this.location = location;
         this.user = user;
+    }
+
+    public void update(String text, Location location, List<Tag> tags, List<Image> images) {
+        this.text = text;
+        this.location = location;
+        this.tags.clear();
+        this.tags.addAll(tags);
+        this.images.addAll(images);
     }
 }
