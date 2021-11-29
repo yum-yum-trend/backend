@@ -44,16 +44,10 @@ public class UserProfileController {
         return url;
     }
 
-    @PutMapping(value = "/profile/pw/{userId}")
-    public void updateUserPassword(@PathVariable("userId") Long userId,
+    @PutMapping(value = "/profile/{userId}")
+    public void updateUserProfileInfo(@PathVariable("userId") Long userId,
                                           @RequestBody ProfileRequestDto profileRequestDto) throws Exception {
-        userProfileService.updateUserPassword(userId, profileRequestDto);
-    }
-
-    @PostMapping(value = "/profile/intro/{userId}")
-    public String updateUserProfileIntroText(@PathVariable("userId") Long userId,
-                                             @RequestBody ProfileRequestDto profileRequestDto) throws Exception {
-        return userProfileService.updateUserProfileIntroText(userId, profileRequestDto);
+        userProfileService.updateUserProfileInfo(userId, profileRequestDto);
     }
 
     @DeleteMapping(value = "/profile/{userId}")
