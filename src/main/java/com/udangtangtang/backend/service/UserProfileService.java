@@ -32,7 +32,6 @@ public class UserProfileService {
     private final ArticleRepository articleRepository;
 
     private final FileProcessService fileProcessService;
-    private final AmazonS3Component amazonS3Component;
 
 
     public Optional<User> getUserProfileInfo(Long userId) {

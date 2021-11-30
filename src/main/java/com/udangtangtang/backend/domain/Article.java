@@ -17,7 +17,7 @@ public class Article extends Timestamped {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
-    @Column(nullable = false)
+    @Column
     private String text;
 
     @OneToOne(orphanRemoval=true)
@@ -29,10 +29,10 @@ public class Article extends Timestamped {
     private User user;
 
     @OneToMany(mappedBy = "article", cascade = CascadeType.ALL, orphanRemoval=true)
-    private List<Tag> tags;
+    private List<Tag> tags = new ArrayList<>();
 
     @OneToMany(mappedBy = "article", cascade = CascadeType.ALL, orphanRemoval=true)
-    private List<Image> images;
+    private List<Image> images = new ArrayList<>();
 
     @OneToMany(mappedBy = "article", cascade = CascadeType.ALL)
     private List<Comment> comments = new ArrayList<>();

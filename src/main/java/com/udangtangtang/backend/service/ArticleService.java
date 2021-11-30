@@ -20,8 +20,9 @@ public class ArticleService {
     private final LocationRepository locationRepository;
     private final TagRepository tagRepository;
     private final ImageRepository imageRepository;
-    private final FileProcessService fileProcessService;
+
     private final LocationDataPreprocess locationDataPreprocess;
+    private final FileProcessService fileProcessService;
 
     public List<Article> getArticles() {
 
@@ -35,13 +36,11 @@ public class ArticleService {
     }
 
     @Transactional
-    public void createArticle(User user, String text, LocationRequestDto locationRequestDto, List<String> tagNames, List<MultipartFile> imageFiles) {
+    public Article createArticle(User user, String text, LocationRequestDto locationRequestDto, List<String> tagNames, List<MultipartFile> imageFiles) {
         locationDataPreprocess.categoryNamePreprocess(locationRequestDto);
         Location location = locationRepository.save(new Location(locationRequestDto, user.getId()));
 
-        Article article = new Article(text, location, user);
-
-        articleRepository.save(article);
+        Article article = articleRepository.save(new Article(text, location, user));
 
         for(String name : tagNames) {
             tagRepository.save(new Tag(name, article, user.getId()));
@@ -51,10 +50,12 @@ public class ArticleService {
             String url = fileProcessService.uploadImage(multipartFile, FileFolder.ARTICLE_IMAGES);
             imageRepository.save(new Image(url, article));
         }
+
+        return article;
     }
 
     @Transactional
-    public void updateArticle(User user, Long id, String text, LocationRequestDto locationRequestDto, List<String> tagNames, List<MultipartFile> imageFiles, List<Long> rmImageIdList) {
+    public Article updateArticle(User user, Long id, String text, LocationRequestDto locationRequestDto, List<String> tagNames, List<MultipartFile> imageFiles, List<Long> rmImageIdList) {
         Article article = articleRepository.findById(id).orElseThrow(
                 () -> new NullPointerException(String.format("해당되는 아이디(%d)의 게시물이 없습니다.", id))
         );
@@ -85,7 +86,7 @@ public class ArticleService {
         }
 
         article.update(text, location, tags, images);
-        articleRepository.save(article);
+        return articleRepository.save(article);
     }
 
     @Transactional
