@@ -21,8 +21,8 @@ public class ArticleController {
     private final ArticleService articleService;
 
     @GetMapping("/articles")
-    public List<Article> getArticles() {
-        return articleService.getArticles();
+    public List<Article> getArticles(@RequestParam(required = false) String searchTag){
+        return articleService.getArticles(searchTag);
     }
 
     @GetMapping("/articles/{id}")
