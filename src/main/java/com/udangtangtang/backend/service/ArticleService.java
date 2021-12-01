@@ -23,9 +23,12 @@ public class ArticleService {
     private final FileProcessService fileProcessService;
     private final LocationDataPreprocess locationDataPreprocess;
 
-    public List<Article> getArticles() {
-
-        return articleRepository.findAll();
+    public List<Article> getArticles(String searchTag) {
+        if (searchTag.isEmpty()) {
+            return articleRepository.findAll();
+        } else {
+            return articleRepository.findAllByTagsName(searchTag);
+        }
     }
 
     public Article getArticle(Long id) {
@@ -43,11 +46,11 @@ public class ArticleService {
 
         articleRepository.save(article);
 
-        for(String name : tagNames) {
+        for (String name : tagNames) {
             tagRepository.save(new Tag(name, article, user.getId()));
         }
 
-        for(MultipartFile multipartFile : imageFiles) {
+        for (MultipartFile multipartFile : imageFiles) {
             String url = fileProcessService.uploadImage(multipartFile, FileFolder.ARTICLE_IMAGES);
             imageRepository.save(new Image(url, article));
         }
@@ -60,7 +63,7 @@ public class ArticleService {
         );
 
         // 기존에 저장된 이미지 삭제
-        for(Long imageId : rmImageIdList) {
+        for (Long imageId : rmImageIdList) {
             Image image = imageRepository.findById(imageId).orElseThrow(
                     () -> new NullPointerException(String.format("해당되는 아이디(%d)의 이미지가 없습니다.", imageId))
             );
@@ -72,13 +75,13 @@ public class ArticleService {
         Location location = locationRepository.save(new Location(locationRequestDto, user.getId()));
 
         List<Tag> tags = new ArrayList<>();
-        for(String tag : tagNames) {
+        for (String tag : tagNames) {
             tags.add(new Tag(tag, article, user.getId()));
         }
 
         List<Image> images = new ArrayList<>();
         if (imageFiles != null) {
-            for(MultipartFile multipartFile : imageFiles) {
+            for (MultipartFile multipartFile : imageFiles) {
                 String url = fileProcessService.uploadImage(multipartFile, FileFolder.ARTICLE_IMAGES);
                 images.add(new Image(url, article));
             }
@@ -95,7 +98,7 @@ public class ArticleService {
         );
 
         // S3에 업로드된 이미지 삭제
-        for(Image image : article.getImages()) {
+        for (Image image : article.getImages()) {
             fileProcessService.deleteImage(image.getUrl());
         }
 
