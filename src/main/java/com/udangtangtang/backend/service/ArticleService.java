@@ -5,6 +5,10 @@ import com.udangtangtang.backend.dto.LocationRequestDto;
 import com.udangtangtang.backend.repository.*;
 import com.udangtangtang.backend.util.LocationDataPreprocess;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -24,11 +28,15 @@ public class ArticleService {
     private final LocationDataPreprocess locationDataPreprocess;
     private final FileProcessService fileProcessService;
 
-    public List<Article> getArticles(String searchTag) {
+    public Page<Article> getArticles(String searchTag, String sortBy, boolean isAsc, int page) {
+        Sort.Direction direction = isAsc ? Sort.Direction.ASC : Sort.Direction.DESC;
+        Sort sort = Sort.by(direction, sortBy);
+        Pageable pageable = PageRequest.of(page, 32, sort);
+
         if (searchTag.isEmpty()) {
-            return articleRepository.findAll();
+            return articleRepository.findAll(pageable);
         } else {
-            return articleRepository.findAllByTagsName(searchTag);
+            return articleRepository.findAllByTagsName(searchTag, pageable);
         }
     }
 
