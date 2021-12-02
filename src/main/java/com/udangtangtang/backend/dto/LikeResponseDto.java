@@ -7,12 +7,12 @@ import lombok.NoArgsConstructor;
 @Getter
 @NoArgsConstructor
 public class LikeResponseDto {
-    private Article article;
+    private Long articleId;
     private Long likeCount;
     private boolean like;
 
-    public LikeResponseDto(Article article, Long likeCount, boolean like) {
-        this.article = article;
+    public LikeResponseDto(Long articleId, Long likeCount, boolean like) {
+        this.articleId = articleId;
         this.likeCount = likeCount;
         this.like = like;
     }
