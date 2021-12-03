@@ -6,6 +6,7 @@ import com.udangtangtang.backend.dto.LocationRequestDto;
 import com.udangtangtang.backend.security.UserDetailsImpl;
 import com.udangtangtang.backend.service.ArticleService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.lang.Nullable;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
@@ -21,8 +22,11 @@ public class ArticleController {
     private final ArticleService articleService;
 
     @GetMapping("/articles")
-    public List<Article> getArticles() {
-        return articleService.getArticles();
+    public Page<Article> getArticles(@RequestParam(required = false) String searchTag,
+                                     @RequestParam("sortBy") String sortBy,
+                                     @RequestParam("isAsc") boolean isAsc,
+                                     @RequestParam("currentPage") int page) {
+        return articleService.getArticles(searchTag, sortBy, isAsc, page);
     }
 
     @GetMapping("/articles/{id}")

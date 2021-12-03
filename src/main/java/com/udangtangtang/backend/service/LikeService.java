@@ -30,9 +30,9 @@ public class LikeService {
             Long likeCount = likesRepository.countByArticleId(article.getId());
 
             if (likesRepository.findByUserIdAndArticleId(userId, article.getId()).isPresent()) {
-                likeResponseDtoList.add(new LikeResponseDto(article, likeCount, true));
+                likeResponseDtoList.add(new LikeResponseDto(article.getId(), likeCount, true));
             } else {
-                likeResponseDtoList.add(new LikeResponseDto(article, likeCount, false));
+                likeResponseDtoList.add(new LikeResponseDto(article.getId(), likeCount, false));
             }
         }
         return likeResponseDtoList;
@@ -46,9 +46,9 @@ public class LikeService {
             Long likeCount = likesRepository.countByArticleId(article.getId());
 
             if (likesRepository.findByUserIdAndArticleId(userId, article.getId()).isPresent()) {
-                likeResponseDtoList.add(new LikeResponseDto(article, likeCount, true));
+                likeResponseDtoList.add(new LikeResponseDto(article.getId(), likeCount, true));
             } else {
-                likeResponseDtoList.add(new LikeResponseDto(article, likeCount, false));
+                likeResponseDtoList.add(new LikeResponseDto(article.getId(), likeCount, false));
             }
         }
         return likeResponseDtoList;
@@ -61,7 +61,7 @@ public class LikeService {
         List<LikeResponseDto> likeResponseDtoList = new ArrayList<>();
         for (Article article : articleList) {
             Long likeCount = likesRepository.countByArticleId(article.getId());
-            likeResponseDtoList.add(new LikeResponseDto(article, likeCount, false));
+            likeResponseDtoList.add(new LikeResponseDto(article.getId(), likeCount, false));
         }
         return likeResponseDtoList;
     }
@@ -74,10 +74,10 @@ public class LikeService {
         Long likeCount = likesRepository.countByArticleId(id);
 
         if (likesRepository.findByUserIdAndArticleId(userId, id).isPresent()) {
-            LikeResponseDto likeResponseDto = new LikeResponseDto(article, likeCount, true);
+            LikeResponseDto likeResponseDto = new LikeResponseDto(article.getId(), likeCount, true);
             return likeResponseDto;
         } else {
-            LikeResponseDto likeResponseDto = new LikeResponseDto(article, likeCount, false);
+            LikeResponseDto likeResponseDto = new LikeResponseDto(article.getId(), likeCount, false);
             return likeResponseDto;
         }
     }
@@ -87,7 +87,7 @@ public class LikeService {
                 () -> new ApiRequestException("해당되는 아이디의 게시물이 없습니다.")
         );
         Long likeCount = likesRepository.countByArticleId(id);
-        LikeResponseDto likeResponseDto = new LikeResponseDto(article, likeCount, false);
+        LikeResponseDto likeResponseDto = new LikeResponseDto(article.getId(), likeCount, false);
 
         return likeResponseDto;
     }

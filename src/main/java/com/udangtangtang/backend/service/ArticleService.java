@@ -6,6 +6,10 @@ import com.udangtangtang.backend.exception.ApiRequestException;
 import com.udangtangtang.backend.repository.*;
 import com.udangtangtang.backend.util.LocationDataPreprocess;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -25,9 +29,16 @@ public class ArticleService {
     private final LocationDataPreprocess locationDataPreprocess;
     private final FileProcessService fileProcessService;
 
-    public List<Article> getArticles() {
+    public Page<Article> getArticles(String searchTag, String sortBy, boolean isAsc, int page) {
+        Sort.Direction direction = isAsc ? Sort.Direction.ASC : Sort.Direction.DESC;
+        Sort sort = Sort.by(direction, sortBy);
+        Pageable pageable = PageRequest.of(page, 32, sort);
 
-        return articleRepository.findAll();
+        if (searchTag.isEmpty()) {
+            return articleRepository.findAll(pageable);
+        } else {
+            return articleRepository.findAllByTagsName(searchTag, pageable);
+        }
     }
 
     public Article getArticle(Long id) {
@@ -43,11 +54,11 @@ public class ArticleService {
 
         Article article = articleRepository.save(new Article(text, location, user));
 
-        for(String name : tagNames) {
+        for (String name : tagNames) {
             tagRepository.save(new Tag(name, article, user.getId()));
         }
 
-        for(MultipartFile multipartFile : imageFiles) {
+        for (MultipartFile multipartFile : imageFiles) {
             String url = fileProcessService.uploadImage(multipartFile, FileFolder.ARTICLE_IMAGES);
             imageRepository.save(new Image(url, article));
         }
@@ -76,13 +87,13 @@ public class ArticleService {
         Location location = locationRepository.save(new Location(locationRequestDto, user.getId()));
 
         List<Tag> tags = new ArrayList<>();
-        for(String tag : tagNames) {
+        for (String tag : tagNames) {
             tags.add(new Tag(tag, article, user.getId()));
         }
 
         List<Image> images = new ArrayList<>();
         if (imageFiles != null) {
-            for(MultipartFile multipartFile : imageFiles) {
+            for (MultipartFile multipartFile : imageFiles) {
                 String url = fileProcessService.uploadImage(multipartFile, FileFolder.ARTICLE_IMAGES);
                 images.add(new Image(url, article));
             }
@@ -99,7 +110,7 @@ public class ArticleService {
         );
 
         // S3에 업로드된 이미지 삭제
-        for(Image image : article.getImages()) {
+        for (Image image : article.getImages()) {
             fileProcessService.deleteImage(image.getUrl());
         }
 
