@@ -1,7 +1,8 @@
 package com.udangtangtang.backend.config;
 
-import com.udangtangtang.backend.controller.JwtAuthenticationEntryPoint;
-import com.udangtangtang.backend.controller.JwtAuthenticationFilter;
+import com.udangtangtang.backend.filter.JwtAuthenticationEntryPoint;
+import com.udangtangtang.backend.filter.JwtAuthenticationFilter;
+import com.udangtangtang.backend.filter.JwtExceptionFilter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -25,7 +26,8 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     private final JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
-    private final JwtAuthenticationFilter jwtRequestFilter;
+    private final JwtAuthenticationFilter jwtAuthenticationFilter;
+    private final JwtExceptionFilter jwtExceptionFilter;
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
@@ -38,12 +40,16 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/login/kakao").permitAll()
                 .antMatchers("/signup").permitAll()
                 .antMatchers("/").permitAll()
+
+                .mvcMatchers(HttpMethod.GET, "/articles").permitAll()
                 .mvcMatchers(HttpMethod.GET, "/articles/**").permitAll()
                 .mvcMatchers(HttpMethod.GET, "/likes/guest/**").permitAll()
                 .mvcMatchers(HttpMethod.GET, "/comment/**").permitAll()
+                .mvcMatchers(HttpMethod.GET, "/profile/navbar-image/**").permitAll()
                 .anyRequest().authenticated().and()
                 .cors().and()
-                .exceptionHandling().authenticationEntryPoint(jwtAuthenticationEntryPoint).and().sessionManagement()
+                .exceptionHandling().authenticationEntryPoint(jwtAuthenticationEntryPoint).and()
+                .sessionManagement()
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
                 .formLogin()
                 .loginPage("/user/login")
@@ -53,8 +59,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .and()
                 .logout();
 
-
-        http.addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class);
+        http.addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
+        http.addFilterBefore(jwtExceptionFilter, JwtAuthenticationFilter.class);
     }
 
     @Bean

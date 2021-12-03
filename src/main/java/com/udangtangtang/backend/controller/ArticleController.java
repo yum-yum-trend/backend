@@ -47,8 +47,8 @@ public class ArticleController {
                               @RequestParam("location") String locationJsonString,
                               @RequestParam("tagNames") List<String> tagNames,
                               @Nullable @RequestParam("imageFiles") List<MultipartFile> imageFiles,
-                              @Nullable @RequestParam("rmImageIdList") List<Long> rmImageIdList) {
-        articleService.updateArticle(userDetails.getUser(), id, text, new LocationRequestDto(locationJsonString), tagNames, imageFiles, rmImageIdList);
+                              @Nullable @RequestParam("rmImageIdList") List<Long> rmImageIds) {
+        articleService.updateArticle(userDetails.getUser(), id, text, new LocationRequestDto(locationJsonString), tagNames, imageFiles, rmImageIds);
     }
 
     @DeleteMapping("/articles/{id}")
