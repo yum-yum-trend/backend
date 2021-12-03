@@ -5,6 +5,7 @@ import com.udangtangtang.backend.domain.Comment;
 import com.udangtangtang.backend.domain.User;
 import com.udangtangtang.backend.dto.CommentRequestDto;
 import com.udangtangtang.backend.dto.CommentResponseDto;
+import com.udangtangtang.backend.exception.ApiRequestException;
 import com.udangtangtang.backend.repository.ArticleRepository;
 import com.udangtangtang.backend.repository.CommentRepository;
 import com.udangtangtang.backend.repository.UserRepository;
@@ -42,9 +43,9 @@ public class CommentService {
 
     public void saveComment(Long userId, Long articleId, CommentRequestDto commentRequestDto) {
         Article article = articleRepository.findById(articleId).orElseThrow(
-                () -> new NullPointerException("해당 게시글이 존재하지 않습니다."));
+                () -> new ApiRequestException("해당 게시글이 존재하지 않습니다."));
         User user = userRepository.findById(userId).orElseThrow(
-                () -> new NullPointerException("해당 유저가 존재하지 않습니다."));
+                () -> new ApiRequestException("해당 유저가 존재하지 않습니다."));
         Comment comment = new Comment(user, article, commentRequestDto.getCommentText());
         commentRepository.save(comment);
     }
