@@ -21,13 +21,13 @@ spring:
       ddl-auto: update
     generate-ddl: false
 
-logging:
-  level:
-    org:
-      hibernate:
-        SQL: error # debug
-        type:
-          descriptor:
-            sql: trace
+#logging:
+#  level:
+#    org:
+#      hibernate:
+#        SQL: error # debug
+#        type:
+#          descriptor:
+#            sql: trace
 jwt:
   secret: javainuse
