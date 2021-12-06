@@ -11,6 +11,10 @@ import com.udangtangtang.backend.repository.ArticleRepository;
 import com.udangtangtang.backend.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.DisabledException;
@@ -39,8 +43,12 @@ public class UserProfileService {
         return userRepository.findById(userId);
     }
 
-    public List<Article> getUserArticles(Long userId) {
-        return articleRepository.findAllByUserId(userId);
+    public Page<Article> getUserArticles(Long userId, String sortBy, boolean isAsc, int page) {
+        Sort.Direction direction = isAsc ? Sort.Direction.ASC : Sort.Direction.DESC;
+        Sort sort = Sort.by(direction, sortBy);
+        Pageable pageable = PageRequest.of(page, 32, sort);
+
+        return articleRepository.findAllByUserId(userId, pageable);
     }
 
     @Transactional
