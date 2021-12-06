@@ -40,12 +40,6 @@ public class Article extends Timestamped {
     @OneToMany(mappedBy = "article", cascade = CascadeType.ALL)
     private List<Comment> comments = new ArrayList<>();
 
-    @CreatedDate
-    private LocalDateTime createdAt;
-
-    @LastModifiedDate
-    private LocalDateTime modifiedAt;
-
     public Article(String text, Location location, User user) {
         this.text = text;
         this.location = location;
