@@ -93,7 +93,7 @@ public class LikeService {
     }
 
     @Transactional
-    public void increaseLikeCount(Long userId, Long articleId) {
+    public Long increaseLikeCount(Long userId, Long articleId) {
         if(likesRepository.findByUserIdAndArticleId(userId, articleId).isPresent()) {
             throw new ApiRequestException("이미 좋아요를 누른 게시글입니다.");
         }
@@ -104,10 +104,11 @@ public class LikeService {
                 () -> new ApiRequestException("해당 글이 존재하지 않습니다!")
         );
         likesRepository.save(new Likes(userId, articleId));
+        return articleId;
     }
 
     @Transactional
-    public void decreaseLikeCount(Long user, Long articleId) {
+    public Long decreaseLikeCount(Long user, Long articleId) {
         Likes deleteLike = likesRepository.findByUserIdAndArticleId(user, articleId).orElseThrow(
                 () -> new ApiRequestException("해당 좋아요 항목이 존재하지 않습니다!")
         );
@@ -118,5 +119,6 @@ public class LikeService {
                 () -> new ApiRequestException("해당 글이 존재하지 않습니다!")
         );
         likesRepository.delete(deleteLike);
+        return articleId;
     }
 }
