@@ -6,10 +6,15 @@ import com.udangtangtang.backend.domain.Article;
 import com.udangtangtang.backend.domain.FileFolder;
 import com.udangtangtang.backend.domain.User;
 import com.udangtangtang.backend.dto.ProfileRequestDto;
+import com.udangtangtang.backend.exception.ApiRequestException;
 import com.udangtangtang.backend.repository.ArticleRepository;
 import com.udangtangtang.backend.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.DisabledException;
@@ -38,14 +43,18 @@ public class UserProfileService {
         return userRepository.findById(userId);
     }
 
-    public List<Article> getUserArticles(Long userId) {
-        return articleRepository.findAllByUserId(userId);
+    public Page<Article> getUserArticles(Long userId, String sortBy, boolean isAsc, int page) {
+        Sort.Direction direction = isAsc ? Sort.Direction.ASC : Sort.Direction.DESC;
+        Sort sort = Sort.by(direction, sortBy);
+        Pageable pageable = PageRequest.of(page, 32, sort);
+
+        return articleRepository.findAllByUserId(userId, pageable);
     }
 
     @Transactional
     public String updateProfileImage(Long userId, MultipartFile newProfileImage) {
         User user = userRepository.findById(userId).orElseThrow(
-                () -> new NullPointerException("해당 유저가 존재하지 않습니다!"));
+                () -> new ApiRequestException("해당 유저가 존재하지 않습니다!"));
 
         deleteUserProfileImageFromS3(user);
 
@@ -57,14 +66,14 @@ public class UserProfileService {
 
     public String getUserProfileImageUrl(Long userId) {
         User user = userRepository.findById(userId).orElseThrow(
-                () -> new NullPointerException("해당 유저가 존재하지 않습니다!"));
+                () -> new ApiRequestException("해당 유저가 존재하지 않습니다!"));
         return user.getUserProfileImageUrl();
     }
 
     @Transactional
     public void updateUserPassword(Long userId, ProfileRequestDto profileRequestDto) throws Exception {
         User user = userRepository.findById(userId).orElseThrow(
-                () -> new NullPointerException("해당 유저가 존재하지 않습니다!"));
+                () -> new ApiRequestException("해당 유저가 존재하지 않습니다!"));
         String nowPassword = profileRequestDto.getNowPassword();
         String newPassword = profileRequestDto.getNewPassword();
 
@@ -78,7 +87,7 @@ public class UserProfileService {
     @Transactional
     public String updateUserProfileIntroText(Long userId, ProfileRequestDto profileRequestDto) {
         User user = userRepository.findById(userId).orElseThrow(
-                () -> new NullPointerException("해당 유저가 존재하지 않습니다!"));
+                () -> new ApiRequestException("해당 유저가 존재하지 않습니다!"));
         String userProfileIntro = profileRequestDto.getUserProfileIntro();
         if (!userProfileIntro.equals(user.getUserProfileIntro())) {
             user.setUserProfileIntro(userProfileIntro);
@@ -100,7 +109,7 @@ public class UserProfileService {
     @Transactional
     public void resetUserProfileImage(Long userId) {
         User user = userRepository.findById(userId).orElseThrow(
-                () -> new NullPointerException("해당 유저가 존재하지 않습니다!"));
+                () -> new ApiRequestException("해당 유저가 존재하지 않습니다!"));
 
         deleteUserProfileImageFromS3(user);
 

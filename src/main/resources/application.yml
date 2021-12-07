@@ -1,6 +1,7 @@
 spring:
   profiles:
     include:
+      #      - db
       - aws
       - credentials
   h2:
@@ -20,13 +21,13 @@ spring:
       ddl-auto: update
     generate-ddl: false
 
-logging:
-  level:
-    org:
-      hibernate:
-        SQL: error # debug
-        type:
-          descriptor:
-            sql: trace
+#logging:
+#  level:
+#    org:
+#      hibernate:
+#        SQL: error # debug
+#        type:
+#          descriptor:
+#            sql: trace
 jwt:
   secret: javainuse

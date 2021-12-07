@@ -2,9 +2,14 @@ package com.udangtangtang.backend.service;
 
 import com.udangtangtang.backend.domain.*;
 import com.udangtangtang.backend.dto.LocationRequestDto;
+import com.udangtangtang.backend.exception.ApiRequestException;
 import com.udangtangtang.backend.repository.*;
 import com.udangtangtang.backend.util.LocationDataPreprocess;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -24,14 +29,21 @@ public class ArticleService {
     private final LocationDataPreprocess locationDataPreprocess;
     private final FileProcessService fileProcessService;
 
-    public List<Article> getArticles() {
+    public Page<Article> getArticles(String searchTag, String sortBy, boolean isAsc, int page) {
+        Sort.Direction direction = isAsc ? Sort.Direction.ASC : Sort.Direction.DESC;
+        Sort sort = Sort.by(direction, sortBy);
+        Pageable pageable = PageRequest.of(page, 32, sort);
 
-        return articleRepository.findAll();
+        if (searchTag.isEmpty()) {
+            return articleRepository.findAll(pageable);
+        } else {
+            return articleRepository.findAllByTagsName(searchTag, pageable);
+        }
     }
 
     public Article getArticle(Long id) {
         return articleRepository.findById(id).orElseThrow(
-                () -> new NullPointerException(String.format("해당되는 아이디(%d)의 게시물이 없습니다.", id))
+                () -> new ApiRequestException(String.format("해당되는 아이디(%d)의 게시물이 없습니다.", id))
         );
     }
 
@@ -46,7 +58,7 @@ public class ArticleService {
             article.addTag(new Tag(name, article, user.getId()));
         }
 
-        for(MultipartFile multipartFile : imageFiles) {
+        for (MultipartFile multipartFile : imageFiles) {
             String url = fileProcessService.uploadImage(multipartFile, FileFolder.ARTICLE_IMAGES);
             article.addImage(new Image(url, article));
         }
@@ -55,9 +67,9 @@ public class ArticleService {
     }
 
     @Transactional
-    public Article updateArticle(User user, Long id, String text, LocationRequestDto locationRequestDto, List<String> tagNames, List<MultipartFile> imageFiles, List<Long> rmImageIdList) {
+    public Article updateArticle(User user, Long id, String text, LocationRequestDto locationRequestDto, List<String> tagNames, List<MultipartFile> imageFiles, List<Long> rmImageIds) {
         Article article = articleRepository.findById(id).orElseThrow(
-                () -> new NullPointerException(String.format("해당되는 아이디(%d)의 게시물이 없습니다.", id))
+                () -> new ApiRequestException(String.format("해당되는 아이디(%d)의 게시물이 없습니다.", id))
         );
 
         // 기존에 저장된 이미지 삭제
@@ -71,19 +83,18 @@ public class ArticleService {
             }
             imageRepository.deleteAllById(rmImageIds);
         }
-        imageRepository.deleteAllById(rmImageIdList);
 
         locationDataPreprocess.categoryNamePreprocess(locationRequestDto);
         Location location = locationRepository.save(new Location(locationRequestDto, user.getId()));
 
         List<Tag> tags = new ArrayList<>();
-        for(String tag : tagNames) {
+        for (String tag : tagNames) {
             tags.add(new Tag(tag, article, user.getId()));
         }
 
         List<Image> images = new ArrayList<>();
         if (imageFiles != null) {
-            for(MultipartFile multipartFile : imageFiles) {
+            for (MultipartFile multipartFile : imageFiles) {
                 String url = fileProcessService.uploadImage(multipartFile, FileFolder.ARTICLE_IMAGES);
                 images.add(new Image(url, article));
             }
@@ -96,11 +107,11 @@ public class ArticleService {
     @Transactional
     public Long deleteArticle(Long id) {
         Article article = articleRepository.findById(id).orElseThrow(
-                () -> new NullPointerException(String.format("아이디(%d)에 해당되는 게시물이 없습니다.", id))
+                () -> new ApiRequestException(String.format("아이디(%d)에 해당되는 게시물이 없습니다.", id))
         );
 
         // S3에 업로드된 이미지 삭제
-        for(Image image : article.getImages()) {
+        for (Image image : article.getImages()) {
             fileProcessService.deleteImage(image.getUrl());
         }
 

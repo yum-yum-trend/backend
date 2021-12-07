@@ -3,6 +3,7 @@ package com.udangtangtang.backend.service;
 import com.udangtangtang.backend.domain.Article;
 import com.udangtangtang.backend.domain.Likes;
 import com.udangtangtang.backend.dto.LikeResponseDto;
+import com.udangtangtang.backend.exception.ApiRequestException;
 import com.udangtangtang.backend.repository.ArticleRepository;
 import com.udangtangtang.backend.repository.LikesRepository;
 import com.udangtangtang.backend.repository.UserRepository;
@@ -29,9 +30,9 @@ public class LikeService {
             Long likeCount = likesRepository.countByArticleId(article.getId());
 
             if (likesRepository.findByUserIdAndArticleId(userId, article.getId()).isPresent()) {
-                likeResponseDtoList.add(new LikeResponseDto(article, likeCount, true));
+                likeResponseDtoList.add(new LikeResponseDto(article.getId(), likeCount, true));
             } else {
-                likeResponseDtoList.add(new LikeResponseDto(article, likeCount, false));
+                likeResponseDtoList.add(new LikeResponseDto(article.getId(), likeCount, false));
             }
         }
         return likeResponseDtoList;
@@ -45,9 +46,9 @@ public class LikeService {
             Long likeCount = likesRepository.countByArticleId(article.getId());
 
             if (likesRepository.findByUserIdAndArticleId(userId, article.getId()).isPresent()) {
-                likeResponseDtoList.add(new LikeResponseDto(article, likeCount, true));
+                likeResponseDtoList.add(new LikeResponseDto(article.getId(), likeCount, true));
             } else {
-                likeResponseDtoList.add(new LikeResponseDto(article, likeCount, false));
+                likeResponseDtoList.add(new LikeResponseDto(article.getId(), likeCount, false));
             }
         }
         return likeResponseDtoList;
@@ -60,7 +61,7 @@ public class LikeService {
         List<LikeResponseDto> likeResponseDtoList = new ArrayList<>();
         for (Article article : articleList) {
             Long likeCount = likesRepository.countByArticleId(article.getId());
-            likeResponseDtoList.add(new LikeResponseDto(article, likeCount, false));
+            likeResponseDtoList.add(new LikeResponseDto(article.getId(), likeCount, false));
         }
         return likeResponseDtoList;
     }
@@ -68,25 +69,25 @@ public class LikeService {
 
     public LikeResponseDto getLike(Long id, Long userId) {
         Article article = articleRepository.findById(id).orElseThrow(
-                () -> new NullPointerException("해당되는 아이디의 게시물이 없습니다.")
+                () -> new ApiRequestException("해당되는 아이디의 게시물이 없습니다.")
         );
         Long likeCount = likesRepository.countByArticleId(id);
 
         if (likesRepository.findByUserIdAndArticleId(userId, id).isPresent()) {
-            LikeResponseDto likeResponseDto = new LikeResponseDto(article, likeCount, true);
+            LikeResponseDto likeResponseDto = new LikeResponseDto(article.getId(), likeCount, true);
             return likeResponseDto;
         } else {
-            LikeResponseDto likeResponseDto = new LikeResponseDto(article, likeCount, false);
+            LikeResponseDto likeResponseDto = new LikeResponseDto(article.getId(), likeCount, false);
             return likeResponseDto;
         }
     }
 
     public LikeResponseDto getLikeGuest(Long id) {
         Article article = articleRepository.findById(id).orElseThrow(
-                () -> new NullPointerException("해당되는 아이디의 게시물이 없습니다.")
+                () -> new ApiRequestException("해당되는 아이디의 게시물이 없습니다.")
         );
         Long likeCount = likesRepository.countByArticleId(id);
-        LikeResponseDto likeResponseDto = new LikeResponseDto(article, likeCount, false);
+        LikeResponseDto likeResponseDto = new LikeResponseDto(article.getId(), likeCount, false);
 
         return likeResponseDto;
     }
@@ -94,13 +95,13 @@ public class LikeService {
     @Transactional
     public void increaseLikeCount(Long userId, Long articleId) {
         if(likesRepository.findByUserIdAndArticleId(userId, articleId).isPresent()) {
-            throw new IllegalArgumentException("이미 좋아요를 누른 게시글입니다.");
+            throw new ApiRequestException("이미 좋아요를 누른 게시글입니다.");
         }
         userRepository.findById(userId).orElseThrow(
-                () -> new NullPointerException("해당 유저가 존재하지 않습니다!")
+                () -> new ApiRequestException("해당 유저가 존재하지 않습니다!")
         );
         articleRepository.findById(articleId).orElseThrow(
-                () -> new NullPointerException("해당 글이 존재하지 않습니다!")
+                () -> new ApiRequestException("해당 글이 존재하지 않습니다!")
         );
         likesRepository.save(new Likes(userId, articleId));
     }
@@ -108,13 +109,13 @@ public class LikeService {
     @Transactional
     public void decreaseLikeCount(Long user, Long articleId) {
         Likes deleteLike = likesRepository.findByUserIdAndArticleId(user, articleId).orElseThrow(
-                () -> new NullPointerException("해당 좋아요 항목이 존재하지 않습니다!")
+                () -> new ApiRequestException("해당 좋아요 항목이 존재하지 않습니다!")
         );
         userRepository.findById(user).orElseThrow(
-                () -> new NullPointerException("해당 유저가 존재하지 않습니다!")
+                () -> new ApiRequestException("해당 유저가 존재하지 않습니다!")
         );
         articleRepository.findById(articleId).orElseThrow(
-                () -> new NullPointerException("해당 글이 존재하지 않습니다!")
+                () -> new ApiRequestException("해당 글이 존재하지 않습니다!")
         );
         likesRepository.delete(deleteLike);
     }

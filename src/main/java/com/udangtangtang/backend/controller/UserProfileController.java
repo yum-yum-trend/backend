@@ -5,6 +5,7 @@ import com.udangtangtang.backend.domain.User;
 import com.udangtangtang.backend.dto.ProfileRequestDto;
 import com.udangtangtang.backend.service.UserProfileService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -28,8 +29,11 @@ public class UserProfileController {
     }
 
     @GetMapping(value = "/profile/articles/{userId}")
-    public List<Article> getUserArticles(@PathVariable("userId") Long userId) {
-        return userProfileService.getUserArticles(userId);
+    public Page<Article> getUserArticles(@PathVariable("userId") Long userId,
+                                         @RequestParam("sortBy") String sortBy,
+                                         @RequestParam("isAsc") boolean isAsc,
+                                         @RequestParam("currentPage") int page ) {
+        return userProfileService.getUserArticles(userId, sortBy, isAsc, page);
     }
 
 //    @GetMapping(value = "/profile/bookmarks/{userId}")
