@@ -1,0 +1,39 @@
+= yumyumTrend API Documents
+:toc: left
+:doctype: book
+
+= 사용자 페이지
+
+== 계정관리
+=== 회원가입
+include::{snippets}/user/signup/http-request.adoc[]
+include::{snippets}/user/signup/request-fields.adoc[]
+include::{snippets}/user/signup/http-response.adoc[]
+
+=== 로그인
+include::{snippets}/user/login/http-request.adoc[]
+include::{snippets}/user/login/request-fields.adoc[]
+include::{snippets}/user/login/http-response.adoc[]
+
+== 트랜드
+=== 트랜드 맵
+include::{snippets}/trend/http-request.adoc[]
+include::{snippets}/trend/http-response.adoc[]
+
+=== 트랜드 차트
+include::{snippets}/trend/chart/http-request.adoc[]
+include::{snippets}/trend/chart/http-response.adoc[]
+
+== 좋아요
+=== 사용자 권한 좋아요 보기
+include::{snippets}/likes/http-request.adoc[]
+include::{snippets}/likes/http-response.adoc[]
+
+=== 손님 권한 좋아요 보기
+include::{snippets}/likes/guest/http-response.adoc[]
+include::{snippets}/likes/guest/http-response.adoc[]
+
+=== 사용자 권한 좋아요 보기
+include::{snippets}/likes/http-response.adoc[]
+include::{snippets}/likes/http-response.adoc[]
+
