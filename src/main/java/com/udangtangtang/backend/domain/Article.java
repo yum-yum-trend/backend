@@ -50,4 +50,21 @@ public class Article extends Timestamped {
         this.tags.addAll(tags);
         this.images.addAll(images);
     }
+
+    public void addTag(Tag tag) {
+        this.tags.add(tag);
+    }
+
+    public void addImage(Image image) {
+        this.images.add(image);
+    }
+
+    public void removeImage(Long id) {
+        for(Image image : this.images) {
+            if(image.getId().equals(id)) {
+                this.images.remove(image);
+                break;
+            }
+        }
+    }
 }

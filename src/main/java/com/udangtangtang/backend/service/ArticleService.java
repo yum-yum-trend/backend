@@ -40,18 +40,18 @@ public class ArticleService {
         locationDataPreprocess.categoryNamePreprocess(locationRequestDto);
         Location location = locationRepository.save(new Location(locationRequestDto, user.getId()));
 
-        Article article = articleRepository.save(new Article(text, location, user));
+        Article article = new Article(text, location, user);
 
-        for(String name : tagNames) {
-            tagRepository.save(new Tag(name, article, user.getId()));
+        for (String name : tagNames) {
+            article.addTag(new Tag(name, article, user.getId()));
         }
 
         for(MultipartFile multipartFile : imageFiles) {
             String url = fileProcessService.uploadImage(multipartFile, FileFolder.ARTICLE_IMAGES);
-            imageRepository.save(new Image(url, article));
+            article.addImage(new Image(url, article));
         }
 
-        return article;
+        return articleRepository.save(article);
     }
 
     @Transactional
@@ -61,11 +61,15 @@ public class ArticleService {
         );
 
         // 기존에 저장된 이미지 삭제
-        for(Long imageId : rmImageIdList) {
-            Image image = imageRepository.findById(imageId).orElseThrow(
-                    () -> new NullPointerException(String.format("해당되는 아이디(%d)의 이미지가 없습니다.", imageId))
-            );
-            fileProcessService.deleteImage(image.getUrl());
+        if(rmImageIds != null) {
+            for (Long imageId : rmImageIds) {
+                Image image = imageRepository.findById(imageId).orElseThrow(
+                        () -> new ApiRequestException(String.format("해당되는 아이디(%d)의 이미지가 없습니다.", imageId))
+                );
+                fileProcessService.deleteImage(image.getUrl());
+                article.removeImage(imageId);
+            }
+            imageRepository.deleteAllById(rmImageIds);
         }
         imageRepository.deleteAllById(rmImageIdList);
 
@@ -90,7 +94,7 @@ public class ArticleService {
     }
 
     @Transactional
-    public void deleteArticle(Long id) throws IllegalArgumentException {
+    public Long deleteArticle(Long id) {
         Article article = articleRepository.findById(id).orElseThrow(
                 () -> new NullPointerException(String.format("아이디(%d)에 해당되는 게시물이 없습니다.", id))
         );
@@ -101,5 +105,6 @@ public class ArticleService {
         }
 
         articleRepository.delete(article);
+        return id;
     }
 }
