@@ -46,3 +46,7 @@ src/main/resources/aws.yml
 src/main/resources/application-aws.yml
 src/main/resources/application-credentials.yml
 src/main/resources/application-db.yml
+
+### Test Data ###
+src/test/resources
+
