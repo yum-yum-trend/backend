@@ -3,8 +3,11 @@ package com.udangtangtang.backend.domain;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedDate;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -49,5 +52,22 @@ public class Article extends Timestamped {
         this.tags.clear();
         this.tags.addAll(tags);
         this.images.addAll(images);
+    }
+
+    public void addTag(Tag tag) {
+        this.tags.add(tag);
+    }
+
+    public void addImage(Image image) {
+        this.images.add(image);
+    }
+
+    public void removeImage(Long id) {
+        for(Image image : this.images) {
+            if(image.getId().equals(id)) {
+                this.images.remove(image);
+                break;
+            }
+        }
     }
 }

@@ -2,6 +2,7 @@ package com.udangtangtang.backend.service;
 
 import com.udangtangtang.backend.domain.*;
 import com.udangtangtang.backend.dto.LocationRequestDto;
+import com.udangtangtang.backend.exception.ApiRequestException;
 import com.udangtangtang.backend.repository.*;
 import com.udangtangtang.backend.util.LocationDataPreprocess;
 import lombok.RequiredArgsConstructor;
@@ -42,7 +43,7 @@ public class ArticleService {
 
     public Article getArticle(Long id) {
         return articleRepository.findById(id).orElseThrow(
-                () -> new NullPointerException(String.format("해당되는 아이디(%d)의 게시물이 없습니다.", id))
+                () -> new ApiRequestException(String.format("해당되는 아이디(%d)의 게시물이 없습니다.", id))
         );
     }
 
@@ -51,34 +52,37 @@ public class ArticleService {
         locationDataPreprocess.categoryNamePreprocess(locationRequestDto);
         Location location = locationRepository.save(new Location(locationRequestDto, user.getId()));
 
-        Article article = articleRepository.save(new Article(text, location, user));
+        Article article = new Article(text, location, user);
 
         for (String name : tagNames) {
-            tagRepository.save(new Tag(name, article, user.getId()));
+            article.addTag(new Tag(name, article, user.getId()));
         }
 
         for (MultipartFile multipartFile : imageFiles) {
             String url = fileProcessService.uploadImage(multipartFile, FileFolder.ARTICLE_IMAGES);
-            imageRepository.save(new Image(url, article));
+            article.addImage(new Image(url, article));
         }
 
-        return article;
+        return articleRepository.save(article);
     }
 
     @Transactional
-    public Article updateArticle(User user, Long id, String text, LocationRequestDto locationRequestDto, List<String> tagNames, List<MultipartFile> imageFiles, List<Long> rmImageIdList) {
+    public Article updateArticle(User user, Long id, String text, LocationRequestDto locationRequestDto, List<String> tagNames, List<MultipartFile> imageFiles, List<Long> rmImageIds) {
         Article article = articleRepository.findById(id).orElseThrow(
-                () -> new NullPointerException(String.format("해당되는 아이디(%d)의 게시물이 없습니다.", id))
+                () -> new ApiRequestException(String.format("해당되는 아이디(%d)의 게시물이 없습니다.", id))
         );
 
         // 기존에 저장된 이미지 삭제
-        for (Long imageId : rmImageIdList) {
-            Image image = imageRepository.findById(imageId).orElseThrow(
-                    () -> new NullPointerException(String.format("해당되는 아이디(%d)의 이미지가 없습니다.", imageId))
-            );
-            fileProcessService.deleteImage(image.getUrl());
+        if(rmImageIds != null) {
+            for (Long imageId : rmImageIds) {
+                Image image = imageRepository.findById(imageId).orElseThrow(
+                        () -> new ApiRequestException(String.format("해당되는 아이디(%d)의 이미지가 없습니다.", imageId))
+                );
+                fileProcessService.deleteImage(image.getUrl());
+                article.removeImage(imageId);
+            }
+            imageRepository.deleteAllById(rmImageIds);
         }
-        imageRepository.deleteAllById(rmImageIdList);
 
         locationDataPreprocess.categoryNamePreprocess(locationRequestDto);
         Location location = locationRepository.save(new Location(locationRequestDto, user.getId()));
@@ -101,9 +105,9 @@ public class ArticleService {
     }
 
     @Transactional
-    public void deleteArticle(Long id) throws IllegalArgumentException {
+    public Long deleteArticle(Long id) {
         Article article = articleRepository.findById(id).orElseThrow(
-                () -> new NullPointerException(String.format("아이디(%d)에 해당되는 게시물이 없습니다.", id))
+                () -> new ApiRequestException(String.format("아이디(%d)에 해당되는 게시물이 없습니다.", id))
         );
 
         // S3에 업로드된 이미지 삭제
@@ -112,5 +116,6 @@ public class ArticleService {
         }
 
         articleRepository.delete(article);
+        return id;
     }
 }

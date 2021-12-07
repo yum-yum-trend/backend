@@ -4,6 +4,7 @@ import com.udangtangtang.backend.domain.Article;
 import com.udangtangtang.backend.domain.Location;
 import com.udangtangtang.backend.domain.User;
 import com.udangtangtang.backend.dto.LocationRequestDto;
+import com.udangtangtang.backend.exception.ApiRequestException;
 import com.udangtangtang.backend.repository.ArticleRepository;
 import com.udangtangtang.backend.repository.ImageRepository;
 import com.udangtangtang.backend.repository.LocationRepository;
@@ -165,12 +166,12 @@ class ArticleServiceTest {
                 Long undefinedId = 200L;
 
                 when(articleRepository.findById(undefinedId)).thenThrow(
-                        new NullPointerException(String.format("해당되는 아이디(%d)의 게시물이 없습니다.", undefinedId)));
+                        new ApiRequestException(String.format("해당되는 아이디(%d)의 게시물이 없습니다.", undefinedId)));
 
                 String modifiedText = "* 수정된 게시물 내용 *";
 
                 ArticleService articleService = new ArticleService(articleRepository, locationRepository, tagRepository, imageRepository, locationDataPreprocess, fileProcessService);
-                Exception exception = assertThrows(NullPointerException.class, () -> {
+                Exception exception = assertThrows(ApiRequestException.class, () -> {
                     articleService.updateArticle(user, undefinedId, modifiedText, locationRequestDto, tagNames, imageFiles, rmImageIdList);
                 });
 

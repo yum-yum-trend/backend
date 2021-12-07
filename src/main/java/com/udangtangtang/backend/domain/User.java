@@ -65,4 +65,5 @@ public class User extends Timestamped {
                 ", kakaoId=" + kakaoId +
                 '}';
     }
+
 }
