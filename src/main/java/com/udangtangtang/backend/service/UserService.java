@@ -3,6 +3,7 @@ package com.udangtangtang.backend.service;
 import com.udangtangtang.backend.domain.User;
 import com.udangtangtang.backend.domain.UserRole;
 import com.udangtangtang.backend.dto.SignupRequestDto;
+import com.udangtangtang.backend.exception.ApiRequestException;
 import com.udangtangtang.backend.repository.UserRepository;
 import com.udangtangtang.backend.security.kakao.KakaoOAuth2;
 import com.udangtangtang.backend.security.kakao.KakaoUserInfo;
@@ -32,12 +33,12 @@ public class UserService {
         this.authenticationManager = authenticationManager;
     }
 
-    public void registerUser(SignupRequestDto requestDto) {
+    public void registerUser(SignupRequestDto requestDto) throws ApiRequestException {
         String username = requestDto.getUsername();
         // 사용자이름 중복 확인
         Optional<User> found = userRepository.findByUsername(username);
         if (found.isPresent()) {
-            throw new IllegalArgumentException("중복된 사용자 이름이 존재합니다.");
+            throw new ApiRequestException("중복된 사용자 이름이 존재합니다.");
         }
 
         String password = passwordEncoder.encode(requestDto.getPassword());
