@@ -31,7 +31,7 @@ public class CommentServiceTest {
     CommentService commentService;
 
     @Test
-    public void 댓글_등록() {
+    public void 댓글_등록과_조회() {
         // given
         Article article = articleRepository.findById(3L).orElseThrow(
                 () -> new ApiRequestException("해당 게시글이 존재하지 않습니다."));
