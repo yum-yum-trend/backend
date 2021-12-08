@@ -1,7 +1,7 @@
 package com.udangtangtang.backend.service;
 
 import com.udangtangtang.backend.domain.Location;
-import com.udangtangtang.backend.dto.TrendResponseDto;
+import com.udangtangtang.backend.dto.response.TrendResponseDto;
 import com.udangtangtang.backend.repository.LocationRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
