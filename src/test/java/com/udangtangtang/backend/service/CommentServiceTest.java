@@ -1,8 +1,7 @@
 package com.udangtangtang.backend.service;
 
-import com.udangtangtang.backend.domain.Article;
-import com.udangtangtang.backend.domain.Comment;
-import com.udangtangtang.backend.domain.User;
+import com.udangtangtang.backend.domain.*;
+import com.udangtangtang.backend.dto.LocationRequestDto;
 import com.udangtangtang.backend.exception.ApiRequestException;
 import com.udangtangtang.backend.repository.ArticleRepository;
 import com.udangtangtang.backend.repository.CommentRepository;
@@ -20,11 +19,7 @@ import static org.junit.jupiter.api.Assertions.*;
 @SpringBootTest // 스프링 부트 띄우고 테스트(이게 없으면 @Autowired 다 실패)
 @Transactional
 public class CommentServiceTest {
-
-    @Autowired
-    ArticleRepository articleRepository;
-    @Autowired
-    UserRepository userRepository;
+    
     @Autowired
     CommentRepository commentRepository;
     @Autowired
@@ -33,10 +28,8 @@ public class CommentServiceTest {
     @Test
     public void 댓글_등록과_조회() {
         // given
-        Article article = articleRepository.findById(3L).orElseThrow(
-                () -> new ApiRequestException("해당 게시글이 존재하지 않습니다."));
-        User user = userRepository.findById(1L).orElseThrow(
-                () -> new ApiRequestException("해당 유저가 존재하지 않습니다."));
+        User user = createUser("testUser", "testPw", "test@test.com", UserRole.USER);
+        Article article = createArticle("testText", user);
         Comment comment = new Comment(user, article, "test 댓글입니다.");
 
         // when
@@ -50,10 +43,8 @@ public class CommentServiceTest {
     @Test(expected = ApiRequestException.class)
     public void 댓글_삭제() {
         // given
-        Article article = articleRepository.findById(3L).orElseThrow(
-                () -> new ApiRequestException("해당 게시글이 존재하지 않습니다."));
-        User user = userRepository.findById(1L).orElseThrow(
-                () -> new ApiRequestException("해당 유저가 존재하지 않습니다."));
+        User user = createUser("testUser", "testPw", "test@test.com", UserRole.USER);
+        Article article = createArticle("testText", user);
         Comment comment = new Comment(user, article, "test 댓글입니다.");
         commentRepository.save(comment);
         Long commentId = comment.getId();
@@ -64,5 +55,24 @@ public class CommentServiceTest {
         // then
         commentRepository.findById(commentId).orElseThrow(
                 () -> new ApiRequestException("해당 댓글이 존재하지 않습니다."));
+    }
+
+    public User createUser(String username, String password, String email, UserRole role) {
+        User user = new User();
+        user.setUsername(username);
+        user.setPassword(password);
+        user.setEmail(email);
+        user.setRole(role);
+        return user;
+    }
+
+    public Article createArticle(String text, User user) {
+        Article article = new Article();
+        LocationRequestDto locationRequestDto = new LocationRequestDto();
+        Location location = new Location(locationRequestDto, user.getId());
+        article.setText(text);
+        article.setUser(user);
+        article.setLocation(location);
+        return article;
     }
 }
