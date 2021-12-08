@@ -30,10 +30,10 @@ include::{snippets}/likes/http-request.adoc[]
 include::{snippets}/likes/http-response.adoc[]
 
 === 손님 권한 좋아요 보기
-include::{snippets}/likes/guest/http-response.adoc[]
+include::{snippets}/likes/guest/http-request.adoc[]
 include::{snippets}/likes/guest/http-response.adoc[]
 
 === 사용자 권한 좋아요 보기
-include::{snippets}/likes/http-response.adoc[]
+include::{snippets}/likes/http-request.adoc[]
 include::{snippets}/likes/http-response.adoc[]
 
