@@ -52,18 +52,18 @@ public class ArticleService {
         locationDataPreprocess.categoryNamePreprocess(locationRequestDto);
         Location location = locationRepository.save(new Location(locationRequestDto, user.getId()));
 
-        Article article = articleRepository.save(new Article(text, location, user));
+        Article article = new Article(text, location, user);
 
         for (String name : tagNames) {
-            tagRepository.save(new Tag(name, article, user.getId()));
+            article.addTag(new Tag(name, article, user.getId()));
         }
 
         for (MultipartFile multipartFile : imageFiles) {
             String url = fileProcessService.uploadImage(multipartFile, FileFolder.ARTICLE_IMAGES);
-            imageRepository.save(new Image(url, article));
+            article.addImage(new Image(url, article));
         }
 
-        return article;
+        return articleRepository.save(article);
     }
 
     @Transactional
@@ -79,6 +79,7 @@ public class ArticleService {
                         () -> new ApiRequestException(String.format("해당되는 아이디(%d)의 이미지가 없습니다.", imageId))
                 );
                 fileProcessService.deleteImage(image.getUrl());
+                article.removeImage(imageId);
             }
             imageRepository.deleteAllById(rmImageIds);
         }
@@ -104,7 +105,7 @@ public class ArticleService {
     }
 
     @Transactional
-    public void deleteArticle(Long id) {
+    public Long deleteArticle(Long id) {
         Article article = articleRepository.findById(id).orElseThrow(
                 () -> new ApiRequestException(String.format("아이디(%d)에 해당되는 게시물이 없습니다.", id))
         );
@@ -115,5 +116,6 @@ public class ArticleService {
         }
 
         articleRepository.delete(article);
+        return id;
     }
 }
