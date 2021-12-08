@@ -39,7 +39,7 @@ public class UserController {
         return userService.reissueAuthenticationToken(tokenRequestDto);
     }
 
-    @PostMapping(value = "/auth/logout")
+    @PostMapping(value = "/logout")
     public void deleteAuthenticationToken(@RequestBody LogoutRequestDto logoutRequestDto) {
         userService.deleteAuthenticationToken(logoutRequestDto);
     }
