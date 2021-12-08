@@ -36,9 +36,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
         http.authorizeRequests()
                 .antMatchers("/h2-console/**").permitAll()
-                .antMatchers("/login").permitAll()
-                .antMatchers("/login/kakao").permitAll()
-                .antMatchers("/signup").permitAll()
+                .antMatchers("/login", "/login/kakao", "/signup", "/auth/token").permitAll()
                 .antMatchers("/").permitAll()
 
                 .mvcMatchers(HttpMethod.GET, "/articles").permitAll()

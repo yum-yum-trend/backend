@@ -37,6 +37,8 @@ dependencies {
     implementation 'io.jsonwebtoken:jjwt:0.9.1'
     // spring-cloud-starter
     implementation 'org.springframework.cloud:spring-cloud-starter-aws:2.2.1.RELEASE'
+    // redis
+    implementation 'org.springframework.boot:spring-boot-starter-data-redis'
 
 }
 

@@ -1,7 +1,7 @@
 package com.udangtangtang.backend.service;
 
 import com.udangtangtang.backend.domain.*;
-import com.udangtangtang.backend.dto.LocationRequestDto;
+import com.udangtangtang.backend.dto.request.LocationRequestDto;
 import com.udangtangtang.backend.exception.ApiRequestException;
 import com.udangtangtang.backend.repository.*;
 import com.udangtangtang.backend.util.LocationDataPreprocess;
