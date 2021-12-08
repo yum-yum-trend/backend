@@ -3,13 +3,17 @@ package com.udangtangtang.backend.controller;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.gson.GsonBuilder;
 import com.sun.security.auth.UserPrincipal;
+import com.udangtangtang.backend.domain.Article;
 import com.udangtangtang.backend.domain.User;
 import com.udangtangtang.backend.domain.UserRole;
 import com.udangtangtang.backend.dto.LocationRequestDto;
 import com.udangtangtang.backend.dto.SignupRequestDto;
 import com.udangtangtang.backend.dto.UserDto;
+import com.udangtangtang.backend.repository.ArticleRepository;
 import com.udangtangtang.backend.repository.UserRepository;
 import com.udangtangtang.backend.security.UserDetailsImpl;
+import com.udangtangtang.backend.service.ArticleService;
+import com.udangtangtang.backend.service.UserProfileServiceTest;
 import com.udangtangtang.backend.util.JwtTokenUtil;
 import org.junit.Before;
 import org.junit.jupiter.api.*;
@@ -86,7 +90,16 @@ public class ApiTest {
     @Autowired
     JwtTokenUtil jwtTokenUtil;
 
+    @Autowired
+    ArticleService articleService;
+
+    @Autowired
+    ArticleRepository articleRepository;
+
     static public String token = "";
+
+    Article createdArticle = null;
+    List<Long> imageIds = null;
 
     @BeforeEach
     public void setUp(WebApplicationContext webApplicationContext, RestDocumentationContextProvider restDocumentation) {
@@ -126,9 +139,13 @@ public class ApiTest {
     @Test
     @Order(2)
     public void 로그인() throws Exception {
+        String password = passwordEncoder.encode("testuser");
+        User user = new User("testuser", password, "testuser@testuser.com", UserRole.USER);
+        userRepository.save(user);
+
         UserDto dto = new UserDto();
-        dto.setUsername("1234");
-        dto.setPassword("qwer1234");
+        dto.setUsername("testuser");
+        dto.setPassword("testuser");
         String jsonString = new GsonBuilder().setPrettyPrinting().create().toJson(dto);
 
         mockMvc.perform(post("/login")
@@ -197,10 +214,25 @@ public class ApiTest {
         userRepository.save(user);
         UserDetailsImpl userDetails = new UserDetailsImpl(user);
 
-        mockMvc.perform(get("/likes/{id}", "3")
+        String text = "게시물 본문";
+        LocationRequestDto locationRequestDto = new LocationRequestDto("{\"roadAddressName\":\"제주특별자치도 서귀포시 일주서로 968-10\",\"placeName\":\"연돈\",\"xCoordinate\":\"126.40715814631936\",\"yCoordinate\":\"33.258895288625645\",\"categoryName\":\"음식점 > 일식 > 돈까스,우동\"}");
+        List<String> tagNames = Arrays.asList("얌얌트랜드", "음식", "사진", "공유");
+        List<MultipartFile> imageFiles = Arrays.asList(
+                getMockMultipartFile("cute_chun_sik", "jpeg", "multipart/form-data", "src/test/resources/images/cute_chun_sik.jpeg"),
+                getMockMultipartFile("ring_ding_kermit", "jpeg", "multipart/form-data", "src/test/resources/images/ring_ding_kermit.jpeg")
+        );
+
+        Article article = articleService.createArticle(user, text, locationRequestDto, tagNames, imageFiles);
+
+        mockMvc.perform(get("/likes/{id}", article.getId())
                 .header("Authorization", "Bearer " + jwtTokenUtil.generateToken(userDetails)))
                 .andExpect(status().isOk())
                 .andDo(document("likes"));
+    }
+
+    private MockMultipartFile getMockMultipartFile(String fileName, String extension, String contentType, String path) throws IOException {
+        FileInputStream fileInputStream = new FileInputStream(new File(path));
+        return new MockMultipartFile(fileName, fileName + "." + extension, contentType, fileInputStream);
     }
 }
 
