@@ -25,15 +25,22 @@ include::{snippets}/trend/chart/http-request.adoc[]
 include::{snippets}/trend/chart/http-response.adoc[]
 
 == 좋아요
-=== 사용자 권한 좋아요 보기
+=== 사용자 권한 전체 게시글 좋아요 보기
 include::{snippets}/likes/http-request.adoc[]
 include::{snippets}/likes/http-response.adoc[]
 
-=== 손님 권한 좋아요 보기
+=== 손님 권한 전체 게시글 좋아요 보기
 include::{snippets}/likes/guest/http-request.adoc[]
 include::{snippets}/likes/guest/http-response.adoc[]
 
-=== 사용자 권한 좋아요 보기
+=== 사용자 권한 전체 게시글 좋아요 보기
 include::{snippets}/likes/http-request.adoc[]
 include::{snippets}/likes/http-response.adoc[]
 
+=== 손님 권한 게시글 좋아요 보기
+include::{snippets}/likes/guest/http-request.adoc[]
+include::{snippets}/likes/guest/http-response.adoc[]
+
+=== 프로필 페이지 게시글 좋아요 보기
+include::{snippets}/profile/likes/http-request.adoc[]
+include::{snippets}/profile/likes/http-response.adoc[]

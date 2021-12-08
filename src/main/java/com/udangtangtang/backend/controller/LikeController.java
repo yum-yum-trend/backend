@@ -40,12 +40,6 @@ public class LikeController {
         return likeService.getLikesUser(id);
     }
 
-    @GetMapping("/profile/likes")
-    public List<LikeResponseDto> getLikes(@PathVariable Long id) {
-        return likeService.getLikesUser(id);
-    }
-
-
     @PutMapping("/articles/like")
     public void increaseLikeCount(@AuthenticationPrincipal UserDetailsImpl userDetails,
                                   @RequestParam("articleId") Long articleId) {

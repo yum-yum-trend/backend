@@ -230,6 +230,52 @@ public class ApiTest {
                 .andDo(document("likes"));
     }
 
+    @Test
+    @Order(8)
+    public void 손님_게시글_좋아요_보기() throws Exception {
+        // given
+        User user = new User("testuser", "testuser", "testuser@testuser.com", UserRole.USER);
+        userRepository.save(user);
+
+        String text = "게시물 본문";
+        LocationRequestDto locationRequestDto = new LocationRequestDto("{\"roadAddressName\":\"제주특별자치도 서귀포시 일주서로 968-10\",\"placeName\":\"연돈\",\"xCoordinate\":\"126.40715814631936\",\"yCoordinate\":\"33.258895288625645\",\"categoryName\":\"음식점 > 일식 > 돈까스,우동\"}");
+        List<String> tagNames = Arrays.asList("얌얌트랜드", "음식", "사진", "공유");
+        List<MultipartFile> imageFiles = Arrays.asList(
+                getMockMultipartFile("cute_chun_sik", "jpeg", "multipart/form-data", "src/test/resources/images/cute_chun_sik.jpeg"),
+                getMockMultipartFile("ring_ding_kermit", "jpeg", "multipart/form-data", "src/test/resources/images/ring_ding_kermit.jpeg")
+        );
+
+        Article article = articleService.createArticle(user, text, locationRequestDto, tagNames, imageFiles);
+
+        mockMvc.perform(get("/likes/guest/{id}", article.getId()))
+                .andExpect(status().isOk())
+                .andDo(document("likes/guest"));
+    }
+
+    @Test
+    @Order(9)
+    public void 마이페이지_게시글_좋아요_보기() throws Exception {
+        // given
+        User user = new User("testuser", "testuser", "testuser@testuser.com", UserRole.USER);
+        userRepository.save(user);
+        UserDetailsImpl userDetails = new UserDetailsImpl(user);
+
+        String text = "게시물 본문";
+        LocationRequestDto locationRequestDto = new LocationRequestDto("{\"roadAddressName\":\"제주특별자치도 서귀포시 일주서로 968-10\",\"placeName\":\"연돈\",\"xCoordinate\":\"126.40715814631936\",\"yCoordinate\":\"33.258895288625645\",\"categoryName\":\"음식점 > 일식 > 돈까스,우동\"}");
+        List<String> tagNames = Arrays.asList("얌얌트랜드", "음식", "사진", "공유");
+        List<MultipartFile> imageFiles = Arrays.asList(
+                getMockMultipartFile("cute_chun_sik", "jpeg", "multipart/form-data", "src/test/resources/images/cute_chun_sik.jpeg"),
+                getMockMultipartFile("ring_ding_kermit", "jpeg", "multipart/form-data", "src/test/resources/images/ring_ding_kermit.jpeg")
+        );
+
+        articleService.createArticle(user, text, locationRequestDto, tagNames, imageFiles);
+
+        mockMvc.perform(get("/profile/likes/{id}", user.getId())
+                        .header("Authorization", "Bearer " + jwtTokenUtil.generateToken(userDetails)))
+                .andExpect(status().isOk())
+                .andDo(document("profile/likes"));
+    }
+
     private MockMultipartFile getMockMultipartFile(String fileName, String extension, String contentType, String path) throws IOException {
         FileInputStream fileInputStream = new FileInputStream(new File(path));
         return new MockMultipartFile(fileName, fileName + "." + extension, contentType, fileInputStream);
