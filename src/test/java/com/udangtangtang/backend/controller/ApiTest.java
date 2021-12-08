@@ -2,41 +2,30 @@ package com.udangtangtang.backend.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.gson.GsonBuilder;
-import com.sun.security.auth.UserPrincipal;
 import com.udangtangtang.backend.domain.Article;
 import com.udangtangtang.backend.domain.User;
 import com.udangtangtang.backend.domain.UserRole;
-import com.udangtangtang.backend.dto.LocationRequestDto;
-import com.udangtangtang.backend.dto.SignupRequestDto;
-import com.udangtangtang.backend.dto.UserDto;
+import com.udangtangtang.backend.dto.request.LocationRequestDto;
+import com.udangtangtang.backend.dto.request.SignupRequestDto;
+import com.udangtangtang.backend.dto.request.UserRequestDto;
 import com.udangtangtang.backend.repository.ArticleRepository;
 import com.udangtangtang.backend.repository.UserRepository;
 import com.udangtangtang.backend.security.UserDetailsImpl;
 import com.udangtangtang.backend.service.ArticleService;
-import com.udangtangtang.backend.service.UserProfileServiceTest;
 import com.udangtangtang.backend.util.JwtTokenUtil;
-import org.junit.Before;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.restdocs.AutoConfigureRestDocs;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.restdocs.RestDocumentationContextProvider;
 import org.springframework.restdocs.RestDocumentationExtension;
-import org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.test.context.support.WithMockUser;
-import org.springframework.security.test.context.support.WithUserDetails;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.transaction.annotation.Transactional;
@@ -47,24 +36,18 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collection;
 import java.util.List;
 
-import static org.mockito.BDDMockito.given;
-import static org.springframework.restdocs.headers.HeaderDocumentation.headerWithName;
-import static org.springframework.restdocs.headers.HeaderDocumentation.requestHeaders;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.documentationConfiguration;
 import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
 import static org.springframework.restdocs.payload.PayloadDocumentation.requestFields;
 import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
 import static org.springframework.restdocs.request.RequestDocumentation.requestParameters;
-import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.jwt;
 import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @ExtendWith({RestDocumentationExtension.class, SpringExtension.class})
@@ -143,7 +126,7 @@ public class ApiTest {
         User user = new User("testuser", password, "testuser@testuser.com", UserRole.USER);
         userRepository.save(user);
 
-        UserDto dto = new UserDto();
+        UserRequestDto dto = new UserRequestDto();
         dto.setUsername("testuser");
         dto.setPassword("testuser");
         String jsonString = new GsonBuilder().setPrettyPrinting().create().toJson(dto);
@@ -193,7 +176,7 @@ public class ApiTest {
         UserDetailsImpl userDetails = new UserDetailsImpl(user);
 
         mockMvc.perform(get("/likes")
-                        .header("Authorization", "Bearer " + jwtTokenUtil.generateToken(userDetails)))
+                        .header("Authorization", "Bearer " + jwtTokenUtil.generateAccessToken(userDetails.getUsername())))
                 .andExpect(status().isOk())
                 .andDo(document("likes"));
     }
@@ -225,7 +208,7 @@ public class ApiTest {
         Article article = articleService.createArticle(user, text, locationRequestDto, tagNames, imageFiles);
 
         mockMvc.perform(get("/likes/{id}", article.getId())
-                .header("Authorization", "Bearer " + jwtTokenUtil.generateToken(userDetails)))
+                .header("Authorization", "Bearer " + jwtTokenUtil.generateAccessToken(userDetails.getUsername())))
                 .andExpect(status().isOk())
                 .andDo(document("likes"));
     }

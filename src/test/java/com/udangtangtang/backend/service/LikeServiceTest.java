@@ -2,20 +2,17 @@ package com.udangtangtang.backend.service;
 
 import com.udangtangtang.backend.domain.Article;
 import com.udangtangtang.backend.domain.User;
-import com.udangtangtang.backend.domain.UserRole;
-import com.udangtangtang.backend.dto.LikeResponseDto;
-import com.udangtangtang.backend.dto.LocationRequestDto;
-import com.udangtangtang.backend.dto.SignupRequestDto;
-import com.udangtangtang.backend.repository.*;
-import org.assertj.core.util.Arrays;
-import org.junit.jupiter.api.*;
+import com.udangtangtang.backend.dto.request.LocationRequestDto;
+import com.udangtangtang.backend.dto.request.SignupRequestDto;
+import com.udangtangtang.backend.dto.response.LikeResponseDto;
+import com.udangtangtang.backend.repository.ArticleRepository;
+import com.udangtangtang.backend.repository.LikesRepository;
+import com.udangtangtang.backend.repository.UserRepository;
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.BadCredentialsException;
-import org.springframework.security.authentication.DisabledException;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.transaction.annotation.Transactional;
@@ -24,7 +21,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @ExtendWith(SpringExtension.class)
 @Transactional
@@ -59,7 +56,7 @@ class LikeServiceTest {
     void 게시글_좋아요_추가_성공() throws Exception {
         //given
         SignupRequestDto signupRequestDto = createSignupRequestDto("testtest", "123", "testtest@test.com");
-        userService.registerUser(signupRequestDto);
+        userService.createUser(signupRequestDto);
         User user = userRepository.findByUsername(signupRequestDto.getUsername()).orElseThrow(
                 () -> new NullPointerException("해당 유저가 존재하지 않습니다.")
         );
@@ -80,7 +77,7 @@ class LikeServiceTest {
     void 게시글_좋아요_제거_성공() throws Exception {
         //given
         SignupRequestDto signupRequestDto = createSignupRequestDto("testtest", "123", "testtest@test.com");
-        userService.registerUser(signupRequestDto);
+        userService.createUser(signupRequestDto);
         User user = userRepository.findByUsername(signupRequestDto.getUsername()).orElseThrow(
                 () -> new NullPointerException("해당 유저가 존재하지 않습니다.")
         );
@@ -102,12 +99,12 @@ class LikeServiceTest {
     void 해당_게시글_좋아요_갯수_좋아요_여부_확인() throws Exception {
         //given
         SignupRequestDto signupRequestDto1 = createSignupRequestDto("testtest", "123", "testtest@test.com");
-        userService.registerUser(signupRequestDto1);
+        userService.createUser(signupRequestDto1);
         User user1 = userRepository.findByUsername(signupRequestDto1.getUsername()).orElseThrow(
                 () -> new NullPointerException("해당 유저가 존재하지 않습니다.")
         );
         SignupRequestDto signupRequestDto2 = createSignupRequestDto("testtest2", "123", "testtest2@test.com");
-        userService.registerUser(signupRequestDto2);
+        userService.createUser(signupRequestDto2);
         User user2 = userRepository.findByUsername(signupRequestDto2.getUsername()).orElseThrow(
                 () -> new NullPointerException("해당 유저가 존재하지 않습니다.")
         );
