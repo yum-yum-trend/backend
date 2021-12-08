@@ -15,7 +15,7 @@ public class JwtTokenUtil  implements Serializable {
 
     private static final Long serialVersionUID = -2550185165626007488L;
 
-    public static final Long ACCESS_TOKEN_EXP_TIME =  5 * 1000L;
+    public static final Long ACCESS_TOKEN_EXP_TIME =  3 * 24 * 60 * 60 * 1000L;
 
     public static final Long REFRESH_TOKEN_EXP_TIME = 7 * 24  * 60 * 60 * 1000L;
 
