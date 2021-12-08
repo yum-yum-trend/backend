@@ -28,26 +28,26 @@ public class TrendService {
 
             tempRegionList.add(region);
             tempRegionHashSet.add(region);
+        }
 
-            // 원래 목표 : count의 평균을 구해서 해당 count 수준에 맞는 색상을 자동으로 넣어주도록 하고 싶었음.
-            for (String element : tempRegionHashSet) {
-                int count = Collections.frequency(tempRegionList, element);
-                if (count >= 100) {
-                    color = "1050FF";
-                } else if (count < 100 && count >= 50) {
-                    color = "4979FF";
-                } else if (count < 50 && count >= 25) {
-                    color = "658EFF";
-                } else if (count < 25 && count >= 10) {
-                    color = "81A3FF";
-                } else {
-                    color = "BACDFF";
-                }
-
-                TrendResponseDto responseDto = new TrendResponseDto(element, count, color);
-
-                trendResponseDto.add(responseDto);
+        // 원래 목표 : count의 평균을 구해서 해당 count 수준에 맞는 색상을 자동으로 넣어주도록 하고 싶었음.
+        for (String element : tempRegionHashSet) {
+            int count = Collections.frequency(tempRegionList, element);
+            if (count >= 100) {
+                color = "1050FF";
+            } else if (count < 100 && count >= 50) {
+                color = "4979FF";
+            } else if (count < 50 && count >= 25) {
+                color = "658EFF";
+            } else if (count < 25 && count >= 10) {
+                color = "81A3FF";
+            } else {
+                color = "BACDFF";
             }
+
+            TrendResponseDto responseDto = new TrendResponseDto(element, count, color);
+
+            trendResponseDto.add(responseDto);
         }
         return trendResponseDto;
     }
