@@ -19,11 +19,7 @@ import static org.junit.jupiter.api.Assertions.*;
 @SpringBootTest // 스프링 부트 띄우고 테스트(이게 없으면 @Autowired 다 실패)
 @Transactional
 public class CommentServiceTest {
-
-    @Autowired
-    ArticleRepository articleRepository;
-    @Autowired
-    UserRepository userRepository;
+    
     @Autowired
     CommentRepository commentRepository;
     @Autowired
