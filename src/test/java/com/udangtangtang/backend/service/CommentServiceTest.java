@@ -1,11 +1,9 @@
 package com.udangtangtang.backend.service;
 
 import com.udangtangtang.backend.domain.*;
-import com.udangtangtang.backend.dto.LocationRequestDto;
+import com.udangtangtang.backend.dto.request.LocationRequestDto;
 import com.udangtangtang.backend.exception.ApiRequestException;
-import com.udangtangtang.backend.repository.ArticleRepository;
 import com.udangtangtang.backend.repository.CommentRepository;
-import com.udangtangtang.backend.repository.UserRepository;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,7 +11,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.transaction.annotation.Transactional;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @RunWith(SpringRunner.class) // 스프링과 테스트 통합
 @SpringBootTest // 스프링 부트 띄우고 테스트(이게 없으면 @Autowired 다 실패)

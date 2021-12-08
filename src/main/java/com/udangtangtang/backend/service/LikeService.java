@@ -2,7 +2,7 @@ package com.udangtangtang.backend.service;
 
 import com.udangtangtang.backend.domain.Article;
 import com.udangtangtang.backend.domain.Likes;
-import com.udangtangtang.backend.dto.LikeResponseDto;
+import com.udangtangtang.backend.dto.response.LikeResponseDto;
 import com.udangtangtang.backend.exception.ApiRequestException;
 import com.udangtangtang.backend.repository.ArticleRepository;
 import com.udangtangtang.backend.repository.LikesRepository;

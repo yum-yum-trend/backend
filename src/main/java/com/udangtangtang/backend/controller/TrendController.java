@@ -1,6 +1,6 @@
 package com.udangtangtang.backend.controller;
 
-import com.udangtangtang.backend.dto.TrendResponseDto;
+import com.udangtangtang.backend.dto.response.TrendResponseDto;
 import com.udangtangtang.backend.service.TrendService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;

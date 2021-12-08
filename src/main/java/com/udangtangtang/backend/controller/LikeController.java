@@ -1,6 +1,6 @@
 package com.udangtangtang.backend.controller;
 
-import com.udangtangtang.backend.dto.LikeResponseDto;
+import com.udangtangtang.backend.dto.response.LikeResponseDto;
 import com.udangtangtang.backend.security.UserDetailsImpl;
 import com.udangtangtang.backend.service.LikeService;
 import lombok.RequiredArgsConstructor;

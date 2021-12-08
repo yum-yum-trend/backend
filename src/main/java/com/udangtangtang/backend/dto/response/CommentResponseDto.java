@@ -1,4 +1,4 @@
-package com.udangtangtang.backend.dto;
+package com.udangtangtang.backend.dto.response;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

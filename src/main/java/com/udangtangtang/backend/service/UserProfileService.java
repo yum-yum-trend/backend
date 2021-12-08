@@ -1,16 +1,13 @@
 package com.udangtangtang.backend.service;
 
-import com.sun.istack.NotNull;
-import com.udangtangtang.backend.config.AmazonS3Component;
 import com.udangtangtang.backend.domain.Article;
 import com.udangtangtang.backend.domain.FileFolder;
 import com.udangtangtang.backend.domain.User;
-import com.udangtangtang.backend.dto.ProfileRequestDto;
+import com.udangtangtang.backend.dto.request.ProfileRequestDto;
 import com.udangtangtang.backend.exception.ApiRequestException;
 import com.udangtangtang.backend.repository.ArticleRepository;
 import com.udangtangtang.backend.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
