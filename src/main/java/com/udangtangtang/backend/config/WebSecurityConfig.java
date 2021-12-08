@@ -36,7 +36,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
         http.authorizeRequests()
                 .antMatchers("/h2-console/**").permitAll()
-                .antMatchers("/login", "/login/kakao", "/signup", "/auth/token").permitAll()
+                .antMatchers("/login", "/login/kakao", "/signup", "/auth/token", "/auth/logout").permitAll()
                 .antMatchers("/").permitAll()
 
                 .mvcMatchers(HttpMethod.GET, "/articles").permitAll()
@@ -49,14 +49,15 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .cors().and()
                 .exceptionHandling().authenticationEntryPoint(jwtAuthenticationEntryPoint).and()
                 .sessionManagement()
-                .sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
-                .formLogin()
-                .loginPage("/user/login")
-                .loginProcessingUrl("/user/login")
-                .defaultSuccessUrl("/")
-                .permitAll()
-                .and()
-                .logout();
+                .sessionCreationPolicy(SessionCreationPolicy.STATELESS);
+//                .and()
+//                .formLogin()
+//                .loginPage("/user/login")
+//                .loginProcessingUrl("/user/login")
+//                .defaultSuccessUrl("/")
+//                .permitAll()
+//                .and()
+//                .logout();
 
         http.addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
         http.addFilterBefore(jwtExceptionFilter, JwtAuthenticationFilter.class);
