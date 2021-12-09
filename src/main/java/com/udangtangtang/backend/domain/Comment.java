@@ -14,11 +14,12 @@ public class Comment {
     @Id @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne
     @JoinColumn(name = "user_id")
     private User user;
 
     @JsonIgnore
+    @ManyToOne
     @JoinColumn(name = "article_id")
     private Article article;
 
