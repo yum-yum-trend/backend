@@ -8,6 +8,6 @@ public class HomeController {
 
     @GetMapping(value = "/")
     public String forHealthCheck () {
-        return "OK";
+        return "index";
     }
 }
