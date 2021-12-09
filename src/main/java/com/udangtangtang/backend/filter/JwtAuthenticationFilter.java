@@ -46,7 +46,7 @@ public class JwtAuthenticationFilter  extends OncePerRequestFilter {
             }
 
             // Access Token 이 유효한 경우
-            if(jwtTokenUtil.validateToken(accessToken)) {
+            if(jwtTokenUtil.validateToken(accessToken) && SecurityContextHolder.getContext().getAuthentication() == null) {
                 String username = jwtTokenUtil.getUsernameFromToken(accessToken);
                 UserDetails userDetails = userDetailsService.loadUserByUsername(username);
 

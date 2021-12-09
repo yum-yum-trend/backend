@@ -14,6 +14,8 @@ import com.udangtangtang.backend.security.kakao.KakaoOAuth2;
 import com.udangtangtang.backend.security.kakao.KakaoUserInfo;
 import com.udangtangtang.backend.util.JwtTokenUtil;
 import lombok.RequiredArgsConstructor;
+import lombok.Setter;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -27,8 +29,8 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.Optional;
 
 @Service
-@RequiredArgsConstructor
 public class UserService {
+
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
     private final AuthenticationManager authenticationManager;
@@ -38,6 +40,18 @@ public class UserService {
     private final KakaoOAuth2 kakaoOAuth2;
     private static final String ADMIN_TOKEN = "AAABnv/xRVklrnYxKZ0aHgTBcXukeZygoC";
 
+    @Autowired
+    public UserService(UserRepository userRepository, PasswordEncoder passwordEncoder, AuthenticationManager authenticationManager,
+                       UserDetailsService userDetailsService, JwtTokenUtil jwtTokenUtil,
+                       JwtRefreshTokenRepository jwtRefreshTokenRepository, KakaoOAuth2 kakaoOAuth2) {
+        this.userRepository = userRepository;
+        this.passwordEncoder = passwordEncoder;
+        this.authenticationManager = authenticationManager;
+        this.userDetailsService = userDetailsService;
+        this.jwtTokenUtil = jwtTokenUtil;
+        this.jwtRefreshTokenRepository = jwtRefreshTokenRepository;
+        this.kakaoOAuth2 = kakaoOAuth2;
+    }
 
     @Transactional
     public User createUser(SignupRequestDto signupRequestDto) throws ApiRequestException {
