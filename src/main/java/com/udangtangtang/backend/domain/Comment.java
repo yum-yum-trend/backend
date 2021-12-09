@@ -1,12 +1,8 @@
 package com.udangtangtang.backend.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.udangtangtang.backend.dto.CommentRequestDto;
-import com.udangtangtang.backend.repository.ArticleRepository;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.persistence.*;
 

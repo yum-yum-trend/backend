@@ -3,7 +3,7 @@ package com.udangtangtang.backend.service;
 import com.udangtangtang.backend.domain.Article;
 import com.udangtangtang.backend.domain.Location;
 import com.udangtangtang.backend.domain.User;
-import com.udangtangtang.backend.dto.LocationRequestDto;
+import com.udangtangtang.backend.dto.request.LocationRequestDto;
 import com.udangtangtang.backend.exception.ApiRequestException;
 import com.udangtangtang.backend.repository.ArticleRepository;
 import com.udangtangtang.backend.repository.ImageRepository;

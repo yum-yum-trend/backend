@@ -1,7 +1,7 @@
 package com.udangtangtang.backend.controller;
 
-import com.udangtangtang.backend.dto.CommentRequestDto;
-import com.udangtangtang.backend.dto.CommentResponseDto;
+import com.udangtangtang.backend.dto.request.CommentRequestDto;
+import com.udangtangtang.backend.dto.response.CommentResponseDto;
 import com.udangtangtang.backend.security.UserDetailsImpl;
 import com.udangtangtang.backend.service.CommentService;
 import lombok.RequiredArgsConstructor;

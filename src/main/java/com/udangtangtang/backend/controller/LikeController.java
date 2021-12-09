@@ -1,6 +1,6 @@
 package com.udangtangtang.backend.controller;
 
-import com.udangtangtang.backend.dto.LikeResponseDto;
+import com.udangtangtang.backend.dto.response.LikeResponseDto;
 import com.udangtangtang.backend.security.UserDetailsImpl;
 import com.udangtangtang.backend.service.LikeService;
 import lombok.RequiredArgsConstructor;
@@ -40,19 +40,13 @@ public class LikeController {
         return likeService.getLikesUser(id);
     }
 
-    @GetMapping("/profile/likes")
-    public List<LikeResponseDto> getLikes(@PathVariable Long id) {
-        return likeService.getLikesUser(id);
-    }
-
-
     @PutMapping("/articles/like")
     public void increaseLikeCount(@AuthenticationPrincipal UserDetailsImpl userDetails,
                                   @RequestParam("articleId") Long articleId) {
         likeService.increaseLikeCount(userDetails.getId(), articleId);
     }
 
-    @PutMapping("articles/unlike")
+    @PutMapping("/articles/unlike")
     public void decreaseLikeCount(@AuthenticationPrincipal UserDetailsImpl userDetails,
                                   @RequestParam("articleId") Long articleId) {
         likeService.decreaseLikeCount(userDetails.getId(), articleId);

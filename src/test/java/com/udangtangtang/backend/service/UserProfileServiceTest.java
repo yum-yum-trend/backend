@@ -1,8 +1,8 @@
 package com.udangtangtang.backend.service;
 
 import com.udangtangtang.backend.domain.User;
-import com.udangtangtang.backend.dto.ProfileRequestDto;
-import com.udangtangtang.backend.dto.SignupRequestDto;
+import com.udangtangtang.backend.dto.request.ProfileRequestDto;
+import com.udangtangtang.backend.dto.request.SignupRequestDto;
 import com.udangtangtang.backend.exception.ApiRequestException;
 import com.udangtangtang.backend.repository.UserRepository;
 import org.junit.Test;
@@ -44,7 +44,7 @@ public class UserProfileServiceTest {
     public void 프로필_이미지_수정() throws IOException {
         // given
         SignupRequestDto signupRequestDto = createSignupRequestDto("tester1", "123", "test@test.com");
-        userService.registerUser(signupRequestDto);
+        userService.createUser(signupRequestDto);
         User user = userRepository.findByUsername(signupRequestDto.getUsername()).orElseThrow(
                 () -> new ApiRequestException("해당 유저가 존재하지 않습니다!"));
 
@@ -64,7 +64,7 @@ public class UserProfileServiceTest {
     public void 프로필_이미지_초기화() throws IOException {
         // given
         SignupRequestDto signupRequestDto = createSignupRequestDto("tester1", "123", "test@test.com");
-        userService.registerUser(signupRequestDto);
+        userService.createUser(signupRequestDto);
         User user = userRepository.findByUsername(signupRequestDto.getUsername()).orElseThrow(
                 () -> new ApiRequestException("해당 유저가 존재하지 않습니다!"));
 
@@ -84,7 +84,7 @@ public class UserProfileServiceTest {
     public void 비밀번호_변경_성공_1() throws Exception {
         // given
         SignupRequestDto signupRequestDto = createSignupRequestDto("tester1", "123", "test@test.com");
-        userService.registerUser(signupRequestDto);
+        userService.createUser(signupRequestDto);
         User user = userRepository.findByUsername(signupRequestDto.getUsername()).orElseThrow(
                 () -> new ApiRequestException("해당 유저가 존재하지 않습니다!"));
         ProfileRequestDto profileRequestDto = createProfileRequestDto("123", "456", "");
@@ -101,7 +101,7 @@ public class UserProfileServiceTest {
     public void 비밀번호_변경_성공_2() throws Exception {
         // given
         SignupRequestDto signupRequestDto = createSignupRequestDto("tester1", "123", "test@test.com");
-        userService.registerUser(signupRequestDto);
+        userService.createUser(signupRequestDto);
         User user = userRepository.findByUsername(signupRequestDto.getUsername()).orElseThrow(
                 () -> new ApiRequestException("해당 유저가 존재하지 않습니다!"));
         ProfileRequestDto profileRequestDto = createProfileRequestDto("123", "456", "");
@@ -117,7 +117,7 @@ public class UserProfileServiceTest {
     public void 상태_메세지_변경() {
         // given
         SignupRequestDto signupRequestDto = createSignupRequestDto("tester1", "123", "test@test.com");
-        userService.registerUser(signupRequestDto);
+        userService.createUser(signupRequestDto);
         User user = userRepository.findByUsername(signupRequestDto.getUsername()).orElseThrow(
                 () -> new ApiRequestException("해당 유저가 존재하지 않습니다!"));
         ProfileRequestDto profileRequestDto = createProfileRequestDto("", "", "Hi");

@@ -2,7 +2,7 @@ package com.udangtangtang.backend.controller;
 
 
 import com.udangtangtang.backend.domain.Article;
-import com.udangtangtang.backend.dto.LocationRequestDto;
+import com.udangtangtang.backend.dto.request.LocationRequestDto;
 import com.udangtangtang.backend.security.UserDetailsImpl;
 import com.udangtangtang.backend.service.ArticleService;
 import lombok.RequiredArgsConstructor;
@@ -51,7 +51,7 @@ public class ArticleController {
                               @RequestParam("location") String locationJsonString,
                               @RequestParam("tagNames") List<String> tagNames,
                               @Nullable @RequestParam("imageFiles") List<MultipartFile> imageFiles,
-                              @Nullable @RequestParam("rmImageIdList") List<Long> rmImageIds) {
+                              @Nullable @RequestParam("rmImageIds") List<Long> rmImageIds) {
         articleService.updateArticle(userDetails.getUser(), id, text, new LocationRequestDto(locationJsonString), tagNames, imageFiles, rmImageIds);
     }
 

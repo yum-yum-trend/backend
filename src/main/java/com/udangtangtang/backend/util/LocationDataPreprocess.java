@@ -1,6 +1,6 @@
 package com.udangtangtang.backend.util;
 
-import com.udangtangtang.backend.dto.LocationRequestDto;
+import com.udangtangtang.backend.dto.request.LocationRequestDto;
 import org.springframework.stereotype.Component;
 
 @Component

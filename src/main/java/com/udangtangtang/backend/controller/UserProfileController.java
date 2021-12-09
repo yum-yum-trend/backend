@@ -2,14 +2,13 @@ package com.udangtangtang.backend.controller;
 
 import com.udangtangtang.backend.domain.Article;
 import com.udangtangtang.backend.domain.User;
-import com.udangtangtang.backend.dto.ProfileRequestDto;
+import com.udangtangtang.backend.dto.request.ProfileRequestDto;
 import com.udangtangtang.backend.service.UserProfileService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.util.List;
 import java.util.Optional;
 
 @RestController
