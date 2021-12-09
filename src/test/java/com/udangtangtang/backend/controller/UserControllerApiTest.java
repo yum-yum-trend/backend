@@ -46,7 +46,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @AutoConfigureRestDocs
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
-@Transactional
 public class UserControllerApiTest {
     @Autowired
     protected MockMvc mockMvc;
@@ -78,6 +77,7 @@ public class UserControllerApiTest {
     }
 
     @Test
+    @Transactional
     public void 회원가입() throws Exception {
         SignupRequestDto signupRequestDto = new SignupRequestDto();
         signupRequestDto.setUsername("Kermit");
@@ -102,6 +102,7 @@ public class UserControllerApiTest {
     }
 
     @Test
+    @Transactional
     public void 로그인() throws Exception {
         User user = new User("Kermit", passwordEncoder.encode("1234"), "Kermit@gaegulgaegul.com", UserRole.USER);
         userRepository.save(user);
@@ -126,6 +127,7 @@ public class UserControllerApiTest {
     }
 
     @Test
+    @Transactional
     public void 로그아웃() throws Exception {
         // given
         User user = new User("testuser", "testuser", "testuser@testuser.com", UserRole.USER);
@@ -151,6 +153,7 @@ public class UserControllerApiTest {
 
 
     @Test
+    @Transactional
     public void 엑세스_토큰_재발급() throws Exception {
         String username = "Kermit";
         String password = "1234";

@@ -51,7 +51,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @AutoConfigureRestDocs
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
-@Transactional
 public class ArticleControllerApiTest {
     @Autowired
     protected MockMvc mockMvc;
@@ -81,6 +80,7 @@ public class ArticleControllerApiTest {
 
 
     @Test
+    @Transactional
     public void 게시물_생성() throws Exception {
         // given
         User user = new User("Kermit", "1234", "Kermit@gaegulgaegul.com", UserRole.USER);
@@ -113,6 +113,7 @@ public class ArticleControllerApiTest {
     }
 
     @Test
+    @Transactional
     public void 모든_게시물_조회() throws Exception {
         // given
         String searchTag = "yummy";
@@ -137,6 +138,7 @@ public class ArticleControllerApiTest {
     }
 
     @Test
+    @Transactional
     public void 특정_게시물_조회() throws Exception {
         // given
         User user = new User("Kermit", "1234", "Kermit@gaegulgaegul.com", UserRole.USER);
@@ -158,6 +160,7 @@ public class ArticleControllerApiTest {
     }
 
     @Test
+    @Transactional
     public void 게시물_수정() throws Exception {
         // given
         User user = new User("Kermit", "1234", "Kermit@gaegulgaegul.com", UserRole.USER);
@@ -203,6 +206,7 @@ public class ArticleControllerApiTest {
     }
 
     @Test
+    @Transactional
     public void 게시물_삭제() throws Exception {
         // given
         User user = new User("Kermit", "1234", "Kermit@gaegulgaegul.com", UserRole.USER);
