@@ -42,7 +42,7 @@ out/
 yum-yum-trend-db.*
 
 ### AWS ###
-src/main/resources/aws.yml
+src/main/resources/application.yml
 src/main/resources/application-aws.yml
 src/main/resources/application-credentials.yml
 src/main/resources/application-db.yml
