@@ -15,6 +15,12 @@ include::{snippets}/user/login/http-request.adoc[]
 include::{snippets}/user/login/request-fields.adoc[]
 include::{snippets}/user/login/http-response.adoc[]
 
+=== 로그아웃
+include::{snippets}/user/logout/http-request.adoc[]
+include::{snippets}/user/logout/request-fields.adoc[]
+include::{snippets}/user/logout/http-response.adoc[]
+
+
 == 트랜드
 === 트랜드 맵
 include::{snippets}/trend/http-request.adoc[]
@@ -44,3 +50,46 @@ include::{snippets}/likes/guest/http-response.adoc[]
 === 프로필 페이지 게시글 좋아요 보기
 include::{snippets}/profile/likes/http-request.adoc[]
 include::{snippets}/profile/likes/http-response.adoc[]
+
+== 댓글
+=== 댓글 보기
+include::{snippets}/comment/http-request.adoc[]
+include::{snippets}/comment/http-response.adoc[]
+
+=== 댓글 저장
+include::{snippets}/comment/http-request.adoc[]
+include::{snippets}/comment/request-fields.adoc[]
+include::{snippets}/comment/http-response.adoc[]
+
+=== 댓글 삭제
+include::{snippets}/comment/http-request.adoc[]
+include::{snippets}/comment/http-response.adoc[]
+
+== 프로필
+=== 프로필 네비게이션바 이미지 보기
+include::{snippets}/profile/navbar-image/http-request.adoc[]
+include::{snippets}/profile/navbar-image/http-response.adoc[]
+
+=== 프로필정보 보기
+include::{snippets}/profile/http-request.adoc[]
+include::{snippets}/profile/http-response.adoc[]
+
+=== 사용자 등록 게시물 보기
+include::{snippets}/profile/articles/http-request.adoc[]
+include::{snippets}/profile/articles/http-response.adoc[]
+
+=== 사용자 프로필 이미지 변경
+include::{snippets}/profile/image-change/http-request.adoc[]
+include::{snippets}/profile/image-change/http-response.adoc[]
+
+=== 사용자 프로필 비밀번호 변경
+include::{snippets}/profile/pw/http-request.adoc[]
+include::{snippets}/profile/pw/request-fields.adoc[]
+include::{snippets}/profile/pw/http-response.adoc[]
+
+=== 사용자 자기소개 변경
+include::{snippets}/profile/intro/http-request.adoc[]
+include::{snippets}/profile/intro/request-fields.adoc[]
+include::{snippets}/profile/intro/http-response.adoc[]
+
+
