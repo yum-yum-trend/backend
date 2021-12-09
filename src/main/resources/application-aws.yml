@@ -1,0 +1,11 @@
+cloud:
+  aws:
+    s3:
+      bucket:
+      folder:
+        articleImagesFolder: article-images/
+        profileImagesFolder: profile-images/
+    region:
+      static: ap-northeast-2
+    stack:
+      auto: false
