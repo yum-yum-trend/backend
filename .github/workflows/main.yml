@@ -24,7 +24,7 @@ jobs:
         with :
           files : 'src/main/resources/*.yml'
         env :
-          clould.aws.s3.bucket : ${{ secrets.BUCKET_NAME }}
+          cloud.aws.s3.bucket : ${{ secrets.BUCKET_NAME }}
           cloud.aws.credentials.accessKey : ${{ secrets.AWS_ACCESS_KEY_ID }}
           cloud.aws.credentials.secretKey : ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           spring.datasource.url : ${{ secrets.DATASOURCE_URL }}
