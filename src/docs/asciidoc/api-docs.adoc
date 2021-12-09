@@ -1,4 +1,4 @@
-= yumyumTrend API Documents
+= YumYumTrend API Documents
 :toc: left
 :doctype: book
 
@@ -6,14 +6,42 @@
 
 == 계정관리
 === 회원가입
-include::{snippets}/user/signup/http-request.adoc[]
-include::{snippets}/user/signup/request-fields.adoc[]
-include::{snippets}/user/signup/http-response.adoc[]
+include::{snippets}/signup/http-request.adoc[]
+include::{snippets}/signup/request-fields.adoc[]
+include::{snippets}/signup/http-response.adoc[]
 
 === 로그인
-include::{snippets}/user/login/http-request.adoc[]
-include::{snippets}/user/login/request-fields.adoc[]
-include::{snippets}/user/login/http-response.adoc[]
+include::{snippets}/login/http-request.adoc[]
+include::{snippets}/login/request-fields.adoc[]
+include::{snippets}/login/http-response.adoc[]
+
+=== 액세스 토큰 재발급
+include::{snippets}/auth/token/http-request.adoc[]
+include::{snippets}/auth/token/request-fields.adoc[]
+include::{snippets}/auth/token/http-response.adoc[]
+
+== 게시물
+=== 생성
+include::{snippets}/articles/create/request-parameters.adoc[]
+include::{snippets}/articles/create/http-response.adoc[]
+
+=== 조회
+==== 모든 게시물
+include::{snippets}/articles/read-all/http-request.adoc[]
+include::{snippets}/articles/read-all/request-parameters.adoc[]
+include::{snippets}/articles/read-all/http-response.adoc[]
+
+==== 특정 게시물
+include::{snippets}/articles/read-one/http-request.adoc[]
+include::{snippets}/articles/read-one/http-response.adoc[]
+
+=== 수정
+include::{snippets}/articles/update/request-parameters.adoc[]
+include::{snippets}/articles/update/http-response.adoc[]
+
+=== 삭제
+include::{snippets}/articles/delete/http-request.adoc[]
+include::{snippets}/articles/delete/http-response.adoc[]
 
 == 트랜드
 === 트랜드 맵
@@ -37,3 +65,7 @@ include::{snippets}/likes/guest/http-response.adoc[]
 include::{snippets}/likes/http-request.adoc[]
 include::{snippets}/likes/http-response.adoc[]
 
+== 사용자 프로필
+=== 프로필 이미지 삭제
+include::{snippets}/profile/image/delete/http-request.adoc[]
+include::{snippets}/profile/image/delete/http-response.adoc[]
