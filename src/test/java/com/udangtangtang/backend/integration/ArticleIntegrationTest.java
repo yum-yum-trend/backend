@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.domain.Page;
 import org.springframework.mock.web.MockMultipartFile;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
@@ -39,6 +40,11 @@ public class ArticleIntegrationTest {
     Long userId = null;
     Article createdArticle = null;
     List<Long> imageIds = null;
+
+    @AfterAll
+    void clearDatabase() {
+        userRepository.deleteById(userId);
+    }
 
     @Test
     @Order(1)
