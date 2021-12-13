@@ -62,9 +62,6 @@
 
 ## 💡 주요기능 &nbsp; [Wiki](https://github.com/hellonayeon/recipe-recommend-service/wiki/%EC%A3%BC%EC%9A%94-%EA%B8%B0%EB%8A%A5-%EC%86%8C%EA%B0%9C)
 
-<details markdown="1">
-<summary>음식 게시물 공유</summary>
-
 #### 게시물 등록
 
 본인이 방문한 맛집의 주소와 음식 사진을 업로드 할 수 있습니다.
@@ -95,12 +92,8 @@
 
 레시피에 간단한 의견을 남길 수 있습니다.
 
-</details>
 
 <br>
-
-<details markdown="1">
-<summary>회원 관리</summary>
 
 #### 회원가입 및 로그인
 
@@ -115,7 +108,6 @@
 * 프로필 내용과 프로필 이미지 수정
 * 작성한 게시물 확인 가능
   
-</details>
 
 
 <br>
