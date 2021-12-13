@@ -37,7 +37,7 @@
 ![image](https://user-images.githubusercontent.com/43202607/145735955-d37a9a78-23a4-4ff4-9de3-beaf8dec8aec.png)
 
 
-## 🛠 사용기술 &nbsp; [Wiki](https://github.com/hellonayeon/recipe-recommend-service/wiki/%EC%82%AC%EC%9A%A9-%EA%B8%B0%EC%88%A0-%EC%86%8C%EA%B0%9C)
+## 🛠 사용기술 &nbsp; [Wiki](https://github.com/yum-yum-trend/backend/wiki/%EC%82%AC%EC%9A%A9-%EA%B8%B0%EC%88%A0)
 
 ### 프론트엔드
 
@@ -60,7 +60,7 @@
 
 <br>
 
-## 💡 주요기능 &nbsp; [Wiki](https://github.com/hellonayeon/recipe-recommend-service/wiki/%EC%A3%BC%EC%9A%94-%EA%B8%B0%EB%8A%A5-%EC%86%8C%EA%B0%9C)
+## 💡 주요기능 &nbsp; [Wiki](https://github.com/yum-yum-trend/backend/wiki/%EC%A3%BC%EC%9A%94-%EA%B8%B0%EB%8A%A5-%EC%86%8C%EA%B0%9C)
 
 #### 게시물 등록
 
@@ -112,5 +112,5 @@
 
 <br>
 
-## 👾 문제해결 &nbsp; [Wiki](https://github.com/hellonayeon/recipe-recommend-service/wiki/%EB%AC%B8%EC%A0%9C-%ED%95%B4%EA%B2%B0-%EA%B3%BC%EC%A0%95)
+## 👾 문제해결 &nbsp; [Wiki](https://github.com/yum-yum-trend/backend/wiki/%EB%AC%B8%EC%A0%9C-%ED%95%B4%EA%B2%B0-%EA%B3%BC%EC%A0%95)
  
