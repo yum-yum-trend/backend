@@ -3,7 +3,7 @@
 <br>
 
 ## 🔗 라이브
-<a href="https://helpmymenu.site">https://helpmymenu.site</a>
+<a href="https://helpmymenu.site">https://www.yumyumtrend.site</a>
 
 <br>
 
@@ -32,41 +32,31 @@
 
 <br>
 
+## 🕸 시스템 구성도
+
+![image](https://user-images.githubusercontent.com/43202607/145735955-d37a9a78-23a4-4ff4-9de3-beaf8dec8aec.png)
+
+
 ## 🛠 사용기술 &nbsp; [Wiki](https://github.com/hellonayeon/recipe-recommend-service/wiki/%EC%82%AC%EC%9A%A9-%EA%B8%B0%EC%88%A0-%EC%86%8C%EA%B0%9C)
 
-<p align="center">
-  <img src="https://img.shields.io/badge/Python-3766AB?style=flat-square&logo=Python&logoColor=white"/>
-  <img src="https://img.shields.io/badge/JavaScript-ffb13b?style=flat-square&logo=javascript&logoColor=white"/>
-  <img src="https://img.shields.io/badge/HTML-E34F26?style=flat-square&logo=html5&logoColor=white"/>
-  <img src="https://img.shields.io/badge/CSS-1572B6?style=flat-square&logo=css3&logoColor=white"/>
-  <img src="https://img.shields.io/badge/mongoDB-47A248?style=flat-square&logo=mongodb&logoColor=white"/>
-  <img src="https://img.shields.io/badge/PyCharm-000000?style=flat-square&logo=pycharm&logoColor=white"/>
-  <img src="https://img.shields.io/badge/aws-333664?style=flat-square&logo=amazon-aws&logoColor=white"/>
-</p>
+### 프론트엔드
 
-### Front-End
+`HTML` / `Javascript` / `CSS` `Ajax`
 
-`HTML` / `Javascript` / `CSS`
+`Kakao SDK` `Google Geolocation` `Kakao Local`
 
-`Ajax`
+### 백엔드
 
-### Back-End
+`Spring Boot` `Spring Security` `Spring Data JPA` `Spring Cloud` `Rest API Docs` `MySQL`
 
-`Spring Boot`: `Java`
+`Python`: `requests`
 
-`Python`: `flask` `pymongo` `requests`
 
-`MongoDB`
+#### 인프라
 
-### Data
+`Cloud Front` `S3`
 
-`농림축산식품 공공데이터`
-
-&nbsp;&nbsp;&nbsp; |__ `레시피 기본정보`: [🔗Link](https://data.mafra.go.kr/opendata/data/indexOpenDataDetail.do?data_id=20150827000000000464&filter_ty=)
-
-&nbsp;&nbsp;&nbsp; |__ `레시피 재료정보`: [🔗Link](https://data.mafra.go.kr/opendata/data/indexOpenDataDetail.do?data_id=20150827000000000465&filter_ty=)
-
-&nbsp;&nbsp;&nbsp; |__ `레시피 과정정보`: [🔗Link](https://data.mafra.go.kr/opendata/data/indexOpenDataDetail.do?data_id=20150827000000000466&filter_ty=)
+`Route 53` `Elastic Beanstalk` `RDS` `Secret Manager` `ACM`
 
 <br>
 
