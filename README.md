@@ -10,7 +10,7 @@
 ## 📢 소개
 여러분만의 맛집 리스트와 하루 동안 먹은 음식들을 기록하고 친구들과 공유해보세요.
 
-![image](https://files.slack.com/files-pri/T02E2LCRPHA-F02QF6CR90S/yyt_logo.png)
+![image](https://user-images.githubusercontent.com/90819869/145738907-1b0dd6f0-083b-436e-a4b5-3fa1acc197c6.png)
 
 <br>
 
