@@ -30,16 +30,24 @@ public class ArticleService {
     private final LocationDataPreprocess locationDataPreprocess;
     private final FileProcessService fileProcessService;
 
-    public Page<Article> getArticles(String searchTag, String location, String sortBy, boolean isAsc, int page) {
+    public Page<Article> getArticles(String searchTag, String location, String category, String sortBy, boolean isAsc, int page) {
         Sort.Direction direction = isAsc ? Sort.Direction.ASC : Sort.Direction.DESC;
         Sort sort = Sort.by(direction, sortBy);
         Pageable pageable = PageRequest.of(page, 32, sort);
 
         if (searchTag.isEmpty()) {
             if (location.isEmpty()) {
-                return articleRepository.findAll(pageable);
+                if (category.isEmpty()) {
+                    return articleRepository.findAll(pageable);
+                } else {
+                    return articleRepository.findAllByLocationCategoryName(pageable, category);
+                }
             } else {
-                return articleRepository.findAllByLocationRoadAddressNameStartsWith(pageable, location);
+                if (category.isEmpty()) {
+                    return articleRepository.findAllByLocationRoadAddressNameStartsWith(pageable, location);
+                } else {
+                    return articleRepository.findAllByLocationRoadAddressNameStartsWithAndLocationCategoryName(pageable, location, category);
+                }
             }
         } else {
             return articleRepository.findAllByTagsName(searchTag, pageable);
