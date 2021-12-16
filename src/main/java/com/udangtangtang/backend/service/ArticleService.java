@@ -25,17 +25,22 @@ public class ArticleService {
     private final LocationRepository locationRepository;
     private final TagRepository tagRepository;
     private final ImageRepository imageRepository;
+    private final TrendService trendService;
 
     private final LocationDataPreprocess locationDataPreprocess;
     private final FileProcessService fileProcessService;
 
-    public Page<Article> getArticles(String searchTag, String sortBy, boolean isAsc, int page) {
+    public Page<Article> getArticles(String searchTag, String location, String sortBy, boolean isAsc, int page) {
         Sort.Direction direction = isAsc ? Sort.Direction.ASC : Sort.Direction.DESC;
         Sort sort = Sort.by(direction, sortBy);
         Pageable pageable = PageRequest.of(page, 32, sort);
 
         if (searchTag.isEmpty()) {
-            return articleRepository.findAll(pageable);
+            if (location.isEmpty()) {
+                return articleRepository.findAll(pageable);
+            } else {
+                return articleRepository.findAllByLocationRoadAddressNameStartsWith(pageable, location);
+            }
         } else {
             return articleRepository.findAllByTagsName(searchTag, pageable);
         }

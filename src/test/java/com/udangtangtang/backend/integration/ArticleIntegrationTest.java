@@ -117,8 +117,9 @@ public class ArticleIntegrationTest {
         String sortBy = "createdAt";
         boolean isAsc = false;
         int page = 1;
+        String location = "";
 
-        Page<Article> articles = articleService.getArticles(searchTag, sortBy, isAsc, page);
+        Page<Article> articles = articleService.getArticles(searchTag, location, sortBy, isAsc, page);
 
         for(Article article : articles.getContent()) {
             assertTrue(article.getTags().contains(searchTag));
@@ -133,8 +134,9 @@ public class ArticleIntegrationTest {
         String sortBy = "createdAt";
         boolean isAsc = false;
         int page = 0;
+        String location = "";
 
-        Page<Article> articles = articleService.getArticles(searchTag, sortBy, isAsc, page);
+        Page<Article> articles = articleService.getArticles(searchTag, location, sortBy, isAsc, page);
 
         Article foundArticle = articles.getContent().stream()
                                 .filter(article -> article.getId().equals(this.createdArticle.getId()))
