@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.udangtangtang.backend.domain.Article;
 import com.udangtangtang.backend.domain.User;
 import com.udangtangtang.backend.domain.UserRole;
+import com.udangtangtang.backend.dto.request.ArticleCreateRequestDto;
 import com.udangtangtang.backend.dto.request.LocationRequestDto;
 import com.udangtangtang.backend.repository.UserRepository;
 import com.udangtangtang.backend.security.UserDetailsImpl;
@@ -110,14 +111,14 @@ public class LikeControllerApiTest {
         UserDetailsImpl userDetails = new UserDetailsImpl(user);
 
         String text = "게시물 본문";
-        LocationRequestDto locationRequestDto = new LocationRequestDto("{\"roadAddressName\":\"제주특별자치도 서귀포시 일주서로 968-10\",\"placeName\":\"연돈\",\"xCoordinate\":\"126.40715814631936\",\"yCoordinate\":\"33.258895288625645\",\"categoryName\":\"음식점 > 일식 > 돈까스,우동\"}");
+        String location = "{\"roadAddressName\":\"제주특별자치도 서귀포시 일주서로 968-10\",\"placeName\":\"연돈\",\"xCoordinate\":\"126.40715814631936\",\"yCoordinate\":\"33.258895288625645\",\"categoryName\":\"음식점 > 일식 > 돈까스,우동\"}";
         List<String> tagNames = Arrays.asList("얌얌트랜드", "음식", "사진", "공유");
         List<MultipartFile> imageFiles = Arrays.asList(
                 getMockMultipartFile("cute_chun_sik", "cute_chun_sik.jpeg", "multipart/form-data", "src/test/resources/images/cute_chun_sik.jpeg"),
                 getMockMultipartFile("ring_ding_kermit", "ring_ding_kermit.jpeg", "multipart/form-data", "src/test/resources/images/ring_ding_kermit.jpeg")
         );
 
-        Article article = articleService.createArticle(user, text, locationRequestDto, tagNames, imageFiles);
+        Article article = articleService.createArticle(user, new ArticleCreateRequestDto(text, location, tagNames, imageFiles));
 
         mockMvc.perform(get("/likes/{id}", article.getId())
                         .header("Authorization", "Bearer " + jwtTokenUtil.generateAccessToken(userDetails.getUsername())))
@@ -132,14 +133,14 @@ public class LikeControllerApiTest {
         userRepository.save(user);
 
         String text = "게시물 본문";
-        LocationRequestDto locationRequestDto = new LocationRequestDto("{\"roadAddressName\":\"제주특별자치도 서귀포시 일주서로 968-10\",\"placeName\":\"연돈\",\"xCoordinate\":\"126.40715814631936\",\"yCoordinate\":\"33.258895288625645\",\"categoryName\":\"음식점 > 일식 > 돈까스,우동\"}");
+        String location = "{\"roadAddressName\":\"제주특별자치도 서귀포시 일주서로 968-10\",\"placeName\":\"연돈\",\"xCoordinate\":\"126.40715814631936\",\"yCoordinate\":\"33.258895288625645\",\"categoryName\":\"음식점 > 일식 > 돈까스,우동\"}";
         List<String> tagNames = Arrays.asList("얌얌트랜드", "음식", "사진", "공유");
         List<MultipartFile> imageFiles = Arrays.asList(
                 getMockMultipartFile("cute_chun_sik", "cute_chun_sik.jpeg", "multipart/form-data", "src/test/resources/images/cute_chun_sik.jpeg"),
                 getMockMultipartFile("ring_ding_kermit", "ring_ding_kermit.jpeg", "multipart/form-data", "src/test/resources/images/ring_ding_kermit.jpeg")
         );
 
-        Article article = articleService.createArticle(user, text, locationRequestDto, tagNames, imageFiles);
+        Article article = articleService.createArticle(user, new ArticleCreateRequestDto(text, location, tagNames, imageFiles));
 
         mockMvc.perform(get("/likes/guest/{id}", article.getId()))
                 .andExpect(status().isOk())
@@ -154,14 +155,14 @@ public class LikeControllerApiTest {
         UserDetailsImpl userDetails = new UserDetailsImpl(user);
 
         String text = "게시물 본문";
-        LocationRequestDto locationRequestDto = new LocationRequestDto("{\"roadAddressName\":\"제주특별자치도 서귀포시 일주서로 968-10\",\"placeName\":\"연돈\",\"xCoordinate\":\"126.40715814631936\",\"yCoordinate\":\"33.258895288625645\",\"categoryName\":\"음식점 > 일식 > 돈까스,우동\"}");
+        String location = "{\"roadAddressName\":\"제주특별자치도 서귀포시 일주서로 968-10\",\"placeName\":\"연돈\",\"xCoordinate\":\"126.40715814631936\",\"yCoordinate\":\"33.258895288625645\",\"categoryName\":\"음식점 > 일식 > 돈까스,우동\"}";
         List<String> tagNames = Arrays.asList("얌얌트랜드", "음식", "사진", "공유");
         List<MultipartFile> imageFiles = Arrays.asList(
                 getMockMultipartFile("cute_chun_sik", "cute_chun_sik.jpeg", "multipart/form-data", "src/test/resources/images/cute_chun_sik.jpeg"),
                 getMockMultipartFile("ring_ding_kermit", "ring_ding_kermit.jpeg", "multipart/form-data", "src/test/resources/images/ring_ding_kermit.jpeg")
         );
 
-        articleService.createArticle(user, text, locationRequestDto, tagNames, imageFiles);
+        Article article = articleService.createArticle(user, new ArticleCreateRequestDto(text, location, tagNames, imageFiles));
 
         mockMvc.perform(get("/profile/likes/{id}", user.getId())
                         .header("Authorization", "Bearer " + jwtTokenUtil.generateAccessToken(userDetails.getUsername())))
@@ -177,13 +178,14 @@ public class LikeControllerApiTest {
         UserDetailsImpl userDetails = new UserDetailsImpl(user);
 
         String text = "게시물 본문";
-        LocationRequestDto locationRequestDto = new LocationRequestDto("{\"roadAddressName\":\"제주특별자치도 서귀포시 일주서로 968-10\",\"placeName\":\"연돈\",\"xCoordinate\":\"126.40715814631936\",\"yCoordinate\":\"33.258895288625645\",\"categoryName\":\"음식점 > 일식 > 돈까스,우동\"}");
+        String location = "{\"roadAddressName\":\"제주특별자치도 서귀포시 일주서로 968-10\",\"placeName\":\"연돈\",\"xCoordinate\":\"126.40715814631936\",\"yCoordinate\":\"33.258895288625645\",\"categoryName\":\"음식점 > 일식 > 돈까스,우동\"}";
         List<String> tagNames = Arrays.asList("얌얌트랜드", "음식", "사진", "공유");
         List<MultipartFile> imageFiles = Arrays.asList(
                 getMockMultipartFile("cute_chun_sik", "cute_chun_sik.jpeg", "multipart/form-data", "src/test/resources/images/cute_chun_sik.jpeg"),
                 getMockMultipartFile("ring_ding_kermit", "ring_ding_kermit.jpeg", "multipart/form-data", "src/test/resources/images/ring_ding_kermit.jpeg")
         );
-        Article article = articleService.createArticle(user, text, locationRequestDto, tagNames, imageFiles);
+
+        Article article = articleService.createArticle(user, new ArticleCreateRequestDto(text, location, tagNames, imageFiles));
         String articleId = Long.toString(article.getId());
 
         mockMvc.perform(put("/articles/like")
@@ -205,13 +207,14 @@ public class LikeControllerApiTest {
         UserDetailsImpl userDetails = new UserDetailsImpl(user);
 
         String text = "게시물 본문";
-        LocationRequestDto locationRequestDto = new LocationRequestDto("{\"roadAddressName\":\"제주특별자치도 서귀포시 일주서로 968-10\",\"placeName\":\"연돈\",\"xCoordinate\":\"126.40715814631936\",\"yCoordinate\":\"33.258895288625645\",\"categoryName\":\"음식점 > 일식 > 돈까스,우동\"}");
+        String location = "{\"roadAddressName\":\"제주특별자치도 서귀포시 일주서로 968-10\",\"placeName\":\"연돈\",\"xCoordinate\":\"126.40715814631936\",\"yCoordinate\":\"33.258895288625645\",\"categoryName\":\"음식점 > 일식 > 돈까스,우동\"}";
         List<String> tagNames = Arrays.asList("얌얌트랜드", "음식", "사진", "공유");
         List<MultipartFile> imageFiles = Arrays.asList(
                 getMockMultipartFile("cute_chun_sik", "cute_chun_sik.jpeg", "multipart/form-data", "src/test/resources/images/cute_chun_sik.jpeg"),
                 getMockMultipartFile("ring_ding_kermit", "ring_ding_kermit.jpeg", "multipart/form-data", "src/test/resources/images/ring_ding_kermit.jpeg")
         );
-        Article article = articleService.createArticle(user, text, locationRequestDto, tagNames, imageFiles);
+
+        Article article = articleService.createArticle(user, new ArticleCreateRequestDto(text, location, tagNames, imageFiles));
         String articleId = Long.toString(article.getId());
 
         likeService.increaseLikeCount(user.getId(), article.getId());

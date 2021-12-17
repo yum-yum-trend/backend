@@ -1,6 +1,8 @@
 package com.udangtangtang.backend.service;
 
 import com.udangtangtang.backend.domain.*;
+import com.udangtangtang.backend.dto.request.ArticleCreateRequestDto;
+import com.udangtangtang.backend.dto.request.ArticleUpdateRequestDto;
 import com.udangtangtang.backend.dto.request.LocationRequestDto;
 import com.udangtangtang.backend.exception.ApiRequestException;
 import com.udangtangtang.backend.repository.*;
@@ -48,17 +50,18 @@ public class ArticleService {
     }
 
     @Transactional
-    public Article createArticle(User user, String text, LocationRequestDto locationRequestDto, List<String> tagNames, List<MultipartFile> imageFiles) {
+    public Article createArticle(User user, ArticleCreateRequestDto requestDto) {
+        LocationRequestDto locationRequestDto = new LocationRequestDto(requestDto.getLocation());
         locationDataPreprocess.categoryNamePreprocess(locationRequestDto);
         Location location = locationRepository.save(new Location(locationRequestDto, user.getId()));
 
-        Article article = new Article(text, location, user);
+        Article article = new Article(requestDto.getText(), location, user);
 
-        for (String name : tagNames) {
+        for (String name : requestDto.getTagNames()) {
             article.addTag(new Tag(name, article, user.getId()));
         }
 
-        for (MultipartFile multipartFile : imageFiles) {
+        for (MultipartFile multipartFile : requestDto.getImageFiles()) {
             String url = fileProcessService.uploadImage(multipartFile, FileFolder.ARTICLE_IMAGES);
             article.addImage(new Image(url, article));
         }
@@ -67,34 +70,41 @@ public class ArticleService {
     }
 
     @Transactional
-    public Article updateArticle(User user, Long id, String text, LocationRequestDto locationRequestDto, List<String> tagNames, List<MultipartFile> imageFiles, List<Long> rmImageIds) {
+    public Article updateArticle(User user, Long id, ArticleUpdateRequestDto requestDto) {
         Article article = articleRepository.findById(id).orElseThrow(
                 () -> new ApiRequestException(String.format("해당되는 아이디(%d)의 게시물이 없습니다.", id))
         );
 
         // 기존에 저장된 이미지 삭제
-        if(rmImageIds != null) {
-            for (Long imageId : rmImageIds) {
+        if(requestDto.getRmImageIds() != null) {
+            for (Long imageId : requestDto.getRmImageIds()) {
                 Image image = imageRepository.findById(imageId).orElseThrow(
                         () -> new ApiRequestException(String.format("해당되는 아이디(%d)의 이미지가 없습니다.", imageId))
                 );
                 fileProcessService.deleteImage(image.getUrl());
                 article.removeImage(imageId);
             }
-            imageRepository.deleteAllById(rmImageIds);
+            imageRepository.deleteAllById(requestDto.getRmImageIds());
         }
 
+        // 게시물 본문 내용
+        String text = requestDto.getText();
+
+        // 위치 정보
+        LocationRequestDto locationRequestDto = new LocationRequestDto(requestDto.getLocation());
         locationDataPreprocess.categoryNamePreprocess(locationRequestDto);
         Location location = locationRepository.save(new Location(locationRequestDto, user.getId()));
 
+        // 태그 리스트
         List<Tag> tags = new ArrayList<>();
-        for (String tag : tagNames) {
+        for (String tag : requestDto.getTagNames()) {
             tags.add(new Tag(tag, article, user.getId()));
         }
 
+        // 이미지 리스트
         List<Image> images = new ArrayList<>();
-        if (imageFiles != null) {
-            for (MultipartFile multipartFile : imageFiles) {
+        if (requestDto.getImageFiles() != null) {
+            for (MultipartFile multipartFile : requestDto.getImageFiles()) {
                 String url = fileProcessService.uploadImage(multipartFile, FileFolder.ARTICLE_IMAGES);
                 images.add(new Image(url, article));
             }
