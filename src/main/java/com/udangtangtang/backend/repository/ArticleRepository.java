@@ -15,4 +15,5 @@ public interface ArticleRepository extends JpaRepository<Article, Long> {
     Page<Article> findAllByLocationRoadAddressNameStartsWith(Pageable pageable, String location);
     Page<Article> findAllByLocationCategoryName(Pageable pageable, String category);
     Page<Article> findAllByLocationRoadAddressNameStartsWithAndLocationCategoryName(Pageable pageable, String location, String category);
+    Page<Article> findAllByLocationRoadAddressNameStartsWithAndTagsName(Pageable pageable, String location, String tagName);
 }

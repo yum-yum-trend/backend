@@ -26,27 +26,32 @@ public class ArticleService {
     private final TagRepository tagRepository;
     private final ImageRepository imageRepository;
     private final TrendService trendService;
+    private final LikesRepository likesRepository;
 
     private final LocationDataPreprocess locationDataPreprocess;
     private final FileProcessService fileProcessService;
 
-    public Page<Article> getArticles(String searchTag, String location, String category, String sortBy, boolean isAsc, int page) {
+    public Page<Article> getArticles(String searchTag, String location, String category, String tagName, String sortBy, boolean isAsc, int page) {
         Sort.Direction direction = isAsc ? Sort.Direction.ASC : Sort.Direction.DESC;
         Sort sort = Sort.by(direction, sortBy);
         Pageable pageable = PageRequest.of(page, 32, sort);
 
         if (searchTag.isEmpty()) {
             if (location.isEmpty()) {
-                if (category.isEmpty()) {
+                if (category.isEmpty() && tagName.isEmpty()) {
                     return articleRepository.findAll(pageable);
-                } else {
+                } else if(tagName.isEmpty()) {
                     return articleRepository.findAllByLocationCategoryName(pageable, category);
+                } else {
+                    return articleRepository.findAllByTagsName(tagName, pageable);
                 }
             } else {
-                if (category.isEmpty()) {
+                if (category.isEmpty() && tagName.isEmpty()) {
                     return articleRepository.findAllByLocationRoadAddressNameStartsWith(pageable, location);
-                } else {
+                } else if(tagName.isEmpty()) {
                     return articleRepository.findAllByLocationRoadAddressNameStartsWithAndLocationCategoryName(pageable, location, category);
+                } else {
+                    return articleRepository.findAllByLocationRoadAddressNameStartsWithAndTagsName(pageable, location, tagName);
                 }
             }
         } else {
@@ -122,6 +127,12 @@ public class ArticleService {
         Article article = articleRepository.findById(id).orElseThrow(
                 () -> new ApiRequestException(String.format("아이디(%d)에 해당되는 게시물이 없습니다.", id))
         );
+
+        // 게시글에 등록된 좋아요 리스트 삭제
+        List<Likes> likeList = likesRepository.findAllByArticleId(article.getId());
+        for (Likes like : likeList) {
+            likesRepository.delete(like);
+        }
 
         // S3에 업로드된 이미지 삭제
         for (Image image : article.getImages()) {
