@@ -30,9 +30,9 @@ class ArticleServiceTest {
     @Mock
     LocationRepository locationRepository;
     @Mock
-    LikesRepository likesRepository;
-    @Mock
     ImageRepository imageRepository;
+    @Mock
+    LikesRepository likesRepository;
     @Mock
     LocationDataPreprocess locationDataPreprocess;
     @Mock

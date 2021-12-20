@@ -81,7 +81,7 @@ public class UserControllerApiTest {
     public void 회원가입() throws Exception {
         SignupRequestDto signupRequestDto = new SignupRequestDto();
         signupRequestDto.setUsername("Kermit");
-        signupRequestDto.setPassword("qwer1234");
+        signupRequestDto.setPassword("Kermit1234");
         signupRequestDto.setEmail("Kermit@gaegulgaegul.com");
         String jsonString = new GsonBuilder().setPrettyPrinting().create().toJson(signupRequestDto);
 
@@ -104,12 +104,12 @@ public class UserControllerApiTest {
     @Test
     @Transactional
     public void 로그인() throws Exception {
-        User user = new User("Kermit", passwordEncoder.encode("1234"), "Kermit@gaegulgaegul.com", UserRole.USER);
+        User user = new User("Kermit", passwordEncoder.encode("Kermit1234"), "Kermit@gaegulgaegul.com", UserRole.USER);
         userRepository.save(user);
 
         UserRequestDto userRequestDto = new UserRequestDto();
         userRequestDto.setUsername("Kermit");
-        userRequestDto.setPassword("1234");
+        userRequestDto.setPassword("Kermit1234");
 
         String jsonString = new GsonBuilder().setPrettyPrinting().create().toJson(userRequestDto);
 
@@ -156,7 +156,7 @@ public class UserControllerApiTest {
     @Transactional
     public void 엑세스_토큰_재발급() throws Exception {
         String username = "Kermit";
-        String password = "1234";
+        String password = "Kermit1234";
         String email = "kermit@gaegulgaegul.com";
 
         // 회원가입
