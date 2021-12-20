@@ -18,7 +18,7 @@ public class Image extends Timestamped {
     private String url;
 
     @JsonIgnore
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "article_id")
     private Article article;
 
