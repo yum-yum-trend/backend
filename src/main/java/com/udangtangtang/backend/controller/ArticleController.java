@@ -2,6 +2,8 @@ package com.udangtangtang.backend.controller;
 
 
 import com.udangtangtang.backend.domain.Article;
+import com.udangtangtang.backend.dto.request.ArticleCreateRequestDto;
+import com.udangtangtang.backend.dto.request.ArticleUpdateRequestDto;
 import com.udangtangtang.backend.dto.request.LocationRequestDto;
 import com.udangtangtang.backend.security.UserDetailsImpl;
 import com.udangtangtang.backend.service.ArticleService;
@@ -38,24 +40,17 @@ public class ArticleController {
     }
 
     @PostMapping("/articles")
-    public void createArticle(@AuthenticationPrincipal UserDetailsImpl userDetails,
-                                @RequestParam("text") String text,
-                                @RequestParam("location") String locationJsonString,
-                                @RequestParam("tagNames") List<String> tagNames,
-                                @RequestParam("imageFiles") List<MultipartFile> imageFiles) {
+    public Article createArticle(@AuthenticationPrincipal UserDetailsImpl userDetails,
+                              @ModelAttribute ArticleCreateRequestDto articleCreateRequestDto) {
 
-        articleService.createArticle(userDetails.getUser(), text, new LocationRequestDto(locationJsonString), tagNames, imageFiles);
+        return articleService.createArticle(userDetails.getUser(), articleCreateRequestDto);
     }
 
     @PostMapping("/articles/{id}")
     public void updateArticle(@AuthenticationPrincipal UserDetailsImpl userDetails,
                               @PathVariable("id") Long id,
-                              @RequestParam("text") String text,
-                              @RequestParam("location") String locationJsonString,
-                              @RequestParam("tagNames") List<String> tagNames,
-                              @Nullable @RequestParam("imageFiles") List<MultipartFile> imageFiles,
-                              @Nullable @RequestParam("rmImageIds") List<Long> rmImageIds) {
-        articleService.updateArticle(userDetails.getUser(), id, text, new LocationRequestDto(locationJsonString), tagNames, imageFiles, rmImageIds);
+                              @ModelAttribute ArticleUpdateRequestDto articleUpdateRequestDto) {
+        articleService.updateArticle(userDetails.getUser(), id, articleUpdateRequestDto);
     }
 
     @DeleteMapping("/articles/{id}")
