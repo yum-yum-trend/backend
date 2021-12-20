@@ -84,7 +84,7 @@ public class ArticleControllerApiTest {
     @Transactional
     public void 게시물_생성() throws Exception {
         // given
-        User user = new User("Kermit", "1234", "Kermit@gaegulgaegul.com", UserRole.USER);
+        User user = new User("Kermit", "Kermit1234", "Kermit@gaegulgaegul.com", UserRole.USER);
         userRepository.save(user);
         UserDetailsImpl userDetails = new UserDetailsImpl(user);
 
@@ -142,7 +142,7 @@ public class ArticleControllerApiTest {
     @Transactional
     public void 특정_게시물_조회() throws Exception {
         // given
-        User user = new User("Kermit", "1234", "Kermit@gaegulgaegul.com", UserRole.USER);
+        User user = new User("Kermit", "Kermit1234", "Kermit@gaegulgaegul.com", UserRole.USER);
         userRepository.save(user);
 
         String text = "게시물 본문";
@@ -164,7 +164,7 @@ public class ArticleControllerApiTest {
     @Transactional
     public void 게시물_수정() throws Exception {
         // given
-        User user = new User("Kermit", "1234", "Kermit@gaegulgaegul.com", UserRole.USER);
+        User user = new User("Kermit", "Kermit1234", "Kermit@gaegulgaegul.com", UserRole.USER);
         userRepository.save(user);
 
         String text = "게시물 본문";
@@ -211,7 +211,7 @@ public class ArticleControllerApiTest {
     @Transactional
     public void 게시물_삭제() throws Exception {
         // given
-        User user = new User("Kermit", "1234", "Kermit@gaegulgaegul.com", UserRole.USER);
+        User user = new User("Kermit", "Kermit1234", "Kermit@gaegulgaegul.com", UserRole.USER);
         userRepository.save(user);
 
         String text = "게시물 본문";

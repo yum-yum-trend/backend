@@ -214,7 +214,7 @@ public class UserProfileControllerApiTest {
 
     @Test
     public void 프로필_이미지_삭제() throws Exception {
-        User user = userRepository.save(new User("Kermit", "1234", "Kermit@gaegulgaegul.com", UserRole.USER));
+        User user = userRepository.save(new User("Kermit", "Kermit1234", "Kermit@gaegulgaegul.com", UserRole.USER));
 
         mockMvc.perform(delete("/profile/{userId}", user.getId())
                         .header("Authorization", "Bearer " + jwtTokenUtil.generateAccessToken(user.getUsername())))

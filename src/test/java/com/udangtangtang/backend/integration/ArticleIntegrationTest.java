@@ -38,7 +38,8 @@ public class ArticleIntegrationTest {
     @Autowired
     UserRepository userRepository;
 
-    User user = new User("Kermit", "1234", "Kermit@gaegulgaegul.com", UserRole.USER);
+
+    User user = new User("Kermit", "Kermit1234", "Kermit@gaegulgaegul.com", UserRole.USER);
 
     @Test
     @DisplayName("새로운 게시물 등록")
@@ -117,15 +118,17 @@ public class ArticleIntegrationTest {
     @DisplayName("상품 검색")
     @Transactional
     void getArticlesThroughSearch() throws IOException {
+        this.user = userRepository.save(user);
+        Long userId = user.getId();
+
         String searchTag = "간식";
         String sortBy = "createdAt";
         boolean isAsc = false;
         int page = 1;
-
-        this.user = userRepository.save(user);
-        Long userId = user.getId();
-
         String text = "게시물 본문";
+        String category = "";
+        String tagName = "";
+
         String location = "{}";
         List<String> tagNames = Arrays.asList("맛있는", "간식");
         List<MultipartFile> imageFiles = Arrays.asList(
@@ -135,7 +138,7 @@ public class ArticleIntegrationTest {
         articleService.createArticle(this.user, new ArticleCreateRequestDto(text, location, tagNames, imageFiles));
 
         // then
-        Page<Article> articles = articleService.getArticles(searchTag, sortBy, isAsc, page);
+        Page<Article> articles = articleService.getArticles(searchTag, location, category, tagName, sortBy, isAsc, page);
 
         for(Article article : articles.getContent()) {
             assertTrue(article.getTags().contains(searchTag));
@@ -146,16 +149,19 @@ public class ArticleIntegrationTest {
     @DisplayName("모든 상품 조회 후 새로 등록한 상품 확인하기")
     @Transactional
     void getArticles() throws IOException {
-        String searchTag = "";
-        String sortBy = "createdAt";
-        boolean isAsc = false;
-        int page = 0;
-
         this.user = userRepository.save(user);
         Long userId = user.getId();
 
-        String text = "게시물 본문";
+        String searchTag = "";
+        String searchLocation = "";
+        String sortBy = "createdAt";
+        boolean isAsc = false;
+        int page = 0;
         String location = "{\"roadAddressName\":\"제주특별자치도 서귀포시 일주서로 968-10\",\"placeName\":\"연돈\",\"xCoordinate\":\"126.40715814631936\",\"yCoordinate\":\"33.258895288625645\",\"categoryName\":\"음식점 > 일식 > 돈까스,우동\"}";
+        String category = "";
+        String tagName = "";
+
+        String text = "게시물 본문";
         List<String> tagNames = Arrays.asList("얌얌트랜드", "음식", "사진", "공유");
         List<MultipartFile> imageFiles = Arrays.asList(
                 getMockMultipartFile("cute_chun_sik", "jpeg", "multipart/form-data", "src/test/resources/images/cute_chun_sik.jpeg"),
@@ -164,8 +170,7 @@ public class ArticleIntegrationTest {
 
         Article createdArticle = articleService.createArticle(this.user, new ArticleCreateRequestDto(text, location, tagNames, imageFiles));
 
-
-        Page<Article> articles = articleService.getArticles(searchTag, sortBy, isAsc, page);
+        Page<Article> articles = articleService.getArticles(searchTag, searchLocation, category, tagName, sortBy, isAsc, page);
 
         Article foundArticle = articles.getContent().stream()
                                 .filter(article -> article.getId().equals(createdArticle.getId()))
@@ -182,7 +187,6 @@ public class ArticleIntegrationTest {
     @Transactional
     void getArticle() throws IOException {
         this.user = userRepository.save(user);
-        Long userId = user.getId();
 
         String text = "게시물 본문";
         String location = "{\"roadAddressName\":\"제주특별자치도 서귀포시 일주서로 968-10\",\"placeName\":\"연돈\",\"xCoordinate\":\"126.40715814631936\",\"yCoordinate\":\"33.258895288625645\",\"categoryName\":\"음식점 > 일식 > 돈까스,우동\"}";

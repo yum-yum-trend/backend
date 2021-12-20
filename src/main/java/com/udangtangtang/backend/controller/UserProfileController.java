@@ -9,6 +9,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.List;
 import java.util.Optional;
 
 @RestController
@@ -35,10 +36,13 @@ public class UserProfileController {
         return userProfileService.getUserArticles(userId, sortBy, isAsc, page);
     }
 
-//    @GetMapping(value = "/profile/bookmarks/{userId}")
-//    public List<Article> getUserArticles(@PathVariable("userId") Long userId) {
-//        return userProfileService.getUserBookmarks(userId);
-//    }
+    @GetMapping(value = "/profile/bookmarks/{userId}")
+    public List<Object> getUserBookmarks(@PathVariable("userId") Long userId,
+                                          @RequestParam("sortBy") String sortBy,
+                                          @RequestParam("isAsc") boolean isAsc,
+                                          @RequestParam("currentPage") int page ) {
+        return userProfileService.getUserBookmarks(userId, sortBy, isAsc, page);
+    }
 
     @PostMapping(value = "/profile/image-change/{userId}")
     public String getProfileImage(@PathVariable("userId") Long userId,

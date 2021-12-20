@@ -7,10 +7,7 @@ import com.udangtangtang.backend.dto.request.ArticleCreateRequestDto;
 import com.udangtangtang.backend.dto.request.ArticleUpdateRequestDto;
 import com.udangtangtang.backend.dto.request.LocationRequestDto;
 import com.udangtangtang.backend.exception.ApiRequestException;
-import com.udangtangtang.backend.repository.ArticleRepository;
-import com.udangtangtang.backend.repository.ImageRepository;
-import com.udangtangtang.backend.repository.LocationRepository;
-import com.udangtangtang.backend.repository.TagRepository;
+import com.udangtangtang.backend.repository.*;
 import com.udangtangtang.backend.util.LocationDataPreprocess;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -35,9 +32,9 @@ class ArticleServiceTest {
     @Mock
     LocationRepository locationRepository;
     @Mock
-    TagRepository tagRepository;
-    @Mock
     ImageRepository imageRepository;
+    @Mock
+    LikesRepository likesRepository;
     @Mock
     LocationDataPreprocess locationDataPreprocess;
     @Mock
@@ -74,7 +71,7 @@ class ArticleServiceTest {
 
                 when(articleRepository.save(any(Article.class))).thenReturn(article);
 
-                ArticleService articleService = new ArticleService(articleRepository, locationRepository, tagRepository, imageRepository, locationDataPreprocess, fileProcessService);
+                ArticleService articleService = new ArticleService(articleRepository, locationRepository, imageRepository, likesRepository, locationDataPreprocess, fileProcessService);
                 Article result = articleService.createArticle(user, new ArticleCreateRequestDto(text, locationJsonString, tagNames, imageFiles));
 
                 assertThat(result.getText()).isEqualTo("새로운 게시물 내용");
@@ -89,7 +86,7 @@ class ArticleServiceTest {
             void createArticleFail1() {
                 when(articleRepository.save(any(Article.class))).thenReturn(null);
 
-                ArticleService articleService = new ArticleService(articleRepository, locationRepository, tagRepository, imageRepository, locationDataPreprocess, fileProcessService);
+                ArticleService articleService = new ArticleService(articleRepository, locationRepository, imageRepository, likesRepository, locationDataPreprocess, fileProcessService);
                 Article result = articleService.createArticle(user, new ArticleCreateRequestDto(text, locationJsonString, tagNames, imageFiles));
 
                 assertThat(result).isNull();
@@ -138,7 +135,7 @@ class ArticleServiceTest {
 
                 String modifiedText = "* 수정된 게시물 내용 *";
 
-                ArticleService articleService = new ArticleService(articleRepository, locationRepository, tagRepository, imageRepository, locationDataPreprocess, fileProcessService);
+                ArticleService articleService = new ArticleService(articleRepository, locationRepository, imageRepository, likesRepository, locationDataPreprocess, fileProcessService);
                 Article result = articleService.updateArticle(user, id, new ArticleUpdateRequestDto(modifiedText, locationJsonString, tagNames, imageFiles, rmImageIdList));
 
                 assertThat(result.getText()).isEqualTo(modifiedText);
@@ -175,7 +172,7 @@ class ArticleServiceTest {
 
                 String modifiedText = "* 수정된 게시물 내용 *";
 
-                ArticleService articleService = new ArticleService(articleRepository, locationRepository, tagRepository, imageRepository, locationDataPreprocess, fileProcessService);
+                ArticleService articleService = new ArticleService(articleRepository, locationRepository, imageRepository, likesRepository, locationDataPreprocess, fileProcessService);
                 Exception exception = assertThrows(ApiRequestException.class, () -> {
                     articleService.updateArticle(user, undefinedId, new ArticleUpdateRequestDto(modifiedText, locationJsonString, tagNames, imageFiles, rmImageIdList));
                 });

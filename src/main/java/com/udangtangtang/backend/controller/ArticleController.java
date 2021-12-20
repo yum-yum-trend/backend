@@ -25,10 +25,13 @@ public class ArticleController {
 
     @GetMapping("/articles")
     public Page<Article> getArticles(@RequestParam(required = false) String searchTag,
+                                     @RequestParam(required = false) String location,
+                                     @RequestParam(required = false) String category,
+                                     @RequestParam(required = false) String tagName,
                                      @RequestParam("sortBy") String sortBy,
                                      @RequestParam("isAsc") boolean isAsc,
                                      @RequestParam("currentPage") int page) {
-        return articleService.getArticles(searchTag, sortBy, isAsc, page);
+        return articleService.getArticles(searchTag, location, category, tagName, sortBy, isAsc, page);
     }
 
     @GetMapping("/articles/{id}")
