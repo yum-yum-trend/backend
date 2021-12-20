@@ -99,18 +99,18 @@ public class UserProfileControllerApiTest {
                 .andDo(document("profile/navbar-image"));
     }
 
-//    @Test
-//    public void 유저_프로필정보_보기() throws Exception {
-//        // given
-//        User user = new User("testuser", "testuser", "testuser@testuser.com", UserRole.USER);
-//        userRepository.save(user);
-//        UserDetailsImpl userDetails = new UserDetailsImpl(user);
-//
-//        mockMvc.perform(get("/profile/{userId}", user.getId())
-//                        .header("Authorization", "Bearer " + jwtTokenUtil.generateAccessToken(userDetails.getUsername())))
-//                .andExpect(status().isOk())
-//                .andDo(document("profile/show"));
-//    }
+    @Test
+    public void 유저_프로필정보_보기() throws Exception {
+        // given
+        User user = new User("testuser", "testuser", "testuser@testuser.com", UserRole.USER);
+        userRepository.save(user);
+        UserDetailsImpl userDetails = new UserDetailsImpl(user);
+
+        mockMvc.perform(get("/profile/{userId}", user.getId())
+                        .header("Authorization", "Bearer " + jwtTokenUtil.generateAccessToken(userDetails.getUsername())))
+                .andExpect(status().isOk())
+                .andDo(document("profile/show"));
+    }
 
     @Test
     public void 유저_게시글_보기() throws Exception {
