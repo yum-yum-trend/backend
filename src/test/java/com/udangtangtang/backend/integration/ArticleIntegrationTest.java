@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.domain.Page;
 import org.springframework.mock.web.MockMultipartFile;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
@@ -158,6 +159,123 @@ public class ArticleIntegrationTest {
         Article article = articleService.getArticle(this.createdArticle.getId());
 
         assertEquals(article.getId(), this.createdArticle.getId());
+    }
+
+    @Test
+    @Transactional
+    @DisplayName("트랜드 지역 상품 조회하기")
+    void getTrendArticles() throws IOException {
+        String searchTag = "";
+        String sortBy = "createdAt";
+        boolean isAsc = false;
+        int page = 0;
+        String location = "제주";
+        String category = "";
+        String tagName = "";
+
+        this.user = userRepository.save(user);
+        this.userId = user.getId();
+
+        String text = "게시물 본문";
+        LocationRequestDto locationRequestDto = new LocationRequestDto("{\"roadAddressName\":\"제주특별자치도 서귀포시 일주서로 968-10\",\"placeName\":\"연돈\",\"xCoordinate\":\"126.40715814631936\",\"yCoordinate\":\"33.258895288625645\",\"categoryName\":\"음식점 > 일식 > 돈까스,우동\"}");
+        List<String> tagNames = Arrays.asList("얌얌트랜드", "음식", "사진", "공유");
+        List<MultipartFile> imageFiles = Arrays.asList(
+                getMockMultipartFile("cute_chun_sik", "jpeg", "multipart/form-data", "src/test/resources/images/cute_chun_sik.jpeg"),
+                getMockMultipartFile("ring_ding_kermit", "jpeg", "multipart/form-data", "src/test/resources/images/ring_ding_kermit.jpeg")
+        );
+
+        Article article1 = articleService.createArticle(this.user, text, locationRequestDto, tagNames, imageFiles);
+
+        this.createdArticle = article1;
+
+        Page<Article> articles = articleService.getArticles(searchTag, location, category, tagName, sortBy, isAsc, page);
+
+        Article foundArticle = articles.getContent().stream()
+                .filter(article -> article.getId().equals(this.createdArticle.getId()))
+                .findFirst().orElse(null);
+
+        assertNotNull(foundArticle);
+        assertEquals(foundArticle.getUser().getId(), this.userId);
+        assertEquals(foundArticle.getId(), this.createdArticle.getId());
+        assertEquals(foundArticle.getText(), this.createdArticle.getText());
+    }
+
+    @Test
+    @Transactional
+    @DisplayName("트랜드 카테고리 상품 조회하기")
+    void getTrendCategoryArticles() throws IOException {
+        String searchTag = "";
+        String sortBy = "createdAt";
+        boolean isAsc = false;
+        int page = 0;
+        String location = "";
+        String category = "돈까스,우동";
+        String tagName = "";
+
+        this.user = userRepository.save(user);
+        this.userId = user.getId();
+
+        String text = "게시물 본문";
+        LocationRequestDto locationRequestDto = new LocationRequestDto("{\"roadAddressName\":\"제주특별자치도 서귀포시 일주서로 968-10\",\"placeName\":\"연돈\",\"xCoordinate\":\"126.40715814631936\",\"yCoordinate\":\"33.258895288625645\",\"categoryName\":\"음식점 > 일식 > 돈까스,우동\"}");
+        List<String> tagNames = Arrays.asList("얌얌트랜드", "음식", "사진", "공유");
+        List<MultipartFile> imageFiles = Arrays.asList(
+                getMockMultipartFile("cute_chun_sik", "jpeg", "multipart/form-data", "src/test/resources/images/cute_chun_sik.jpeg"),
+                getMockMultipartFile("ring_ding_kermit", "jpeg", "multipart/form-data", "src/test/resources/images/ring_ding_kermit.jpeg")
+        );
+
+        Article article1 = articleService.createArticle(this.user, text, locationRequestDto, tagNames, imageFiles);
+
+        this.createdArticle = article1;
+
+        Page<Article> articles = articleService.getArticles(searchTag, location, category, tagName, sortBy, isAsc, page);
+
+        Article foundArticle = articles.getContent().stream()
+                .filter(article -> article.getId().equals(this.createdArticle.getId()))
+                .findFirst().orElse(null);
+
+        assertNotNull(foundArticle);
+        assertEquals(foundArticle.getUser().getId(), this.userId);
+        assertEquals(foundArticle.getId(), this.createdArticle.getId());
+        assertEquals(foundArticle.getText(), this.createdArticle.getText());
+    }
+
+    @Test
+    @Transactional
+    @DisplayName("트랜드 태그 상품 조회하기")
+    void getTrendTagArticles() throws IOException {
+        String searchTag = "";
+        String sortBy = "createdAt";
+        boolean isAsc = false;
+        int page = 0;
+        String location = "";
+        String category = "";
+        String tagName = "얌얌트랜드";
+
+        this.user = userRepository.save(user);
+        this.userId = user.getId();
+
+        String text = "게시물 본문";
+        LocationRequestDto locationRequestDto = new LocationRequestDto("{\"roadAddressName\":\"제주특별자치도 서귀포시 일주서로 968-10\",\"placeName\":\"연돈\",\"xCoordinate\":\"126.40715814631936\",\"yCoordinate\":\"33.258895288625645\",\"categoryName\":\"음식점 > 일식 > 돈까스,우동\"}");
+        List<String> tagNames = Arrays.asList("얌얌트랜드", "음식", "사진", "공유");
+        List<MultipartFile> imageFiles = Arrays.asList(
+                getMockMultipartFile("cute_chun_sik", "jpeg", "multipart/form-data", "src/test/resources/images/cute_chun_sik.jpeg"),
+                getMockMultipartFile("ring_ding_kermit", "jpeg", "multipart/form-data", "src/test/resources/images/ring_ding_kermit.jpeg")
+        );
+
+        Article article1 = articleService.createArticle(this.user, text, locationRequestDto, tagNames, imageFiles);
+
+        this.createdArticle = article1;
+
+        Page<Article> articles = articleService.getArticles(searchTag, location, category, tagName, sortBy, isAsc, page);
+
+        Article foundArticle = articles.getContent().stream()
+                .filter(article -> article.getId().equals(this.createdArticle.getId()))
+                .findFirst().orElse(null);
+
+        assertNotNull(foundArticle);
+        assertEquals(foundArticle.getUser().getId(), this.userId);
+        assertEquals(foundArticle.getId(), this.createdArticle.getId());
+        assertEquals(foundArticle.getText(), this.createdArticle.getText());
     }
 
     @Test
