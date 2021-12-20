@@ -35,7 +35,7 @@ public class ArticleIntegrationTest {
     @Autowired
     UserRepository userRepository;
 
-    User user = new User("Kermit", "1234", "Kermit@gaegulgaegul.com", UserRole.USER);
+    User user = new User("Kermit", "Kermit1234", "Kermit@gaegulgaegul.com", UserRole.USER);
     Long userId = null;
     Article createdArticle = null;
     List<Long> imageIds = null;
