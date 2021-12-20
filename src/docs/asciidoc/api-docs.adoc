@@ -59,6 +59,11 @@ include::{snippets}/trend/chart/http-request.adoc[]
 include::{snippets}/trend/chart/request-parameters.adoc[]
 include::{snippets}/trend/chart/http-response.adoc[]
 
+=== 트랜드 태그 차트
+include::{snippets}/trend/chart/tag/http-request.adoc[]
+include::{snippets}/trend/chart/tag/request-parameters.adoc[]
+include::{snippets}/trend/chart/tag/http-response.adoc[]
+
 == 좋아요
 === 사용자 권한 전체 게시글 좋아요 보기
 include::{snippets}/likes/show/http-request.adoc[]

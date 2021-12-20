@@ -23,9 +23,7 @@ public class ArticleService {
 
     private final ArticleRepository articleRepository;
     private final LocationRepository locationRepository;
-    private final TagRepository tagRepository;
     private final ImageRepository imageRepository;
-    private final TrendService trendService;
     private final LikesRepository likesRepository;
 
     private final LocationDataPreprocess locationDataPreprocess;

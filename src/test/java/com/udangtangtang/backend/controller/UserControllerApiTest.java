@@ -81,7 +81,7 @@ public class UserControllerApiTest {
     public void 회원가입() throws Exception {
         SignupRequestDto signupRequestDto = new SignupRequestDto();
         signupRequestDto.setUsername("Kermit");
-        signupRequestDto.setPassword("1234");
+        signupRequestDto.setPassword("qwer1234");
         signupRequestDto.setEmail("Kermit@gaegulgaegul.com");
         String jsonString = new GsonBuilder().setPrettyPrinting().create().toJson(signupRequestDto);
 
