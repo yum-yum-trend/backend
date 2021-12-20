@@ -174,7 +174,6 @@ class ArticleServiceTest {
 
                 assertThat(exception.getMessage()).isEqualTo(String.format("해당되는 아이디(%d)의 게시물이 없습니다.", undefinedId));
             }
-
         }
     }
 }

@@ -73,4 +73,18 @@ public class TrendControllerApiTest {
                 ));
     }
 
+    @Test
+    public void 트랜드_태그_차트_호출() throws Exception {
+        String location = "서울";
+
+        mockMvc.perform(get("/trend/chart/tag")
+                        .param("location", location))
+                .andExpect(status().isOk())
+                .andDo(document("trend/chart/tag",
+                        requestParameters(
+                                parameterWithName("location").description("지역명")
+                        )
+                ));
+    }
+
 }
