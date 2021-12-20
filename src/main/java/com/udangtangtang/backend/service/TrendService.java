@@ -1,8 +1,11 @@
 package com.udangtangtang.backend.service;
 
+import com.udangtangtang.backend.domain.Article;
 import com.udangtangtang.backend.domain.Location;
+import com.udangtangtang.backend.domain.Tag;
 import com.udangtangtang.backend.dto.response.TrendResponseDto;
 import com.udangtangtang.backend.repository.LocationRepository;
+import com.udangtangtang.backend.repository.TagRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -13,6 +16,7 @@ import java.util.*;
 public class TrendService {
 
     private final LocationRepository locationRepository;
+    private final TagRepository tagRepository;
 
     public List<TrendResponseDto> getTrendData() {
         String color;
@@ -78,13 +82,53 @@ public class TrendService {
                 if (value.getPlaceName().equals("집")) {
                     continue;
                 }
-                if (value.getRoadAddressName().contains(location)) {
+                if (value.getRoadAddressName().startsWith(location)) {
                     tempCategoryList.add(value.getCategoryName());
                     tempCategoryHashSet.add(value.getCategoryName());
                 }
             }
             for (String element : tempCategoryHashSet) {
                 int count = Collections.frequency(tempCategoryList, element);
+
+                TrendResponseDto responseDto = new TrendResponseDto(element, count);
+
+                trendResponseDto.add(responseDto);
+            }
+        }
+        return trendResponseDto;
+    }
+
+
+    public List<TrendResponseDto> getTagChartTrendData(String location) {
+        List<TrendResponseDto> trendResponseDto = new ArrayList<>();
+        List<String> tempTagList = new ArrayList<>();
+        HashSet<String> tempTagHashSet = new HashSet<>();
+        List<Tag> allTag = tagRepository.findAll();
+        if(location.isEmpty()) {
+            for (Tag value : allTag) {
+                tempTagList.add(value.getName());
+                tempTagHashSet.add(value.getName());
+            }
+
+            for (String element : tempTagHashSet) {
+                int count = Collections.frequency(tempTagList, element);
+
+                TrendResponseDto responseDto = new TrendResponseDto(element, count);
+
+                trendResponseDto.add(responseDto);
+            }
+        } else {
+            for (Tag value : allTag) {
+                Article tempArticle = value.getArticle();
+                Location tempLocation = tempArticle.getLocation();
+
+                if (tempLocation.getRoadAddressName().startsWith(location)) {
+                    tempTagList.add(value.getName());
+                    tempTagHashSet.add(value.getName());
+                }
+            }
+            for (String element : tempTagHashSet) {
+                int count = Collections.frequency(tempTagList, element);
 
                 TrendResponseDto responseDto = new TrendResponseDto(element, count);
 

@@ -13,8 +13,6 @@ import com.udangtangtang.backend.security.UserDetailsImpl;
 import com.udangtangtang.backend.security.kakao.KakaoOAuth2;
 import com.udangtangtang.backend.security.kakao.KakaoUserInfo;
 import com.udangtangtang.backend.util.JwtTokenUtil;
-import lombok.RequiredArgsConstructor;
-import lombok.Setter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -56,18 +54,21 @@ public class UserService {
     @Transactional
     public User createUser(SignupRequestDto signupRequestDto) throws ApiRequestException {
         String username = signupRequestDto.getUsername();
-        // 사용자이름 중복 확인
-        Optional<User> found = userRepository.findByUsername(username);
-        if (found.isPresent()) {
-            throw new ApiRequestException("중복된 사용자 이름이 존재합니다.");
-        }
-
         String password = passwordEncoder.encode(signupRequestDto.getPassword());
         String email = signupRequestDto.getEmail();
         UserRole role = UserRole.USER;
 
         User user = new User(username, password, email, role);
         return userRepository.save(user);
+    }
+
+    public void checkUsername(SignupUsernameRequestDto signupUsernameRequestDto) throws ApiRequestException {
+        String username = signupUsernameRequestDto.getUsername();
+        // 사용자이름 중복 확인
+        Optional<User> found = userRepository.findByUsername(username);
+        if (found.isPresent()) {
+            throw new ApiRequestException("중복된 사용자 이름이 존재합니다.");
+        }
     }
 
     public ResponseEntity<?> createAuthenticationToken(UserRequestDto userRequestDto) {

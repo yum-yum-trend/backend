@@ -1,11 +1,10 @@
 package com.udangtangtang.backend.service;
 
-import com.udangtangtang.backend.domain.Article;
-import com.udangtangtang.backend.domain.FileFolder;
-import com.udangtangtang.backend.domain.User;
+import com.udangtangtang.backend.domain.*;
 import com.udangtangtang.backend.dto.request.ProfileRequestDto;
 import com.udangtangtang.backend.exception.ApiRequestException;
 import com.udangtangtang.backend.repository.ArticleRepository;
+import com.udangtangtang.backend.repository.LikesRepository;
 import com.udangtangtang.backend.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -32,6 +31,7 @@ public class UserProfileService {
 
     private final UserRepository userRepository;
     private final ArticleRepository articleRepository;
+    private final LikesRepository likesRepository;
 
     private final FileProcessService fileProcessService;
 
@@ -46,6 +46,26 @@ public class UserProfileService {
         Pageable pageable = PageRequest.of(page, 32, sort);
 
         return articleRepository.findAllByUserId(userId, pageable);
+    }
+
+    public List<Object> getUserBookmarks(Long userId, String sortBy, boolean isAsc, int page) {
+        Sort.Direction direction = isAsc ? Sort.Direction.ASC : Sort.Direction.DESC;
+        Sort sort = Sort.by(direction, sortBy);
+        Pageable pageable = PageRequest.of(page, 32, sort);
+
+        Page<Likes> articlesLiked = likesRepository.findAllByUserId(userId, pageable);
+        List<Article> articles = new ArrayList<>();
+        List<Object> data = new ArrayList<>();
+
+        for (Likes likes : articlesLiked) {
+            Article article = articleRepository.findById(likes.getArticleId()).orElseThrow(
+                    () -> new ApiRequestException("해당 게시글이 없습니다."));
+            articles.add(article);
+        }
+
+        data.add(articlesLiked);
+        data.add(articles);
+        return data;
     }
 
     @Transactional

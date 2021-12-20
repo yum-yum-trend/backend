@@ -23,4 +23,9 @@ public class TrendController {
     public List<TrendResponseDto> getChartTrendData(@RequestParam(required = false) String location) {
         return trendService.getChartTrendData(location);
     }
+
+    @GetMapping("/trend/chart/tag")
+    public List<TrendResponseDto> getTagChartTrendData(@RequestParam(required = false) String location) {
+        return trendService.getTagChartTrendData(location);
+    }
 }

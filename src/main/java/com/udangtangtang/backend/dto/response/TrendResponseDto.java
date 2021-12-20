@@ -1,5 +1,6 @@
 package com.udangtangtang.backend.dto.response;
 
+import com.udangtangtang.backend.domain.Article;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 

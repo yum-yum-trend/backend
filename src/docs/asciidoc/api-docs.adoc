@@ -1,0 +1,138 @@
+= YumYumTrend API Documents
+:toc: left
+:doctype: book
+
+= 사용자 페이지
+
+== 계정관리
+=== 회원가입
+include::{snippets}/signup/http-request.adoc[]
+include::{snippets}/signup/request-fields.adoc[]
+include::{snippets}/signup/http-response.adoc[]
+
+=== 로그인
+include::{snippets}/login/http-request.adoc[]
+include::{snippets}/login/request-fields.adoc[]
+include::{snippets}/login/http-response.adoc[]
+
+=== 액세스 토큰 재발급
+include::{snippets}/auth/token/http-request.adoc[]
+include::{snippets}/auth/token/request-fields.adoc[]
+include::{snippets}/auth/token/http-response.adoc[]
+
+== 게시물
+=== 생성
+include::{snippets}/articles/create/request-parameters.adoc[]
+include::{snippets}/articles/create/http-response.adoc[]
+
+=== 조회
+==== 모든 게시물
+include::{snippets}/articles/read-all/http-request.adoc[]
+include::{snippets}/articles/read-all/request-parameters.adoc[]
+include::{snippets}/articles/read-all/http-response.adoc[]
+
+==== 특정 게시물
+include::{snippets}/articles/read-one/http-request.adoc[]
+include::{snippets}/articles/read-one/http-response.adoc[]
+
+=== 수정
+include::{snippets}/articles/update/request-parameters.adoc[]
+include::{snippets}/articles/update/http-response.adoc[]
+
+=== 삭제
+include::{snippets}/articles/delete/http-request.adoc[]
+include::{snippets}/articles/delete/http-response.adoc[]
+
+=== 로그아웃
+include::{snippets}/user/logout/http-request.adoc[]
+include::{snippets}/user/logout/request-fields.adoc[]
+include::{snippets}/user/logout/http-response.adoc[]
+
+
+== 트랜드
+=== 트랜드 맵
+include::{snippets}/trend/http-request.adoc[]
+include::{snippets}/trend/http-response.adoc[]
+
+=== 트랜드 차트
+include::{snippets}/trend/chart/http-request.adoc[]
+include::{snippets}/trend/chart/request-parameters.adoc[]
+include::{snippets}/trend/chart/http-response.adoc[]
+
+== 좋아요
+=== 사용자 권한 전체 게시글 좋아요 보기
+include::{snippets}/likes/show/http-request.adoc[]
+include::{snippets}/likes/show/http-response.adoc[]
+
+=== 손님 권한 전체 게시글 좋아요 보기
+include::{snippets}/likes/guest/show/http-request.adoc[]
+include::{snippets}/likes/guest/show/http-response.adoc[]
+
+=== 사용자 권한 전체 게시글 좋아요 보기
+include::{snippets}/likes/article/http-request.adoc[]
+include::{snippets}/likes/article/http-response.adoc[]
+
+=== 손님 권한 게시글 좋아요 보기
+include::{snippets}/likes/guest/article/http-request.adoc[]
+include::{snippets}/likes/guest/article/http-response.adoc[]
+
+=== 프로필 페이지 게시글 좋아요 보기
+include::{snippets}/likes/profile/show/http-request.adoc[]
+include::{snippets}/likes/profile/show/http-response.adoc[]
+
+=== 좋아요 추가
+include::{snippets}/likes/articles/add/http-request.adoc[]
+include::{snippets}/articles/like/request-parameters.adoc[]
+include::{snippets}/articles/like/http-response.adoc[]
+
+=== 좋아요 삭제
+include::{snippets}/likes/articles/delete/http-request.adoc[]
+include::{snippets}/likes/articles/delete/request-parameters.adoc[]
+include::{snippets}/likes/articles/delete/http-response.adoc[]
+
+== 댓글
+=== 댓글 보기
+include::{snippets}/comment/show/http-request.adoc[]
+include::{snippets}/comment/show/http-response.adoc[]
+
+=== 댓글 저장
+include::{snippets}/comment/save/http-request.adoc[]
+include::{snippets}/comment/save/request-fields.adoc[]
+include::{snippets}/comment/save/http-response.adoc[]
+
+=== 댓글 삭제
+include::{snippets}/comment/delete/http-request.adoc[]
+include::{snippets}/comment/delete/http-response.adoc[]
+
+== 프로필
+=== 프로필 네비게이션바 이미지 보기
+include::{snippets}/profile/navbar-image/http-request.adoc[]
+include::{snippets}/profile/navbar-image/http-response.adoc[]
+
+=== 프로필정보 보기
+include::{snippets}/profile/show/http-request.adoc[]
+include::{snippets}/profile/show/http-response.adoc[]
+
+=== 사용자 등록 게시물 보기
+include::{snippets}/profile/articles/http-request.adoc[]
+include::{snippets}/profile/articles/request-parameters.adoc[]
+include::{snippets}/profile/articles/http-response.adoc[]
+
+=== 사용자 프로필 이미지 변경
+include::{snippets}/profile/image-change/http-request.adoc[]
+include::{snippets}/profile/image-change/http-response.adoc[]
+
+=== 사용자 프로필 비밀번호 변경
+include::{snippets}/profile/pw/http-request.adoc[]
+include::{snippets}/profile/pw/request-fields.adoc[]
+include::{snippets}/profile/pw/http-response.adoc[]
+
+=== 사용자 자기소개 변경
+include::{snippets}/profile/intro/http-request.adoc[]
+include::{snippets}/profile/intro/request-fields.adoc[]
+include::{snippets}/profile/intro/http-response.adoc[]
+
+== 사용자 프로필
+=== 프로필 이미지 삭제
+include::{snippets}/profile/image/delete/http-request.adoc[]
+include::{snippets}/profile/image/delete/http-response.adoc[]
