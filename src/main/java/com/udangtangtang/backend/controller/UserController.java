@@ -6,6 +6,7 @@ import com.udangtangtang.backend.security.UserDetailsImpl;
 import com.udangtangtang.backend.service.UserService;
 import com.udangtangtang.backend.util.JwtTokenUtil;
 
+import com.udangtangtang.backend.validation.ValidationSequence;
 import lombok.RequiredArgsConstructor;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,7 +14,10 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+
+import javax.validation.Valid;
 
 @RestController
 public class UserController {
@@ -25,8 +29,13 @@ public class UserController {
     }
 
     @PostMapping(value = "/signup")
-    public User createUser(@RequestBody SignupRequestDto signupRequestDto) {
+    public User createUser(@Validated(ValidationSequence.class) @RequestBody SignupRequestDto signupRequestDto) {
         return userService.createUser(signupRequestDto);
+    }
+
+    @PostMapping(value = "/signup/username")
+    public void checkUsername(@Validated(ValidationSequence.class) @RequestBody SignupUsernameRequestDto signupUsernameRequestDto) {
+        userService.checkUsername(signupUsernameRequestDto);
     }
 
     @PostMapping(value = "/login")

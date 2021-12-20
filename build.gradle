@@ -47,7 +47,8 @@ dependencies {
 
     implementation 'org.springframework.security:spring-security-test'
 
-
+    // input validation
+    implementation 'org.springframework.boot:spring-boot-starter-validation:2.5.6'
 
 }
 
