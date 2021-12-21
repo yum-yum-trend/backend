@@ -49,6 +49,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .mvcMatchers(HttpMethod.GET, "/trend/**").permitAll()
                 .mvcMatchers(HttpMethod.GET, "/profile/navbar-image/**").permitAll()
                 .mvcMatchers(HttpMethod.GET, "/search").permitAll()
+                .mvcMatchers(HttpMethod.GET, "/").permitAll()
+                .mvcMatchers(HttpMethod.GET, "/error/test/CyhDZOquoh").permitAll()
                 .anyRequest().authenticated().and()
                 .cors().and()
                 .exceptionHandling().authenticationEntryPoint(jwtAuthenticationEntryPoint).and()
