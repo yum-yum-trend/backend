@@ -30,6 +30,7 @@ jobs:
           spring.datasource.url : ${{ secrets.DATASOURCE_URL }}
           spring.datasource.username : ${{ secrets.DATASOURCE_USERNAME }}
           spring.datasource.password : ${{ secrets.DATASOURCE_PASSWORD }}
+          logging.slack.webhook-uri : ${{ secrets.WEBHOOK_URI }}
           jwt.secret : ${{ secrets.JWT_SECRET }}
 
       - name: Grant execute permission for gradlew
