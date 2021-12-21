@@ -3,6 +3,8 @@ package com.udangtangtang.backend.service;
 import com.udangtangtang.backend.domain.Article;
 import com.udangtangtang.backend.domain.Location;
 import com.udangtangtang.backend.domain.User;
+import com.udangtangtang.backend.dto.request.ArticleCreateRequestDto;
+import com.udangtangtang.backend.dto.request.ArticleUpdateRequestDto;
 import com.udangtangtang.backend.dto.request.LocationRequestDto;
 import com.udangtangtang.backend.exception.ApiRequestException;
 import com.udangtangtang.backend.repository.*;
@@ -43,7 +45,7 @@ class ArticleServiceTest {
     class CreateArticle {
         private String text;
         private User user;
-        private LocationRequestDto locationRequestDto;
+        private String locationJsonString;
         private Location location;
         private List<String> tagNames;
         private List<MultipartFile> imageFiles;
@@ -52,7 +54,8 @@ class ArticleServiceTest {
         void setup() {
             text = "새로운 게시물 내용";
             user = new User();
-            locationRequestDto = new LocationRequestDto();
+            locationJsonString = "{}";
+            LocationRequestDto locationRequestDto = new LocationRequestDto(locationJsonString);
             location = new Location(locationRequestDto, user.getId());
             tagNames = new ArrayList<>();
             imageFiles = new ArrayList<>();
@@ -69,7 +72,7 @@ class ArticleServiceTest {
                 when(articleRepository.save(any(Article.class))).thenReturn(article);
 
                 ArticleService articleService = new ArticleService(articleRepository, locationRepository, imageRepository, likesRepository, locationDataPreprocess, fileProcessService);
-                Article result = articleService.createArticle(user, text, locationRequestDto, tagNames, imageFiles);
+                Article result = articleService.createArticle(user, new ArticleCreateRequestDto(text, locationJsonString, tagNames, imageFiles));
 
                 assertThat(result.getText()).isEqualTo("새로운 게시물 내용");
             }
@@ -84,7 +87,7 @@ class ArticleServiceTest {
                 when(articleRepository.save(any(Article.class))).thenReturn(null);
 
                 ArticleService articleService = new ArticleService(articleRepository, locationRepository, imageRepository, likesRepository, locationDataPreprocess, fileProcessService);
-                Article result = articleService.createArticle(user, text, locationRequestDto, tagNames, imageFiles);
+                Article result = articleService.createArticle(user, new ArticleCreateRequestDto(text, locationJsonString, tagNames, imageFiles));
 
                 assertThat(result).isNull();
             }
@@ -98,7 +101,7 @@ class ArticleServiceTest {
         private Long id;
         private String text;
         private User user;
-        private LocationRequestDto locationRequestDto;
+        private String locationJsonString;
         private Location location;
         private List<String> tagNames;
         private List<MultipartFile> imageFiles;
@@ -113,7 +116,8 @@ class ArticleServiceTest {
                 id = 100L;
                 text = "게시물 내용";
                 user = new User();
-                locationRequestDto = new LocationRequestDto();
+                locationJsonString = "{}";
+                LocationRequestDto locationRequestDto = new LocationRequestDto(locationJsonString);
                 location = new Location(locationRequestDto, user.getId());
                 tagNames = new ArrayList<>();
                 imageFiles = new ArrayList<>();
@@ -132,7 +136,7 @@ class ArticleServiceTest {
                 String modifiedText = "* 수정된 게시물 내용 *";
 
                 ArticleService articleService = new ArticleService(articleRepository, locationRepository, imageRepository, likesRepository, locationDataPreprocess, fileProcessService);
-                Article result = articleService.updateArticle(user, id, modifiedText, locationRequestDto, tagNames, imageFiles, rmImageIdList);
+                Article result = articleService.updateArticle(user, id, new ArticleUpdateRequestDto(modifiedText, locationJsonString, tagNames, imageFiles, rmImageIdList));
 
                 assertThat(result.getText()).isEqualTo(modifiedText);
             }
@@ -147,7 +151,8 @@ class ArticleServiceTest {
                 id = 100L;
                 text = "게시물 내용";
                 user = new User();
-                locationRequestDto = new LocationRequestDto();
+                locationJsonString = "{}";
+                LocationRequestDto locationRequestDto = new LocationRequestDto();
                 location = new Location(locationRequestDto, user.getId());
                 tagNames = new ArrayList<>();
                 imageFiles = new ArrayList<>();
@@ -169,12 +174,11 @@ class ArticleServiceTest {
 
                 ArticleService articleService = new ArticleService(articleRepository, locationRepository, imageRepository, likesRepository, locationDataPreprocess, fileProcessService);
                 Exception exception = assertThrows(ApiRequestException.class, () -> {
-                    articleService.updateArticle(user, undefinedId, modifiedText, locationRequestDto, tagNames, imageFiles, rmImageIdList);
+                    articleService.updateArticle(user, undefinedId, new ArticleUpdateRequestDto(modifiedText, locationJsonString, tagNames, imageFiles, rmImageIdList));
                 });
 
                 assertThat(exception.getMessage()).isEqualTo(String.format("해당되는 아이디(%d)의 게시물이 없습니다.", undefinedId));
             }
-
         }
     }
 }

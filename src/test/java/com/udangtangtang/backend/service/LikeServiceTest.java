@@ -2,6 +2,7 @@ package com.udangtangtang.backend.service;
 
 import com.udangtangtang.backend.domain.Article;
 import com.udangtangtang.backend.domain.User;
+import com.udangtangtang.backend.dto.request.ArticleCreateRequestDto;
 import com.udangtangtang.backend.dto.request.LocationRequestDto;
 import com.udangtangtang.backend.dto.request.SignupRequestDto;
 import com.udangtangtang.backend.dto.response.LikeResponseDto;
@@ -60,10 +61,11 @@ class LikeServiceTest {
         User user = userRepository.findByUsername(signupRequestDto.getUsername()).orElseThrow(
                 () -> new NullPointerException("해당 유저가 존재하지 않습니다.")
         );
-        LocationRequestDto locationRequestDto = new LocationRequestDto("{}");
+        String text = "아무소리";
+        String location = "{}";
         List<String> tagsName = new ArrayList<>();
         List<MultipartFile> imageFiles = new ArrayList<>();
-        Article article = articleService.createArticle(user, "아무소리", locationRequestDto, tagsName, imageFiles);
+        Article article = articleService.createArticle(user, new ArticleCreateRequestDto(text, location, tagsName, imageFiles));
 
         //when
         likeService.increaseLikeCount(user.getId(), article.getId());
@@ -81,10 +83,12 @@ class LikeServiceTest {
         User user = userRepository.findByUsername(signupRequestDto.getUsername()).orElseThrow(
                 () -> new NullPointerException("해당 유저가 존재하지 않습니다.")
         );
-        LocationRequestDto locationRequestDto = new LocationRequestDto("{}");
-        List<String> tagsName = new ArrayList<>();
+
+        String text = "아무소리";
+        String location = "{}";
+        List<String> tagsNames = new ArrayList<>();
         List<MultipartFile> imageFiles = new ArrayList<>();
-        Article article = articleService.createArticle(user, "아무소리", locationRequestDto, tagsName, imageFiles);
+        Article article = articleService.createArticle(user, new ArticleCreateRequestDto(text, location, tagsNames, imageFiles));
         likeService.increaseLikeCount(user.getId(), article.getId());
 
         //when
@@ -108,10 +112,12 @@ class LikeServiceTest {
         User user2 = userRepository.findByUsername(signupRequestDto2.getUsername()).orElseThrow(
                 () -> new NullPointerException("해당 유저가 존재하지 않습니다.")
         );
-        LocationRequestDto locationRequestDto = new LocationRequestDto("{}");
-        List<String> tagsName = new ArrayList<>();
+
+        String text = "아무소리";
+        String location = "{}";
+        List<String> tagsNames = new ArrayList<>();
         List<MultipartFile> imageFiles = new ArrayList<>();
-        Article article = articleService.createArticle(user1, "아무소리", locationRequestDto, tagsName, imageFiles);
+        Article article = articleService.createArticle(user1, new ArticleCreateRequestDto(text, location, tagsNames, imageFiles));
 
         likeService.increaseLikeCount(user1.getId(), article.getId());
         likeService.increaseLikeCount(user2.getId(), article.getId());
