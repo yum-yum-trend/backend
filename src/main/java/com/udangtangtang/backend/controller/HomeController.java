@@ -1,6 +1,5 @@
 package com.udangtangtang.backend.controller;
 
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -8,8 +7,8 @@ import org.springframework.web.bind.annotation.RestController;
 public class HomeController {
 
     @GetMapping(value = "/")
-    public String forHealthCheck(Model model) {
-        return "index";
+    public String forHealthCheck() {
+        return "OK";
     }
 
     @GetMapping(value = "/error/test/CyhDZOquoh")
