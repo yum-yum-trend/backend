@@ -22,12 +22,8 @@ public class Tag extends Timestamped {
     @JoinColumn(name = "article_id")
     private Article article;
 
-    @Column(nullable = false)
-    private Long userId;
-
-    public Tag(String name, Article article, Long userId) {
+    public Tag(String name, Article article) {
         this.name = name;
         this.article = article;
-        this.userId = userId;
     }
 }

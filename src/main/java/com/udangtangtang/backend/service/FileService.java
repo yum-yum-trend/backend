@@ -10,6 +10,8 @@ public interface FileService {
 
     void deleteFile(String fileName);
 
+    boolean getFile(String fileName);
+
     String getFileUrl(String fileName);
 
     String getFileFolder(FileFolder fileFolder);

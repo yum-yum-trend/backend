@@ -2,8 +2,6 @@
 :toc: left
 :doctype: book
 
-= 사용자 페이지
-
 == 계정관리
 === 회원가입
 include::{snippets}/signup/http-request.adoc[]
@@ -22,8 +20,8 @@ include::{snippets}/auth/token/http-response.adoc[]
 
 == 게시물
 === 생성
-include::{snippets}/articles/create/request-parameters.adoc[]
-include::{snippets}/articles/create/http-response.adoc[]
+include::{snippets}/article/create/http-response.adoc[]
+include::{snippets}/article/create/request-fields.adoc[]
 
 === 조회
 ==== 모든 게시물
@@ -32,16 +30,18 @@ include::{snippets}/articles/read-all/request-parameters.adoc[]
 include::{snippets}/articles/read-all/http-response.adoc[]
 
 ==== 특정 게시물
-include::{snippets}/articles/read-one/http-request.adoc[]
-include::{snippets}/articles/read-one/http-response.adoc[]
+include::{snippets}/article/read-one/http-request.adoc[]
+include::{snippets}/article/read-one/http-response.adoc[]
+include::{snippets}/article/read-one/response-fields.adoc[]
 
 === 수정
-include::{snippets}/articles/update/request-parameters.adoc[]
-include::{snippets}/articles/update/http-response.adoc[]
+include::{snippets}/article/update/request-parameters.adoc[]
+include::{snippets}/article/update/request-fields.adoc[]
+include::{snippets}/article/update/http-response.adoc[]
 
 === 삭제
-include::{snippets}/articles/delete/http-request.adoc[]
-include::{snippets}/articles/delete/http-response.adoc[]
+include::{snippets}/article/delete/http-request.adoc[]
+include::{snippets}/article/delete/http-response.adoc[]
 
 === 로그아웃
 include::{snippets}/user/logout/http-request.adoc[]
@@ -87,8 +87,8 @@ include::{snippets}/likes/profile/show/http-response.adoc[]
 
 === 좋아요 추가
 include::{snippets}/likes/articles/add/http-request.adoc[]
-include::{snippets}/articles/like/request-parameters.adoc[]
-include::{snippets}/articles/like/http-response.adoc[]
+include::{snippets}/likes/articles/add/request-parameters.adoc[]
+include::{snippets}/likes/articles/add/http-response.adoc[]
 
 === 좋아요 삭제
 include::{snippets}/likes/articles/delete/http-request.adoc[]

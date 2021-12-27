@@ -17,9 +17,7 @@ public class FileProcessService {
 
     private final FileService amazonS3Service;
 
-    public String uploadImage(MultipartFile file, FileFolder fileFolder) {
-        String fileName = amazonS3Service.getFileFolder(fileFolder) + createFileName(file.getOriginalFilename());
-
+    public String uploadImage(MultipartFile file, String fileName) {
         ObjectMetadata objectMetadata = new ObjectMetadata();
         objectMetadata.setContentLength(file.getSize());
         objectMetadata.setContentType(file.getContentType());
@@ -34,20 +32,15 @@ public class FileProcessService {
         return amazonS3Service.getFileUrl(fileName);
     }
 
-    private String createFileName(String originalFileName) {
-        return UUID.randomUUID().toString().concat(getFileExtension(originalFileName));
+    public String createFileName(FileFolder fileFolder, String originalFileName) {
+        return amazonS3Service.getFileFolder(fileFolder) + UUID.randomUUID().toString().concat(getFileExtension(originalFileName));
     }
 
     private String getFileExtension(String fileName) {
         return fileName.substring(fileName.lastIndexOf("."));
     }
 
-    public void deleteImage(String url) {
-        amazonS3Service.deleteFile(getFileName(url));
-    }
-
-    private String getFileName(String url) {
-        String[] paths = url.split("/");
-        return paths[paths.length-2] + "/" + paths[paths.length-1]; // folder + / + file name
+    public void deleteImage(String fileName) {
+        amazonS3Service.deleteFile(fileName);
     }
 }
