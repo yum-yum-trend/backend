@@ -38,7 +38,6 @@ public class ArticleIntegrationTest {
     @Autowired
     UserRepository userRepository;
 
-
     User user = new User("Kermit", "Kermit1234", "Kermit@gaegulgaegul.com", UserRole.USER);
     Article createdArticle = null;
     Long userId = null;
@@ -46,7 +45,7 @@ public class ArticleIntegrationTest {
     @Test
     @DisplayName("새로운 게시물 등록")
     @Transactional
-    void createArticle() throws IOException {
+    void createArticle() {
         // given
         this.user = userRepository.save(user);
         Long userId = user.getId();
@@ -54,13 +53,10 @@ public class ArticleIntegrationTest {
         String text = "게시물 본문";
         String location = "{\"roadAddressName\":\"제주특별자치도 서귀포시 일주서로 968-10\",\"placeName\":\"연돈\",\"xCoordinate\":\"126.40715814631936\",\"yCoordinate\":\"33.258895288625645\",\"categoryName\":\"음식점 > 일식 > 돈까스,우동\"}";
         List<String> tagNames = Arrays.asList("얌얌트랜드", "음식", "사진", "공유");
-        List<MultipartFile> imageFiles = Arrays.asList(
-                getMockMultipartFile("cute_chun_sik", "jpeg", "multipart/form-data", "src/test/resources/images/cute_chun_sik.jpeg"),
-                getMockMultipartFile("ring_ding_kermit", "jpeg", "multipart/form-data", "src/test/resources/images/ring_ding_kermit.jpeg")
-        );
+        List<Long> imageIds = new ArrayList<>();
 
         // when
-        Article article = articleService.createArticle(this.user, new ArticleCreateRequestDto(text, location, tagNames, imageFiles));
+        Article article = articleService.createArticle(this.user, new ArticleCreateRequestDto(text, location, tagNames, imageIds));
 
         // then
         // assertEquals(article.getId(), articleId); // 불가능한 비교 why? Service 에서 객체 저장하면 아이디가 새로 부여되기 때문에
@@ -68,9 +64,6 @@ public class ArticleIntegrationTest {
         assertEquals(article.getUser().getId(), userId);
         assertEquals(article.getText(), text);
         assertEquals(article.getLocation().getPlaceName(), "연돈");
-
-        // S3 File Find Function
-        assertEquals(article.getImages().size(), imageFiles.size());
 
         for(int i = 0; i < tagNames.size(); i++) {
             assertEquals(article.getTags().get(i).getName(), tagNames.get(i));
@@ -87,30 +80,22 @@ public class ArticleIntegrationTest {
         String text = "게시물 본문";
         String location = "{\"roadAddressName\":\"제주특별자치도 서귀포시 일주서로 968-10\",\"placeName\":\"연돈\",\"xCoordinate\":\"126.40715814631936\",\"yCoordinate\":\"33.258895288625645\",\"categoryName\":\"음식점 > 일식 > 돈까스,우동\"}";
         List<String> tagNames = Arrays.asList("얌얌트랜드", "음식", "사진", "공유");
-        List<MultipartFile> imageFiles = Arrays.asList(
-                getMockMultipartFile("cute_chun_sik", "jpeg", "multipart/form-data", "src/test/resources/images/cute_chun_sik.jpeg"),
-                getMockMultipartFile("ring_ding_kermit", "jpeg", "multipart/form-data", "src/test/resources/images/ring_ding_kermit.jpeg")
-        );
+        List<Long> imageIds = new ArrayList<>();
 
-        Article createdArticle = articleService.createArticle(this.user, new ArticleCreateRequestDto(text, location, tagNames, imageFiles));
-
-        List<Long> rmImageIds = new ArrayList<>();
-        createdArticle.getImages().forEach((image) -> rmImageIds.add(image.getId()));
+        Article createdArticle = articleService.createArticle(this.user, new ArticleCreateRequestDto(text, location, tagNames, imageIds));
 
         String modifiedText = "게시물 수정된 내용";
         String modifiedLocation = "{}";
         List<String> modifiedTagNames = Arrays.asList("맛있는", "간식");
-        List<MultipartFile> modifiedImageFiles = Arrays.asList(
-                getMockMultipartFile("thinking_before_talking", "jpeg", "multipart/form-data", "src/test/resources/images/thinking_before_talking.jpeg")
-        );
+        List<Long> modifiedImageIds = new ArrayList<>();
 
-        Article updatedArticle = articleService.updateArticle(this.user, createdArticle.getId(), new ArticleUpdateRequestDto(modifiedText, modifiedLocation, modifiedTagNames, modifiedImageFiles, rmImageIds));
+        Article updatedArticle = articleService.updateArticle(this.user, createdArticle.getId(), new ArticleUpdateRequestDto(modifiedText, modifiedLocation, modifiedTagNames, modifiedImageIds));
 
         assertNotNull(updatedArticle.getId());
         assertEquals(updatedArticle.getUser().getId(), userId);
         assertEquals(updatedArticle.getText(), modifiedText);
         assertEquals(updatedArticle.getLocation().getPlaceName(), "집");
-        assertEquals(updatedArticle.getImages().size(), 1);
+        assertEquals(updatedArticle.getImages().size(), 0);
         for(int i = 0; i < modifiedTagNames.size(); i++) {
             assertEquals(updatedArticle.getTags().get(i).getName(), modifiedTagNames.get(i));
         }
@@ -121,7 +106,6 @@ public class ArticleIntegrationTest {
     @Transactional
     void getArticlesThroughSearch() throws IOException {
         this.user = userRepository.save(user);
-        Long userId = user.getId();
 
         String searchTag = "간식";
         String sortBy = "createdAt";
@@ -133,11 +117,9 @@ public class ArticleIntegrationTest {
 
         String location = "{}";
         List<String> tagNames = Arrays.asList("맛있는", "간식");
-        List<MultipartFile> imageFiles = Arrays.asList(
-                getMockMultipartFile("ring_ding_kermit", "jpeg", "multipart/form-data", "src/test/resources/images/ring_ding_kermit.jpeg")
-        );
+        List<Long> imageIds = new ArrayList<>();
 
-        articleService.createArticle(this.user, new ArticleCreateRequestDto(text, location, tagNames, imageFiles));
+        articleService.createArticle(this.user, new ArticleCreateRequestDto(text, location, tagNames, imageIds));
 
         // then
         Page<Article> articles = articleService.getArticles(searchTag, location, category, tagName, sortBy, isAsc, page);
@@ -165,12 +147,9 @@ public class ArticleIntegrationTest {
 
         String text = "게시물 본문";
         List<String> tagNames = Arrays.asList("얌얌트랜드", "음식", "사진", "공유");
-        List<MultipartFile> imageFiles = Arrays.asList(
-                getMockMultipartFile("cute_chun_sik", "jpeg", "multipart/form-data", "src/test/resources/images/cute_chun_sik.jpeg"),
-                getMockMultipartFile("ring_ding_kermit", "jpeg", "multipart/form-data", "src/test/resources/images/ring_ding_kermit.jpeg")
-        );
+        List<Long> imageIds = new ArrayList<>();
 
-        Article createdArticle = articleService.createArticle(this.user, new ArticleCreateRequestDto(text, location, tagNames, imageFiles));
+        Article createdArticle = articleService.createArticle(this.user, new ArticleCreateRequestDto(text, location, tagNames, imageIds));
 
         Page<Article> articles = articleService.getArticles(searchTag, searchLocation, category, tagName, sortBy, isAsc, page);
 
@@ -193,12 +172,9 @@ public class ArticleIntegrationTest {
         String text = "게시물 본문";
         String location = "{\"roadAddressName\":\"제주특별자치도 서귀포시 일주서로 968-10\",\"placeName\":\"연돈\",\"xCoordinate\":\"126.40715814631936\",\"yCoordinate\":\"33.258895288625645\",\"categoryName\":\"음식점 > 일식 > 돈까스,우동\"}";
         List<String> tagNames = Arrays.asList("얌얌트랜드", "음식", "사진", "공유");
-        List<MultipartFile> imageFiles = Arrays.asList(
-                getMockMultipartFile("cute_chun_sik", "jpeg", "multipart/form-data", "src/test/resources/images/cute_chun_sik.jpeg"),
-                getMockMultipartFile("ring_ding_kermit", "jpeg", "multipart/form-data", "src/test/resources/images/ring_ding_kermit.jpeg")
-        );
+        List<Long> imageIds = new ArrayList<>();
 
-        Article createdArticle = articleService.createArticle(this.user, new ArticleCreateRequestDto(text, location, tagNames, imageFiles));
+        Article createdArticle = articleService.createArticle(this.user, new ArticleCreateRequestDto(text, location, tagNames, imageIds));
 
         Article article = articleService.getArticle(createdArticle.getId());
 
@@ -208,7 +184,7 @@ public class ArticleIntegrationTest {
     @Test
     @Transactional
     @DisplayName("트랜드 지역 상품 조회하기")
-    void getTrendArticles() throws IOException {
+    void getTrendArticles() {
         String searchTag = "";
         String sortBy = "createdAt";
         boolean isAsc = false;
@@ -223,12 +199,9 @@ public class ArticleIntegrationTest {
         String text = "게시물 본문";
         String location = "{\"roadAddressName\":\"제주특별자치도 서귀포시 일주서로 968-10\",\"placeName\":\"연돈\",\"xCoordinate\":\"126.40715814631936\",\"yCoordinate\":\"33.258895288625645\",\"categoryName\":\"음식점 > 일식 > 돈까스,우동\"}";
         List<String> tagNames = Arrays.asList("얌얌트랜드", "음식", "사진", "공유");
-        List<MultipartFile> imageFiles = Arrays.asList(
-                getMockMultipartFile("cute_chun_sik", "jpeg", "multipart/form-data", "src/test/resources/images/cute_chun_sik.jpeg"),
-                getMockMultipartFile("ring_ding_kermit", "jpeg", "multipart/form-data", "src/test/resources/images/ring_ding_kermit.jpeg")
-        );
+        List<Long> imageIds = new ArrayList<>();
 
-        Article article1 = articleService.createArticle(this.user, new ArticleCreateRequestDto(text, location, tagNames, imageFiles));
+        Article article1 = articleService.createArticle(this.user, new ArticleCreateRequestDto(text, location, tagNames, imageIds));
 
         this.createdArticle = article1;
 
@@ -262,12 +235,9 @@ public class ArticleIntegrationTest {
         String text = "게시물 본문";
         String location = "{\"roadAddressName\":\"제주특별자치도 서귀포시 일주서로 968-10\",\"placeName\":\"연돈\",\"xCoordinate\":\"126.40715814631936\",\"yCoordinate\":\"33.258895288625645\",\"categoryName\":\"음식점 > 일식 > 돈까스,우동\"}";
         List<String> tagNames = Arrays.asList("얌얌트랜드", "음식", "사진", "공유");
-        List<MultipartFile> imageFiles = Arrays.asList(
-                getMockMultipartFile("cute_chun_sik", "jpeg", "multipart/form-data", "src/test/resources/images/cute_chun_sik.jpeg"),
-                getMockMultipartFile("ring_ding_kermit", "jpeg", "multipart/form-data", "src/test/resources/images/ring_ding_kermit.jpeg")
-        );
+        List<Long> imageIds = new ArrayList<>();
 
-        Article article1 = articleService.createArticle(this.user, new ArticleCreateRequestDto(text, location, tagNames, imageFiles));
+        Article article1 = articleService.createArticle(this.user, new ArticleCreateRequestDto(text, location, tagNames, imageIds));
 
         this.createdArticle = article1;
 
@@ -301,12 +271,9 @@ public class ArticleIntegrationTest {
         String text = "게시물 본문";
         String location = "{\"roadAddressName\":\"제주특별자치도 서귀포시 일주서로 968-10\",\"placeName\":\"연돈\",\"xCoordinate\":\"126.40715814631936\",\"yCoordinate\":\"33.258895288625645\",\"categoryName\":\"음식점 > 일식 > 돈까스,우동\"}";
         List<String> tagNames = Arrays.asList("얌얌트랜드", "음식", "사진", "공유");
-        List<MultipartFile> imageFiles = Arrays.asList(
-                getMockMultipartFile("cute_chun_sik", "jpeg", "multipart/form-data", "src/test/resources/images/cute_chun_sik.jpeg"),
-                getMockMultipartFile("ring_ding_kermit", "jpeg", "multipart/form-data", "src/test/resources/images/ring_ding_kermit.jpeg")
-        );
+        List<Long> imageIds = new ArrayList<>();
 
-        Article article1 = articleService.createArticle(this.user, new ArticleCreateRequestDto(text, location, tagNames, imageFiles));
+        Article article1 = articleService.createArticle(this.user, new ArticleCreateRequestDto(text, location, tagNames, imageIds));
 
         this.createdArticle = article1;
 
@@ -333,12 +300,9 @@ public class ArticleIntegrationTest {
         String text = "게시물 본문";
         String location = "{\"roadAddressName\":\"제주특별자치도 서귀포시 일주서로 968-10\",\"placeName\":\"연돈\",\"xCoordinate\":\"126.40715814631936\",\"yCoordinate\":\"33.258895288625645\",\"categoryName\":\"음식점 > 일식 > 돈까스,우동\"}";
         List<String> tagNames = Arrays.asList("얌얌트랜드", "음식", "사진", "공유");
-        List<MultipartFile> imageFiles = Arrays.asList(
-                getMockMultipartFile("cute_chun_sik", "jpeg", "multipart/form-data", "src/test/resources/images/cute_chun_sik.jpeg"),
-                getMockMultipartFile("ring_ding_kermit", "jpeg", "multipart/form-data", "src/test/resources/images/ring_ding_kermit.jpeg")
-        );
+        List<Long> imageIds = new ArrayList<>();
 
-        Article createdArticle = articleService.createArticle(this.user, new ArticleCreateRequestDto(text, location, tagNames, imageFiles));
+        Article createdArticle = articleService.createArticle(this.user, new ArticleCreateRequestDto(text, location, tagNames, imageIds));
 
 
         Long deletedArticleId = articleService.deleteArticle(createdArticle.getId());
@@ -349,10 +313,5 @@ public class ArticleIntegrationTest {
             articleService.getArticle(deletedArticleId);
         });
         assertThat(exception.getMessage()).isEqualTo(String.format("해당되는 아이디(%d)의 게시물이 없습니다.", deletedArticleId));
-    }
-
-    private MockMultipartFile getMockMultipartFile(String fileName, String extension, String contentType, String path) throws IOException {
-        FileInputStream fileInputStream = new FileInputStream(new File(path));
-        return new MockMultipartFile(fileName, fileName + "." + extension, contentType, fileInputStream);
     }
 }

@@ -17,10 +17,5 @@ public class ArticleUpdateRequestDto {
     private String text;
     private String location;
     private List<String> tagNames;
-
-//    @Nullable
-    private List<MultipartFile> imageFiles;
-
-//    @Nullable
-    private List<Long> rmImageIds;
+    private List<Long> imageIds;
 }

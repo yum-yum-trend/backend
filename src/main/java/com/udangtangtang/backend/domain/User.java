@@ -52,6 +52,9 @@ public class User extends Timestamped {
     private String userProfileIntro;
 
     @Column(nullable = true)
+    private String userProfileImageName;
+
+    @Column(nullable = true)
     private String userProfileImageUrl;
 
     @Override
