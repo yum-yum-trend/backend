@@ -315,8 +315,9 @@ public class ArticleIntegrationTest {
 
         assertEquals(deletedArticleId, createdArticle.getId());
         // 예외 '메시지' 와 비교하기
+        Long finalDeletedArticleId = deletedArticleId;
         Exception exception = assertThrows(ApiRequestException.class, () -> {
-            articleService.getArticle(deletedArticleId);
+            articleService.getArticle(finalDeletedArticleId);
         });
         assertThat(exception.getMessage()).isEqualTo(String.format("해당되는 아이디(%d)의 게시물이 없습니다.", deletedArticleId));
     }
