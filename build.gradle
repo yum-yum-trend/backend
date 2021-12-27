@@ -72,6 +72,9 @@ ext {
 test {
     useJUnitPlatform()
     outputs.dir snippetsDir
+    testLogging {
+        exceptionFormat = 'full'
+    }
 }
 
 asciidoctor {
