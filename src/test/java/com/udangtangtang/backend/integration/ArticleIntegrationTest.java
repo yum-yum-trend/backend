@@ -14,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.domain.Page;
 import org.springframework.mock.web.MockMultipartFile;
+import org.springframework.orm.jpa.JpaSystemException;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -304,8 +305,13 @@ public class ArticleIntegrationTest {
 
         Article createdArticle = articleService.createArticle(this.user, new ArticleCreateRequestDto(text, location, tagNames, imageIds));
 
+        Long deletedArticleId = null;
+        try {
+            deletedArticleId = articleService.deleteArticle(createdArticle.getId());
+        } catch (JpaSystemException e) {
+            e.printStackTrace();
+        }
 
-        Long deletedArticleId = articleService.deleteArticle(createdArticle.getId());
 
         assertEquals(deletedArticleId, createdArticle.getId());
         // 예외 '메시지' 와 비교하기
