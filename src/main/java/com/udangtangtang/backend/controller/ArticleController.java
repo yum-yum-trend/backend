@@ -34,26 +34,26 @@ public class ArticleController {
         return articleService.getArticles(searchTag, location, category, tagName, sortBy, isAsc, page);
     }
 
-    @GetMapping("/articles/{id}")
+    @GetMapping("/article/{id}")
     public Article getArticle(@PathVariable Long id) {
         return articleService.getArticle(id);
     }
 
     @PostMapping("/articles")
     public Article createArticle(@AuthenticationPrincipal UserDetailsImpl userDetails,
-                              @ModelAttribute ArticleCreateRequestDto articleCreateRequestDto) {
+                                 @RequestBody ArticleCreateRequestDto articleCreateRequestDto) {
 
         return articleService.createArticle(userDetails.getUser(), articleCreateRequestDto);
     }
 
-    @PostMapping("/articles/{id}")
+    @PostMapping("/article/{id}")
     public void updateArticle(@AuthenticationPrincipal UserDetailsImpl userDetails,
                               @PathVariable("id") Long id,
-                              @ModelAttribute ArticleUpdateRequestDto articleUpdateRequestDto) {
+                              @RequestBody ArticleUpdateRequestDto articleUpdateRequestDto) {
         articleService.updateArticle(userDetails.getUser(), id, articleUpdateRequestDto);
     }
 
-    @DeleteMapping("/articles/{id}")
+    @DeleteMapping("/article/{id}")
     public void deleteArticle(@AuthenticationPrincipal UserDetailsImpl userDetails, @PathVariable("id") Long id) {
         articleService.deleteArticle(id);
     }

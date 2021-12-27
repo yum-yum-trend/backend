@@ -29,7 +29,6 @@ public class ArticleService {
     private final LikesRepository likesRepository;
 
     private final LocationDataPreprocess locationDataPreprocess;
-    private final FileProcessService fileProcessService;
 
     public Page<Article> getArticles(String searchTag, String location, String category, String tagName, String sortBy, boolean isAsc, int page) {
         Sort.Direction direction = isAsc ? Sort.Direction.ASC : Sort.Direction.DESC;
@@ -74,13 +73,19 @@ public class ArticleService {
         Article article = new Article(requestDto.getText(), location, user);
 
         for (String name : requestDto.getTagNames()) {
-            article.addTag(new Tag(name, article, user.getId()));
+            article.addTag(new Tag(name, article));
         }
 
-        for (MultipartFile multipartFile : requestDto.getImageFiles()) {
-            String url = fileProcessService.uploadImage(multipartFile, FileFolder.ARTICLE_IMAGES);
-            article.addImage(new Image(url, article));
+        List<Image> images = new ArrayList<>();
+        for (Long imageId : requestDto.getImageIds()) {
+            Image image = imageRepository.findById(imageId).orElseThrow(
+                    () -> new ApiRequestException(String.format("해당되는 아이디(%d)의 이미지가 없습니다.", imageId))
+            );
+            image.setArticle(article);
+            images.add(image);
         }
+
+        article.setImages(images);
 
         return articleRepository.save(article);
     }
@@ -90,18 +95,6 @@ public class ArticleService {
         Article article = articleRepository.findById(id).orElseThrow(
                 () -> new ApiRequestException(String.format("해당되는 아이디(%d)의 게시물이 없습니다.", id))
         );
-
-        // 기존에 저장된 이미지 삭제
-        if(requestDto.getRmImageIds() != null) {
-            for (Long imageId : requestDto.getRmImageIds()) {
-                Image image = imageRepository.findById(imageId).orElseThrow(
-                        () -> new ApiRequestException(String.format("해당되는 아이디(%d)의 이미지가 없습니다.", imageId))
-                );
-                fileProcessService.deleteImage(image.getUrl());
-                article.removeImage(imageId);
-            }
-            imageRepository.deleteAllById(requestDto.getRmImageIds());
-        }
 
         // 게시물 본문 내용
         String text = requestDto.getText();
@@ -114,16 +107,17 @@ public class ArticleService {
         // 태그 리스트
         List<Tag> tags = new ArrayList<>();
         for (String tag : requestDto.getTagNames()) {
-            tags.add(new Tag(tag, article, user.getId()));
+            tags.add(new Tag(tag, article));
         }
 
         // 이미지 리스트
         List<Image> images = new ArrayList<>();
-        if (requestDto.getImageFiles() != null) {
-            for (MultipartFile multipartFile : requestDto.getImageFiles()) {
-                String url = fileProcessService.uploadImage(multipartFile, FileFolder.ARTICLE_IMAGES);
-                images.add(new Image(url, article));
-            }
+        for (Long imageId : requestDto.getImageIds()) {
+            Image image = imageRepository.findById(imageId).orElseThrow(
+                    () -> new ApiRequestException(String.format("해당되는 아이디(%d)의 이미지가 없습니다.", imageId))
+            );
+            image.setArticle(article);
+            images.add(image);
         }
 
         article.update(text, location, tags, images);
@@ -133,18 +127,17 @@ public class ArticleService {
     @Transactional
     public Long deleteArticle(Long id) {
         Article article = articleRepository.findById(id).orElseThrow(
-                () -> new ApiRequestException(String.format("아이디(%d)에 해당되는 게시물이 없습니다.", id))
+                () -> new ApiRequestException(String.format("해당되는 아이디(%d)의 게시물이 없습니다.", id))
         );
+
+        for(Image image : imageRepository.findAllByArticleId(id)) {
+            image.setArticle(null);
+        }
 
         // 게시글에 등록된 좋아요 리스트 삭제
         List<Likes> likeList = likesRepository.findAllByArticleId(article.getId());
         for (Likes like : likeList) {
             likesRepository.delete(like);
-        }
-
-        // S3에 업로드된 이미지 삭제
-        for (Image image : article.getImages()) {
-            fileProcessService.deleteImage(image.getUrl());
         }
 
         articleRepository.delete(article);

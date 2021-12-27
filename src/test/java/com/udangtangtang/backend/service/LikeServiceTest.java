@@ -64,8 +64,8 @@ class LikeServiceTest {
         String text = "아무소리";
         String location = "{}";
         List<String> tagsName = new ArrayList<>();
-        List<MultipartFile> imageFiles = new ArrayList<>();
-        Article article = articleService.createArticle(user, new ArticleCreateRequestDto(text, location, tagsName, imageFiles));
+        List<Long> imageIds = new ArrayList<>();
+        Article article = articleService.createArticle(user, new ArticleCreateRequestDto(text, location, tagsName, imageIds));
 
         //when
         likeService.increaseLikeCount(user.getId(), article.getId());
@@ -87,8 +87,8 @@ class LikeServiceTest {
         String text = "아무소리";
         String location = "{}";
         List<String> tagsNames = new ArrayList<>();
-        List<MultipartFile> imageFiles = new ArrayList<>();
-        Article article = articleService.createArticle(user, new ArticleCreateRequestDto(text, location, tagsNames, imageFiles));
+        List<Long> imageIds = new ArrayList<>();
+        Article article = articleService.createArticle(user, new ArticleCreateRequestDto(text, location, tagsNames, imageIds));
         likeService.increaseLikeCount(user.getId(), article.getId());
 
         //when
@@ -116,8 +116,8 @@ class LikeServiceTest {
         String text = "아무소리";
         String location = "{}";
         List<String> tagsNames = new ArrayList<>();
-        List<MultipartFile> imageFiles = new ArrayList<>();
-        Article article = articleService.createArticle(user1, new ArticleCreateRequestDto(text, location, tagsNames, imageFiles));
+        List<Long> imageIds = new ArrayList<>();
+        Article article = articleService.createArticle(user1, new ArticleCreateRequestDto(text, location, tagsNames, imageIds));
 
         likeService.increaseLikeCount(user1.getId(), article.getId());
         likeService.increaseLikeCount(user2.getId(), article.getId());

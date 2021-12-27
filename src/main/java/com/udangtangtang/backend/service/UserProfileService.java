@@ -75,8 +75,10 @@ public class UserProfileService {
 
         deleteUserProfileImageFromS3(user);
 
-        String url = fileProcessService.uploadImage(newProfileImage, FileFolder.PROFILE_IMAGES);
+        String fileName = fileProcessService.createFileName(FileFolder.PROFILE_IMAGES, newProfileImage.getOriginalFilename());
+        String url = fileProcessService.uploadImage(newProfileImage, fileName);
         user.setUserProfileImageUrl(url);
+        user.setUserProfileImageName(fileName);
 
         return user.getUserProfileImageUrl();
     }
@@ -136,7 +138,7 @@ public class UserProfileService {
     // 기존에 업로드된 사용지 프로필 이미지 삭제
     private void deleteUserProfileImageFromS3(User user) {
         if(user.getUserProfileImageUrl() != null) {
-            fileProcessService.deleteImage(user.getUserProfileImageUrl());
+            fileProcessService.deleteImage(user.getUserProfileImageName());
         }
     }
 

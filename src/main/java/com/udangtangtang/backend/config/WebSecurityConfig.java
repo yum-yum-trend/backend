@@ -43,7 +43,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/docs/**").permitAll()
 
                 .mvcMatchers(HttpMethod.GET, "/articles").permitAll()
-                .mvcMatchers(HttpMethod.GET, "/articles/**").permitAll()
+                .mvcMatchers(HttpMethod.GET, "/article/**").permitAll()
                 .mvcMatchers(HttpMethod.GET, "/likes/guest/**").permitAll()
                 .mvcMatchers(HttpMethod.GET, "/comment/**").permitAll()
                 .mvcMatchers(HttpMethod.GET, "/trend/**").permitAll()
