@@ -35,7 +35,7 @@ include::{snippets}/article/read-one/http-response.adoc[]
 include::{snippets}/article/read-one/response-fields.adoc[]
 
 === 수정
-include::{snippets}/article/update/request-parameters.adoc[]
+include::{snippets}/article/update/http-request.adoc[]
 include::{snippets}/article/update/request-fields.adoc[]
 include::{snippets}/article/update/http-response.adoc[]
 
