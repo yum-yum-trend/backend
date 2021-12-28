@@ -1,0 +1,8 @@
+{
+  "AWSEBDockerrunVersion": "1",
+  "Image": {
+    "Name": "028590157815.dkr.ecr.ap-northeast-2.amazonaws.com/yumyumtrend-ecr",
+    "Update": "true"
+  },
+  "Ports": [ { "ContainerPort" : 5000} ]
+}
