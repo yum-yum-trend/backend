@@ -20,6 +20,7 @@ spring:
     hibernate:
       ddl-auto: update
     generate-ddl: false
+    database-platform: org.hibernate.dialect.MySQLDialect
 
 logging:
   slack:
