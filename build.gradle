@@ -1,7 +1,7 @@
 plugins {
     id 'org.springframework.boot' version '2.5.7'
     id 'io.spring.dependency-management' version '1.0.11.RELEASE'
-    id "org.asciidoctor.convert" version "1.5.9.2"
+    id "org.asciidoctor.convert" version "1.5.8"
     id 'java'
 }
 
@@ -41,15 +41,28 @@ dependencies {
     // redis
     implementation 'org.springframework.boot:spring-boot-starter-data-redis'
 
-    testImplementation 'org.springframework.restdocs:spring-restdocs-mockmvc'
     implementation 'com.google.code.gson:gson:2.8.8'
+
+    // asciidoctor
     asciidoctor 'org.springframework.restdocs:spring-restdocs-asciidoctor:2.0.4.RELEASE'
 
+    // rest docs mockmvc
+    testImplementation 'org.springframework.restdocs:spring-restdocs-mockmvc'
+
+    // spring security test
     implementation 'org.springframework.security:spring-security-test'
 
     // input validation
     implementation 'org.springframework.boot:spring-boot-starter-validation:2.5.6'
 
+    // webhook
+    implementation 'com.github.maricn:logback-slack-appender:1.4.0'
+
+    // jsr305
+    // build 시 발생하는 경고 메시지 해결
+    // warning: unknown enum constant When.MAYBE
+    // reason: class file for javax.annotation.meta.When not found
+    implementation 'com.google.code.findbugs:jsr305:3.0.2'
 }
 
 ext {
@@ -58,9 +71,11 @@ ext {
 
 test {
     useJUnitPlatform()
+    outputs.dir snippetsDir
 }
 
 asciidoctor {
+    attributes 'snippets': snippetsDir
     inputs.dir snippetsDir
     dependsOn test
 }

@@ -1,10 +1,7 @@
 package com.udangtangtang.backend.service;
 
 import com.amazonaws.services.s3.AmazonS3;
-import com.amazonaws.services.s3.model.CannedAccessControlList;
-import com.amazonaws.services.s3.model.DeleteObjectRequest;
-import com.amazonaws.services.s3.model.ObjectMetadata;
-import com.amazonaws.services.s3.model.PutObjectRequest;
+import com.amazonaws.services.s3.model.*;
 import com.udangtangtang.backend.config.AmazonS3Component;
 import com.udangtangtang.backend.domain.FileFolder;
 import lombok.RequiredArgsConstructor;
@@ -28,6 +25,18 @@ public class AmazonS3Service implements FileService {
     public void deleteFile(String fileName) {
         amazonS3.deleteObject(new DeleteObjectRequest(amazonS3Component.getBucket(), fileName));
     }
+
+    public boolean getFile(String fileName) {
+        S3Object object = null;
+        try {
+            object = amazonS3.getObject(new GetObjectRequest(amazonS3Component.getBucket(), fileName));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return object != null;
+    }
+
 
     // FIXME: Cloud Front URL
     public String getFileUrl(String fileName) {

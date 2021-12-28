@@ -37,6 +37,7 @@ import javax.servlet.ServletException;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -76,7 +77,6 @@ public class UserProfileControllerApiTest {
     @Autowired
     PasswordEncoder passwordEncoder;
 
-    static public String token = "";
 
     @BeforeEach
     public void setUp(WebApplicationContext webApplicationContext, RestDocumentationContextProvider restDocumentation) throws ServletException {
@@ -123,12 +123,9 @@ public class UserProfileControllerApiTest {
         String text = "게시물 본문";
         String location = "{\"roadAddressName\":\"제주특별자치도 서귀포시 일주서로 968-10\",\"placeName\":\"연돈\",\"xCoordinate\":\"126.40715814631936\",\"yCoordinate\":\"33.258895288625645\",\"categoryName\":\"음식점 > 일식 > 돈까스,우동\"}";
         List<String> tagNames = Arrays.asList("얌얌트랜드", "음식", "사진", "공유");
-        List<MultipartFile> imageFiles = Arrays.asList(
-                getMockMultipartFile("cute_chun_sik", "cute_chun_sik.jpeg", "multipart/form-data", "src/test/resources/images/cute_chun_sik.jpeg"),
-                getMockMultipartFile("ring_ding_kermit", "ring_ding_kermit.jpeg", "multipart/form-data", "src/test/resources/images/ring_ding_kermit.jpeg")
-        );
+        List<Long> imageIds = new ArrayList<>();
 
-        Article article = articleService.createArticle(user, new ArticleCreateRequestDto(text, location, tagNames, imageFiles));
+        Article article = articleService.createArticle(user, new ArticleCreateRequestDto(text, location, tagNames, imageIds));
         String page = "0";
 
         mockMvc.perform(get("/profile/articles/{userId}", user.getId())
