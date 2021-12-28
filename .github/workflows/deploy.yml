@@ -35,6 +35,14 @@ jobs:
             yumyumtrend/rds
           parse-json: false
 
+      - name : Set Environment Variables
+        uses : microsoft/variable-substitution@v1
+        with :
+          files : 'src/main/resources/*.yml'
+        env :
+          logging.slack.webhook-uri : ${{ secrets.WEBHOOK_URI }}
+
+
       - name: Grant execute permission for gradlew
         run: chmod +x ./gradlew
 
@@ -78,7 +86,7 @@ jobs:
           aws_access_key: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws_secret_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           application_name: yum-yum-trend-eb
-          environment_name: Yumyumtrendeb-env
+          environment_name: Yumyumtrendeb-env-docker
           version_label: yumyumtrend-docker-${{steps.current-time.outputs.formattedTime}}
           region: ap-northeast-2
           deployment_package: deploy/deploy.zip

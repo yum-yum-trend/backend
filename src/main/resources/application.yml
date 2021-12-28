@@ -23,8 +23,8 @@ spring:
 
 logging:
   slack:
-    webhook-uri: ${SLACK_WEBHOOK_URI}
-    config: classpath:logback-spring.xml
+    webhook-uri:
+    config: classpath:logback-slack.xml
 
 #  level:
 #    org:
