@@ -6,8 +6,8 @@
         <layout class="ch.qos.logback.classic.PatternLayout">
             <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} %msg %n</pattern>
         </layout>
-        <username>Cake-Server-log</username>
-        <iconEmoji>:stuck_out_tongue_winking_eye:</iconEmoji>
+        <username>Server Log (Docker)</username>
+        <iconEmoji>:whale:</iconEmoji>
         <colorCoding>true</colorCoding>
     </appender>
 
