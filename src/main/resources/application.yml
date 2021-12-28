@@ -21,6 +21,11 @@ spring:
       ddl-auto: update
     generate-ddl: false
 
+logging:
+  slack:
+    webhook-uri: ${SLACK_WEBHOOK_URI}
+    config: classpath:logback-slack.xml
+
 #  level:
 #    org:
 #      hibernate:
