@@ -1,7 +1,7 @@
 cloud:
   aws:
     s3:
-      bucket: ${BUCKET_NAME}
+      bucket: $(BUCKET_NAME)
       folder:
         articleImagesFolder: article-images/
         profileImagesFolder: profile-images/
