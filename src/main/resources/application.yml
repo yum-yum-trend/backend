@@ -23,7 +23,7 @@ spring:
 
 logging:
   slack:
-    webhook-uri: $(SLACK_WEBHOOK_URI)
+    webhook-uri: $SLACK_WEBHOOK_URI
     config: classpath:logback-slack.xml
 
 #  level:
@@ -35,5 +35,5 @@ logging:
 #            sql: trace
 
 jwt:
-  secret: $(JWT_SECRET)
+  secret: $JWT_SECRET
 
