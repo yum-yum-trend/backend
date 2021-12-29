@@ -20,11 +20,13 @@ spring:
     hibernate:
       ddl-auto: update
     generate-ddl: false
+    database-platform: org.hibernate.dialect.MySQLDialect
 
 logging:
   slack:
     webhook-uri:
     config: classpath:logback-slack.xml
+
 #  level:
 #    org:
 #      hibernate:
