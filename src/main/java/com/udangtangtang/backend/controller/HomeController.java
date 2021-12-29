@@ -8,7 +8,7 @@ public class HomeController {
 
     @GetMapping(value = "/")
     public String forHealthCheck() {
-        return "OK";
+        return "OK from Docker Server";
     }
 
     @GetMapping(value = "/error/test/CyhDZOquoh")
