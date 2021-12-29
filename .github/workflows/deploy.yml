@@ -42,7 +42,7 @@ jobs:
         run: chmod +x ./gradlew
 
       - name: Build with Gradle
-        run: ./gradlew clean build
+        run: ./gradlew clean build -x test
 
       - name: Login to Amazon ECR
         id: login-ecr
