@@ -6,6 +6,7 @@ import com.udangtangtang.backend.dto.request.ArticleCreateRequestDto;
 import com.udangtangtang.backend.dto.request.ArticleUpdateRequestDto;
 import com.udangtangtang.backend.dto.request.LocationRequestDto;
 import com.udangtangtang.backend.dto.response.ArticleResponseDto;
+import com.udangtangtang.backend.dto.response.OneArticleResponseDto;
 import com.udangtangtang.backend.security.UserDetailsImpl;
 import com.udangtangtang.backend.service.ArticleService;
 import lombok.RequiredArgsConstructor;
@@ -36,7 +37,7 @@ public class ArticleController {
     }
 
     @GetMapping("/article/{id}")
-    public Article getArticle(@PathVariable Long id) {
+    public OneArticleResponseDto getArticle(@PathVariable Long id) {
         return articleService.getArticle(id);
     }
 
