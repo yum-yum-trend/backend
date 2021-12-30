@@ -26,7 +26,7 @@ public class Article extends Timestamped {
     @Column
     private String text;
 
-    @OneToOne(orphanRemoval=true)
+    @OneToOne(fetch = FetchType.LAZY, orphanRemoval=true)
     @JoinColumn(name = "location_id", nullable = false)
     private Location location;
 
@@ -34,13 +34,13 @@ public class Article extends Timestamped {
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
-    @OneToMany(mappedBy = "article", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "article", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<Tag> tags = new ArrayList<>();
 
-    @OneToMany(mappedBy = "article")
+    @OneToMany(mappedBy = "article", fetch = FetchType.LAZY)
     private List<Image> images = new ArrayList<>();
 
-    @OneToMany(mappedBy = "article", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "article", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<Comment> comments = new ArrayList<>();
 
     public Article(String text, Location location, User user) {
