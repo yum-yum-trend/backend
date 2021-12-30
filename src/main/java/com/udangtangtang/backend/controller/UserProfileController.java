@@ -3,6 +3,7 @@ package com.udangtangtang.backend.controller;
 import com.udangtangtang.backend.domain.Article;
 import com.udangtangtang.backend.domain.User;
 import com.udangtangtang.backend.dto.request.ProfileRequestDto;
+import com.udangtangtang.backend.dto.response.ArticleResponseDto;
 import com.udangtangtang.backend.service.UserProfileService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -29,10 +30,10 @@ public class UserProfileController {
     }
 
     @GetMapping(value = "/profile/articles/{userId}")
-    public Page<Article> getUserArticles(@PathVariable("userId") Long userId,
-                                         @RequestParam("sortBy") String sortBy,
-                                         @RequestParam("isAsc") boolean isAsc,
-                                         @RequestParam("currentPage") int page ) {
+    public Page<ArticleResponseDto> getUserArticles(@PathVariable("userId") Long userId,
+                                                    @RequestParam("sortBy") String sortBy,
+                                                    @RequestParam("isAsc") boolean isAsc,
+                                                    @RequestParam("currentPage") int page ) {
         return userProfileService.getUserArticles(userId, sortBy, isAsc, page);
     }
 
