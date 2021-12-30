@@ -69,9 +69,7 @@ public class ArticleService {
             articles = articleRepository.findAllByTagsName(searchTag, pageable);
         }
 
-        Page<ArticleResponseDto> responseDto =  articles.map(ArticleResponseDto::new);
-
-        return responseDto;
+        return articles.map(ArticleResponseDto::new);
     }
 
     public OneArticleResponseDto getArticle(Long id) {

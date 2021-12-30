@@ -1,18 +1,10 @@
 package com.udangtangtang.backend.domain;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.hibernate.annotations.BatchSize;
-import org.hibernate.annotations.Fetch;
-import org.hibernate.annotations.FetchMode;
-import org.springframework.data.annotation.CreatedDate;
-import org.springframework.data.annotation.LastModifiedDate;
 
 import javax.persistence.*;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -20,7 +12,6 @@ import java.util.List;
 @NoArgsConstructor
 @Getter
 @Setter
-@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 public class Article extends Timestamped {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -34,16 +25,16 @@ public class Article extends Timestamped {
     private Location location;
 
     @OneToOne
-    @JoinColumn(name = "user_id", nullable = true)
+    @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
-    @OneToMany(mappedBy = "article", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "article", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval=true)
     private List<Tag> tags = new ArrayList<>();
 
     @OneToMany(mappedBy = "article", fetch = FetchType.LAZY)
     private List<Image> images = new ArrayList<>();
 
-    @OneToMany(mappedBy = "article", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "article", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval=true)
     private List<Comment> comments = new ArrayList<>();
 
     public Article(String text, Location location, User user) {
@@ -62,18 +53,5 @@ public class Article extends Timestamped {
 
     public void addTag(Tag tag) {
         this.tags.add(tag);
-    }
-
-    public void addImage(Image image) {
-        this.images.add(image);
-    }
-
-    public void removeImage(Long id) {
-        for(Image image : this.images) {
-            if(image.getId().equals(id)) {
-                this.images.remove(image);
-                break;
-            }
-        }
     }
 }
