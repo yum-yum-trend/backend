@@ -8,6 +8,7 @@ import com.udangtangtang.backend.dto.request.ArticleCreateRequestDto;
 import com.udangtangtang.backend.dto.request.ArticleUpdateRequestDto;
 import com.udangtangtang.backend.dto.request.LocationRequestDto;
 import com.udangtangtang.backend.dto.response.ArticleResponseDto;
+import com.udangtangtang.backend.dto.response.OneArticleResponseDto;
 import com.udangtangtang.backend.exception.ApiRequestException;
 import com.udangtangtang.backend.repository.ArticleRepository;
 import com.udangtangtang.backend.repository.ImageRepository;
@@ -15,6 +16,7 @@ import com.udangtangtang.backend.repository.LikesRepository;
 import com.udangtangtang.backend.repository.LocationRepository;
 import com.udangtangtang.backend.util.LocationDataPreprocess;
 import lombok.RequiredArgsConstructor;
+import org.hibernate.Hibernate;
 import org.springframework.cglib.core.internal.Function;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -72,10 +74,12 @@ public class ArticleService {
         return responseDto;
     }
 
-    public Article getArticle(Long id) {
-        return articleRepository.findById(id).orElseThrow(
+    public OneArticleResponseDto getArticle(Long id) {
+        Article article = articleRepository.findById(id).orElseThrow(
                 () -> new ApiRequestException(String.format("해당되는 아이디(%d)의 게시물이 없습니다.", id))
         );
+
+        return new OneArticleResponseDto(article, (Location) Hibernate.unproxy(article.getLocation()));
     }
 
     @Transactional

@@ -1,5 +1,6 @@
 package com.udangtangtang.backend.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.udangtangtang.backend.dto.request.LocationRequestDto;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
