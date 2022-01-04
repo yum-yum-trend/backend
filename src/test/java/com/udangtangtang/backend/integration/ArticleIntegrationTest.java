@@ -114,6 +114,7 @@ public class ArticleIntegrationTest {
         String text = "게시물 본문";
         String category = "";
         String tagName = "";
+        Long lastArticleId = 0L;
 
         String location = "{}";
         List<String> tagNames = Arrays.asList("맛있는", "간식");
@@ -122,7 +123,7 @@ public class ArticleIntegrationTest {
         articleService.createArticle(this.user, new ArticleCreateRequestDto(text, location, tagNames, imageIds));
 
         // then
-        Page<Article> articles = articleService.getArticles(searchTag, location, category, tagName, sortBy, isAsc, page);
+        Page<Article> articles = articleService.getArticles(searchTag, location, category, tagName, sortBy, isAsc, page, lastArticleId);
 
         for(Article article : articles.getContent()) {
             assertTrue(article.getTags().contains(searchTag));
@@ -144,6 +145,7 @@ public class ArticleIntegrationTest {
         String location = "{\"roadAddressName\":\"제주특별자치도 서귀포시 일주서로 968-10\",\"placeName\":\"연돈\",\"xCoordinate\":\"126.40715814631936\",\"yCoordinate\":\"33.258895288625645\",\"categoryName\":\"음식점 > 일식 > 돈까스,우동\"}";
         String category = "";
         String tagName = "";
+        Long lastArticleId = 0L;
 
         String text = "게시물 본문";
         List<String> tagNames = Arrays.asList("얌얌트랜드", "음식", "사진", "공유");
@@ -151,7 +153,7 @@ public class ArticleIntegrationTest {
 
         Article createdArticle = articleService.createArticle(this.user, new ArticleCreateRequestDto(text, location, tagNames, imageIds));
 
-        Page<Article> articles = articleService.getArticles(searchTag, searchLocation, category, tagName, sortBy, isAsc, page);
+        Page<Article> articles = articleService.getArticles(searchTag, searchLocation, category, tagName, sortBy, isAsc, page, lastArticleId);
 
         Article foundArticle = articles.getContent().stream()
                                 .filter(article -> article.getId().equals(createdArticle.getId()))
@@ -192,6 +194,7 @@ public class ArticleIntegrationTest {
         String location1 = "제주";
         String category = "";
         String tagName = "";
+        Long lastArticleId = 0L;
 
         this.user = userRepository.save(user);
         this.userId = user.getId();
@@ -205,7 +208,7 @@ public class ArticleIntegrationTest {
 
         this.createdArticle = article1;
 
-        Page<Article> articles = articleService.getArticles(searchTag, location1, category, tagName, sortBy, isAsc, page);
+        Page<Article> articles = articleService.getArticles(searchTag, location1, category, tagName, sortBy, isAsc, page, lastArticleId);
 
         Article foundArticle = articles.getContent().stream()
                 .filter(article -> article.getId().equals(this.createdArticle.getId()))
@@ -228,6 +231,7 @@ public class ArticleIntegrationTest {
         String location1 = "";
         String category = "돈까스,우동";
         String tagName = "";
+        Long lastArticleId = 0L;
 
         this.user = userRepository.save(user);
         this.userId = user.getId();
@@ -241,7 +245,7 @@ public class ArticleIntegrationTest {
 
         this.createdArticle = article1;
 
-        Page<Article> articles = articleService.getArticles(searchTag, location1, category, tagName, sortBy, isAsc, page);
+        Page<Article> articles = articleService.getArticles(searchTag, location1, category, tagName, sortBy, isAsc, page, lastArticleId);
 
         Article foundArticle = articles.getContent().stream()
                 .filter(article -> article.getId().equals(this.createdArticle.getId()))
@@ -264,6 +268,7 @@ public class ArticleIntegrationTest {
         String location1 = "";
         String category = "";
         String tagName = "얌얌트랜드";
+        Long lastArticleId = 0L;
 
         this.user = userRepository.save(user);
         this.userId = user.getId();
@@ -277,7 +282,7 @@ public class ArticleIntegrationTest {
 
         this.createdArticle = article1;
 
-        Page<Article> articles = articleService.getArticles(searchTag, location1, category, tagName, sortBy, isAsc, page);
+        Page<Article> articles = articleService.getArticles(searchTag, location1, category, tagName, sortBy, isAsc, page, lastArticleId);
 
         Article foundArticle = articles.getContent().stream()
                 .filter(article -> article.getId().equals(this.createdArticle.getId()))

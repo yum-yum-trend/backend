@@ -41,33 +41,59 @@ public class ArticleService {
 
     private final LocationDataPreprocess locationDataPreprocess;
 
-    public Page<ArticleResponseDto> getArticles(String searchTag, String location, String category, String tagName, String sortBy, boolean isAsc, int page) {
+    public Page<ArticleResponseDto> getArticles(String searchTag, String location, String category, String tagName, String sortBy, boolean isAsc, int page, Long lastArticleId) {
         Sort.Direction direction = isAsc ? Sort.Direction.ASC : Sort.Direction.DESC;
         Sort sort = Sort.by(direction, sortBy);
         Pageable pageable = PageRequest.of(page, 32, sort);
 
         Page<Article> articles = null;
-        if (searchTag.isEmpty()) {
-            if (location.isEmpty()) {
-                if (category.isEmpty() && tagName.isEmpty()) {
-                    articles = articleRepository.findAll(pageable);
-                } else if(tagName.isEmpty()) {
-                    articles = articleRepository.findAllByLocationCategoryName(pageable, category);
+        if (lastArticleId.equals(0L)) {
+            if (searchTag.isEmpty()) {
+                if (location.isEmpty()) {
+                    if (category.isEmpty() && tagName.isEmpty()) {
+                        articles = articleRepository.findAll(pageable);
+                    } else if(tagName.isEmpty()) {
+                        articles = articleRepository.findAllByLocationCategoryName(pageable, category);
+                    } else {
+                        articles = articleRepository.findAllByTagsName(tagName, pageable);
+                    }
                 } else {
-                    articles = articleRepository.findAllByTagsName(tagName, pageable);
+                    if (category.isEmpty() && tagName.isEmpty()) {
+                        articles = articleRepository.findAllByLocationRoadAddressNameStartsWith(pageable, location);
+                    } else if(tagName.isEmpty()) {
+                        articles = articleRepository.findAllByLocationRoadAddressNameStartsWithAndLocationCategoryName(pageable, location, category);
+                    } else {
+                        articles = articleRepository.findAllByLocationRoadAddressNameStartsWithAndTagsName(pageable, location, tagName);
+                    }
                 }
             } else {
-                if (category.isEmpty() && tagName.isEmpty()) {
-                    articles = articleRepository.findAllByLocationRoadAddressNameStartsWith(pageable, location);
-                } else if(tagName.isEmpty()) {
-                    articles = articleRepository.findAllByLocationRoadAddressNameStartsWithAndLocationCategoryName(pageable, location, category);
-                } else {
-                    articles = articleRepository.findAllByLocationRoadAddressNameStartsWithAndTagsName(pageable, location, tagName);
-                }
+                articles = articleRepository.findAllByTagsName(searchTag, pageable);
             }
         } else {
-            articles = articleRepository.findAllByTagsName(searchTag, pageable);
+            if (searchTag.isEmpty()) {
+                if (location.isEmpty()) {
+                    if (category.isEmpty() && tagName.isEmpty()) {
+                        articles = articleRepository.findAllByIdLessThan(pageable, lastArticleId);
+                    } else if(tagName.isEmpty()) {
+                        articles = articleRepository.findAllByLocationCategoryNameAndIdLessThan(pageable, category, lastArticleId);
+                    } else {
+                        articles = articleRepository.findAllByTagsNameAndIdLessThan(tagName, pageable, lastArticleId);
+                    }
+                } else {
+                    if (category.isEmpty() && tagName.isEmpty()) {
+                        articles = articleRepository.findAllByLocationRoadAddressNameStartsWithAndIdLessThan(pageable, location, lastArticleId);
+                    } else if(tagName.isEmpty()) {
+                        articles = articleRepository.findAllByLocationRoadAddressNameStartsWithAndLocationCategoryNameAndIdLessThan(pageable, location, category, lastArticleId);
+                    } else {
+                        articles = articleRepository.findAllByLocationRoadAddressNameStartsWithAndTagsNameAndIdLessThan(pageable, location, tagName, lastArticleId);
+                    }
+                }
+            } else {
+                articles = articleRepository.findAllByTagsNameAndIdLessThan(searchTag, pageable, lastArticleId);
+            }
         }
+
+
 
         return articles.map(ArticleResponseDto::new);
     }
