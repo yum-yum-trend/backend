@@ -2,6 +2,7 @@ package com.udangtangtang.backend.service;
 
 import com.udangtangtang.backend.domain.*;
 import com.udangtangtang.backend.dto.request.ProfileRequestDto;
+import com.udangtangtang.backend.dto.response.ArticleResponseDto;
 import com.udangtangtang.backend.exception.ApiRequestException;
 import com.udangtangtang.backend.repository.ArticleRepository;
 import com.udangtangtang.backend.repository.LikesRepository;
@@ -40,12 +41,13 @@ public class UserProfileService {
         return userRepository.findById(userId);
     }
 
-    public Page<Article> getUserArticles(Long userId, String sortBy, boolean isAsc, int page) {
+    public Page<ArticleResponseDto> getUserArticles(Long userId, String sortBy, boolean isAsc, int page) {
         Sort.Direction direction = isAsc ? Sort.Direction.ASC : Sort.Direction.DESC;
         Sort sort = Sort.by(direction, sortBy);
         Pageable pageable = PageRequest.of(page, 32, sort);
 
-        return articleRepository.findAllByUserId(userId, pageable);
+        Page<Article> articles = articleRepository.findAllByUserId(userId, pageable);
+        return articles.map(ArticleResponseDto::new);
     }
 
     public List<Object> getUserBookmarks(Long userId, String sortBy, boolean isAsc, int page) {

@@ -1,23 +1,34 @@
 package com.udangtangtang.backend.service;
 
+import com.fasterxml.jackson.databind.JavaType;
+import com.fasterxml.jackson.databind.type.TypeFactory;
+import com.fasterxml.jackson.databind.util.Converter;
 import com.udangtangtang.backend.domain.*;
 import com.udangtangtang.backend.dto.request.ArticleCreateRequestDto;
 import com.udangtangtang.backend.dto.request.ArticleUpdateRequestDto;
 import com.udangtangtang.backend.dto.request.LocationRequestDto;
+import com.udangtangtang.backend.dto.response.ArticleResponseDto;
+import com.udangtangtang.backend.dto.response.OneArticleResponseDto;
 import com.udangtangtang.backend.exception.ApiRequestException;
-import com.udangtangtang.backend.repository.*;
+import com.udangtangtang.backend.repository.ArticleRepository;
+import com.udangtangtang.backend.repository.ImageRepository;
+import com.udangtangtang.backend.repository.LikesRepository;
+import com.udangtangtang.backend.repository.LocationRepository;
 import com.udangtangtang.backend.util.LocationDataPreprocess;
 import lombok.RequiredArgsConstructor;
+import org.hibernate.Hibernate;
+import org.springframework.cglib.core.internal.Function;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.multipart.MultipartFile;
+import org.springframework.util.StopWatch;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -30,38 +41,43 @@ public class ArticleService {
 
     private final LocationDataPreprocess locationDataPreprocess;
 
-    public Page<Article> getArticles(String searchTag, String location, String category, String tagName, String sortBy, boolean isAsc, int page) {
+    public Page<ArticleResponseDto> getArticles(String searchTag, String location, String category, String tagName, String sortBy, boolean isAsc, int page) {
         Sort.Direction direction = isAsc ? Sort.Direction.ASC : Sort.Direction.DESC;
         Sort sort = Sort.by(direction, sortBy);
         Pageable pageable = PageRequest.of(page, 32, sort);
 
+        Page<Article> articles = null;
         if (searchTag.isEmpty()) {
             if (location.isEmpty()) {
                 if (category.isEmpty() && tagName.isEmpty()) {
-                    return articleRepository.findAll(pageable);
+                    articles = articleRepository.findAll(pageable);
                 } else if(tagName.isEmpty()) {
-                    return articleRepository.findAllByLocationCategoryName(pageable, category);
+                    articles = articleRepository.findAllByLocationCategoryName(pageable, category);
                 } else {
-                    return articleRepository.findAllByTagsName(tagName, pageable);
+                    articles = articleRepository.findAllByTagsName(tagName, pageable);
                 }
             } else {
                 if (category.isEmpty() && tagName.isEmpty()) {
-                    return articleRepository.findAllByLocationRoadAddressNameStartsWith(pageable, location);
+                    articles = articleRepository.findAllByLocationRoadAddressNameStartsWith(pageable, location);
                 } else if(tagName.isEmpty()) {
-                    return articleRepository.findAllByLocationRoadAddressNameStartsWithAndLocationCategoryName(pageable, location, category);
+                    articles = articleRepository.findAllByLocationRoadAddressNameStartsWithAndLocationCategoryName(pageable, location, category);
                 } else {
-                    return articleRepository.findAllByLocationRoadAddressNameStartsWithAndTagsName(pageable, location, tagName);
+                    articles = articleRepository.findAllByLocationRoadAddressNameStartsWithAndTagsName(pageable, location, tagName);
                 }
             }
         } else {
-            return articleRepository.findAllByTagsName(searchTag, pageable);
+            articles = articleRepository.findAllByTagsName(searchTag, pageable);
         }
+
+        return articles.map(ArticleResponseDto::new);
     }
 
-    public Article getArticle(Long id) {
-        return articleRepository.findById(id).orElseThrow(
+    public OneArticleResponseDto getArticle(Long id) {
+        Article article = articleRepository.findById(id).orElseThrow(
                 () -> new ApiRequestException(String.format("해당되는 아이디(%d)의 게시물이 없습니다.", id))
         );
+
+        return new OneArticleResponseDto(article, (Location) Hibernate.unproxy(article.getLocation()));
     }
 
     @Transactional
